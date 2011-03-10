@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "运动物体跟踪MFC", "运动物体跟踪MFC\运动物体跟踪MFC.vcproj", "{0F9808E2-A639-4D13-AD3B-20364454DD54}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F9808E2-A639-4D13-AD3B-20364454DD54}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0F9808E2-A639-4D13-AD3B-20364454DD54}.Debug|Win32.Build.0 = Debug|Win32
+		{0F9808E2-A639-4D13-AD3B-20364454DD54}.Release|Win32.ActiveCfg = Release|Win32
+		{0F9808E2-A639-4D13-AD3B-20364454DD54}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
