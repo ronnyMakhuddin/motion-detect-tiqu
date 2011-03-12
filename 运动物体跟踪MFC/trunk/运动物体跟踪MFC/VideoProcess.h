@@ -456,6 +456,7 @@ static void displaySingleEvent(int index)
 	}
 }
 
+/*
 //显示所有事件
 static void displayAllEvent(int total, int maxEvent)
 {
@@ -566,20 +567,22 @@ static void displayAllEvent(int total, int maxEvent)
 	cvDestroyWindow( "AllEvent" );//销毁窗口
 	cvReleaseVideoWriter( &writer );
 }
+*/
 
 //显示所有事件
-static void displayAllEvent2(int total, int maxEvent)
+static void displayAllEvent(int total, int maxEvent)
 {
 	HistNode* node = head;
 	CvSize size = cvSize(300,300);
-	double fps = 1;
-    CvCapture* capture = 0;
-	USES_CONVERSION;
-	capture = cvCaptureFromAVI( FilePathName);
-	if(capture)
+    CvCapture* capture = cvCaptureFromAVI( FilePathName);
+	IplImage* backImage;
+	//USES_CONVERSION;
+	//capture = 
+	//if(capture!=0)
 	{
-		size = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH));
-		fps = cvGetCaptureProperty (capture,CV_CAP_PROP_FPS);
+		cvGrabFrame( capture );
+		backImage = cvRetrieveFrame( capture );
+		size = cvSize(backImage->width,backImage->height);
 	}
 	
 	cvReleaseCapture( &capture );//释放设备
@@ -589,66 +592,150 @@ static void displayAllEvent2(int total, int maxEvent)
 		USES_CONVERSION;
 		node->capture = cvCaptureFromAVI(FilePathName);
 
-		//提前两帧
-		int startFrame = node->startFrame;
-		if((node->startFrame - 4) >= 1)
-			startFrame = node->startFrame - 4;
-		cvSetCaptureProperty(node->capture, CV_CAP_PROP_POS_FRAMES, startFrame);
-
-		node->rect = node->startRect;
-		node->motion = 0;
-		node->buf = 0;
-		node->last = 0;
-		node->mhi = 0;
+		cvSetCaptureProperty(node->capture, CV_CAP_PROP_POS_FRAMES, node->startFrame);
+        node->eventTempNode = node->eventStart;
 		node = node->next;
 	}
 	node = head;
+    
+	CvVideoWriter*writer = cvCreateVideoWriter("allEvent.avi",-1,50, size);
 
-	//建立最初的事件合集视频（用最长事件作为时间）
-	//CvVideoWriter * writer = cvCreateVideoWriter("allevent1.avi", /*CV_FOURCC('X','V','I','D'),*/-1, fps, size, 1);
-	CvVideoWriter * writer = cvCreateVideoWriter("allevent1.avi", CV_FOURCC('X','V','I','D'), fps, size, 1);
-	IplImage* AllEventImage = cvCreateImage( size, IPL_DEPTH_8U, 3 );
-	for(int i = 0; i < maxEvent + PRE_NUM_FRAME; i++)
+	cvNamedWindow( "AllEvent", 1 );//建立窗口
+	IplImage* AllEventImage = cvCreateImage(cvGetSize(backImage),backImage->depth , backImage->nChannels);
+	cvCopy(backImage,AllEventImage,NULL);
+	for(int i = 0; i < maxEvent + 4; i++)
 	{
-		cvWriteFrame(writer, AllEventImage);
-	}
-	cvReleaseVideoWriter(&writer);
-	while(node)
-	{
-		//每执行一次循环就把一个事件放入视频中
-		CvCapture*capture2 = cvCaptureFromAVI( "allevent.avi");
-		CvVideoWriter*writer2 = cvCreateVideoWriter("alleventtemp.avi", CV_FOURCC('X','V','I','D'), fps, size, 1);
-		//提前4帧
-		int startFrame = node->startFrame;
-		if((node->startFrame - PRE_NUM_FRAME) >= 1)
-			startFrame = node->startFrame - PRE_NUM_FRAME;
-		cvSetCaptureProperty(node->capture, CV_CAP_PROP_POS_FRAMES, startFrame);
-		
-		IplImage *AllEventImage;
-		for(int i = 0; i < maxEvent + PRE_NUM_FRAME; i++)
+		if(i%JIANGE_FRAME==0)
 		{
-			AllEventImage = cvQueryFrame(capture2);
-			if(i<node->endFrame - node->startFrame+PRE_NUM_FRAME)
+			IplImage *tempRelease = AllEventImage;
+			AllEventImage = cvCreateImage(cvGetSize(backImage),backImage->depth , backImage->nChannels);
+			cvCopy(backImage,AllEventImage,NULL);
+			cvReleaseImage(&tempRelease);
+		}
+		int limit = 0;
+		while(node)
+		{
+			if(limit++>=LIMIT)
+				break;
+			if(node->eventTempNode==NULL)
+			{
+				node = node->next;
+				continue;
+			}
+			if(node->capture)
 			{
 				IplImage* image;
 				if( !(cvGrabFrame(node->capture )))//捕捉一桢
 					break;
-				if(i%2==0)
+				if(i%JIANGE_FRAME==0)
 				{
 					image = cvRetrieveFrame( node->capture );//取出这个帧
 					if( image )//若取到则判断motion是否为空
 					{
-						//cvFlip(image,image,1);//图像翻转
-						if( !node->motion )
-						{
-							node->motion = cvCreateImage( cvSize(image->width,image->height), 8, 1 );
-							//创建motion帧，八位，一通道
-							cvZero( node->motion );
-							//零填充motion
-							node->motion->origin = image->origin;
-							//内存存储的顺序和取出的帧相同
-						}
-						update_mhi3( image, node->motion, node->buf, node->last, node->mhi, node->rect);//更新历史图像
+						CvSize pre_size = {node->eventTempNode->rect.width, node->eventTempNode->rect.height};
+						CvMat test;
+						IplImage*sub_img=cvCreateImage(pre_size,IPL_DEPTH_8U,3);
+						cvGetImage(cvGetSubRect(image,&test,node->eventTempNode->rect),sub_img);
+						// Set the image ROI to display the current image
+						cvSetImageROI(AllEventImage,node->eventTempNode->rect);
+						// Resize the input image and copy the it to the Single Big Image
+						cvResize(sub_img, AllEventImage);
+						// Reset the ROI in order to display the next image
+						cvResetImageROI(AllEventImage);
+						
+					}
+				}
+			}
+			node = node->next;
+		}
+		node = head;
+
+		cvWriteToAVI( writer, AllEventImage);
+
+		if(i%JIANGE_FRAME==0)
+			cvShowImage( "AllEvent", AllEventImage );//显示处理过的图像
+		if( cvWaitKey(10) >= 0 )//10ms中按任意键退出
+			break;
+	}
+	node = head;
+	while(node)
+	{
+		cvReleaseCapture( &node->capture );//释放设备
+		node = node->next;
+	}
+	cvDestroyWindow( "AllEvent" );//销毁窗口
+	cvReleaseVideoWriter( &writer );
+}
+
+/*
+//显示所有事件
+static void displayAllEvent2(int total, int maxEvent)
+{
+	HistNode* node = head;
+	CvSize size = cvSize(300,300);
+    CvCapture* capture;
+	IplImage* backImage;
+	USES_CONVERSION;
+	capture = cvCaptureFromAVI( FilePathName);
+	if(capture)
+	{
+		cvGrabFrame( capture );
+		backImage = cvRetrieveFrame( capture );
+		size = cvSize(backImage->width,backImage->height);
+	}
+	
+	cvReleaseCapture( &capture );//释放设备
+
+	while(node)
+	{
+		node->capture = cvCaptureFromAVI( FilePathName);
+		node->eventTempNode = node->eventStart;
+
+		node = node->next;
+	}
+	node = head;
+
+	CvVideoWriter*writer = cvCreateVideoWriter("out.avi", -1, 50, size, 1);
+
+	cvNamedWindow("AllEvent", 1);
+	IplImage* AllEventImage; //= cvCreateImage(size, IPL_DEPTH_8U, 3);
+	//cvCopy(backImage, AllEventImage, NULL);
+
+	for(int i = 0; i < maxEvent; i++)
+	{
+		if(i%JIANGE_FRAME == 0)
+		{
+			//IplImage * tempRelease = AllEventImage;
+			AllEventImage = cvCreateImage(size, IPL_DEPTH_8U, 3);
+			cvCopy(backImage, AllEventImage, NULL);
+			//cvReleaseImage(&tempRelease);
+		}
+
+		int limit = 0;
+		while(node)
+		{
+
+			if(limit++ >= LIMIT)
+			{
+				break;
+			}
+			if(!node->eventTempNode)
+			{
+				node = node->next;
+				continue;
+			}
+			if(node->capture)
+			{
+				IplImage* image;
+				if( !(cvGrabFrame(node->capture )))//捕捉一桢
+					break;
+				if(i%JIANGE_FRAME==0)
+				{
+					image = cvRetrieveFrame( node->capture );//取出这个帧
+					if( image )//若取到则判断motion是否为空
+					{
+						CvMat test;
+						cvGetImage(cvGetSubRect(image,&test,node->eventTempNode->rect),image);
 						// Set the image ROI to display the current image
 						cvSetImageROI(AllEventImage,node->rect);
 						// Resize the input image and copy the it to the Single Big Image
@@ -659,16 +746,25 @@ static void displayAllEvent2(int total, int maxEvent)
 					}
 				}
 			}
-
-			cvWriteFrame(writer2, AllEventImage);
+			node->eventTempNode = node->eventTempNode->next;
+			node = node->next;
 		}
+		node = head;
+		cvWriteToAVI( writer, AllEventImage);
 
-		cvReleaseVideoWriter(&writer2);
-		cvReleaseCapture(&capture2);
+		if(i%JIANGE_FRAME==0)
+			cvShowImage( "AllEvent", AllEventImage );//显示处理过的图像
+		if( cvWaitKey(10) >= 0 )//10ms中按任意键退出
+			break;
+	}
 
-		DeleteFile("allevent.avi");
-		rename("alleventtemp.avi", "allevent.avi");
+	node = head;
+	while(node)
+	{
+		cvReleaseCapture( &node->capture );//释放设备
 		node = node->next;
 	}
-	node = head;
-}
+	cvDestroyWindow( "AllEvent" );//销毁窗口
+	cvReleaseVideoWriter( &writer );
+
+}*/

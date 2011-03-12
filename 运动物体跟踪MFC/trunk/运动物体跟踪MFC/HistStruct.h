@@ -32,6 +32,7 @@ struct HistNode
 	int startFrame;
 	int endFrame;
 	TrackNode*eventStart;
+	TrackNode*eventTempNode;
 
 	CvCapture* capture;
 	IplImage* motion;
