@@ -29,11 +29,11 @@ const double MAX_TIME_DELTA = 0.5;
 const double MIN_TIME_DELTA = 0.05;
 const int N = 3;
 const int PRE_NUM_FRAME = 4;
-const int JIANGE_FRAME = 4;
+const int JIANGE_FRAME = 1;
 const int LIMIT = 40;
 //
 const int CONTOUR_MAX_AERA = 60000;
-const int CONTOUR_MIN_AERA = 6000;
+const int CONTOUR_MIN_AERA = 1000;
 
 static struct HistNode*head;
 static CString FilePathName;
@@ -120,36 +120,27 @@ static void  update_mhi( IplImage* img, IplImage* dst, int frameNum, IplImage**&
 
 			CvScalar s;
 
-			if(frameNum!=-5)
+			//链表操作
+			HistNode*node;
+			if(head==NULL)
 			{
-				//链表操作
-				HistNode*node;
-				if(head==NULL)
-				{
-					createHead(head, r, frameNum);
-					node = head;
-				}else
-				{
-					node = searchHist(head, r);
-					if(node == NULL)
-					{
-						node = insertNode(head, r, frameNum);
-					}
-				}
-				s = sampleColor[node->num%5];
+				createHead(head, r, frameNum);
+				node = head;
 			}else
 			{
-				s = sampleColor[0];
+				node = searchHist(head, r);
+				if(node == NULL)
+				{
+					node = insertNode(head, r, frameNum);
+				}
 			}
+			s = sampleColor[node->num%5];
 
 	        cvRectangle( img, cvPoint(r.x,r.y),
 		    cvPoint(r.x + r.width, r.y + r.height), s, 1, CV_AA,0);
 	    }
     }
-	if(frameNum!=-5)
-	{
-		bianliNode(head, frameNum);
-	}
+	bianliNode(head, frameNum);
     // free memory
     cvReleaseMemStorage(&stor);
     cvReleaseImage( &pyr );
@@ -381,7 +372,8 @@ static void process(CString str)
 						//内存存储的顺序和取出的帧相同
 					}
 				}
-				update_mhi( image, motion, frameNum, buf, last, mhi);//更新历史图像
+				int posFrames    = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
+				update_mhi( image, motion, posFrames, buf, last, mhi);//更新历史图像
 				cvShowImage( "Motion", image );//显示处理过的图像
 				if( cvWaitKey(10) >= 0 )//10ms中按任意键退出
 					break;
@@ -429,7 +421,7 @@ static void displaySingleEvent(int index)
             IplImage* image;
             if( !(t=cvGrabFrame( capture )))//捕捉一桢
                 break;
-			if(i%2==0)
+			if(i%PRE_NUM_FRAME==0)
 			{
 				image = cvRetrieveFrame( capture );//取出这个帧
 				if( image )//若取到则判断motion是否为空
@@ -456,6 +448,60 @@ static void displaySingleEvent(int index)
 	}
 }
 
+
+static void displaySingleEvent2(int index)
+{
+	HistNode* node = head;
+	for(int i = 0; i < index; i++)
+	{
+		node=node->next;
+	}
+
+	USES_CONVERSION;
+	CvCapture* capture = cvCaptureFromAVI( FilePathName);
+	if( capture )
+    {
+		node->eventTempNode = node->eventStart;
+		//精确定位
+		cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node->startFrame-1);
+		cvGrabFrame( capture );
+		int posFrames = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
+		for(int i = 1; posFrames>node->startFrame; i++)
+		{
+			cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node->startFrame-i-1);
+			cvGrabFrame( capture );
+			posFrames = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
+		}
+		while(posFrames<node->startFrame-1)
+		{
+			cvGrabFrame( capture );
+			posFrames = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
+		}
+		
+        cvNamedWindow( "Motion_Event", 1 );//建立窗口
+		for(int i = 0;i <= node->endFrame - node->startFrame;i++)
+        {   
+			int t;
+            IplImage* image;
+            if( !(t=cvGrabFrame( capture )))//捕捉一桢
+                break;
+			if(i%JIANGE_FRAME==0 && node->eventTempNode!=NULL)
+			{
+				image = cvRetrieveFrame( capture );//取出这个帧
+			    CvScalar s = sampleColor[0];
+				cvRectangle( image, cvPoint(node->eventTempNode->rect.x, node->eventTempNode->rect.y),
+				cvPoint(node->eventTempNode->rect.x + node->eventTempNode->rect.width, node->eventTempNode->rect.y + node->eventTempNode->rect.height), s, 1, CV_AA,0);
+				cvShowImage( "Motion_Event", image );//显示处理过的图像
+				if( cvWaitKey(50) >= 0 )//10ms中按任意键退出
+					break;
+				int posFrames    = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
+				node->eventTempNode = node->eventTempNode->next;
+			}
+		}
+		cvReleaseCapture( &capture );//释放设备
+		cvDestroyWindow( "Motion_Event" );//销毁窗口
+	}
+}
 /*
 //显示所有事件
 static void displayAllEvent(int total, int maxEvent)

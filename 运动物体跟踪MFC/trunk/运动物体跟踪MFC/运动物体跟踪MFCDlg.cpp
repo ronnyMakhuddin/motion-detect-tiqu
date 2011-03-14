@@ -222,7 +222,7 @@ void C运动物体跟踪MFCDlg::OnBnClickedAnalyse()
 			CString startF;
 			CString endF;
 			CString totalF;
-			int totalFint = node->endFrame - node->startFrame + 1;
+			int totalFint = node->endFrame - node->startFrame;
 			if(totalFint>maxEvent)
 			{
 				maxEvent = totalFint;
@@ -249,8 +249,6 @@ void C运动物体跟踪MFCDlg::OnBnClickedAnalyse()
 		statics = "共" + totalCString + "个事件,最长事件" + maxEventCString + "帧, 最小事件" + minEventCString + "帧";
 		Statics_Edit.SetWindowTextA(statics);
 	}
-	
-	printEvents(head, "out");
 
 }
 
@@ -276,7 +274,7 @@ void C运动物体跟踪MFCDlg::OnBnClickedButton2()
 	if(index == -1)
         MessageBox("没有选中事件");
 	else
-	    displaySingleEvent(index);
+	    displaySingleEvent2(index);
 }
 
 //播放所有事件

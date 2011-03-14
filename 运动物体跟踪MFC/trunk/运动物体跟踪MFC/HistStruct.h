@@ -20,6 +20,7 @@ public:
 struct TrackNode
 {
 	CvRect rect;
+	int frameNum;
 	TrackNode*next;
 };
 
@@ -109,6 +110,7 @@ static HistNode* insertNode(HistNode*head, CvRect r, int startFrame)
 	//事件的表头
 	insert->eventStart = (TrackNode*)malloc(sizeof(TrackNode));
 	insert->eventStart->rect = r;
+	insert->eventStart->frameNum = startFrame;
 	insert->eventStart->next = NULL;
 
 	return insert;
@@ -128,6 +130,7 @@ static void createHead(HistNode* &head, CvRect r, int startFrame)
 	//事件的表头
 	head->eventStart = (TrackNode*)malloc(sizeof(TrackNode));
 	head->eventStart->rect = r;
+	head->eventStart->frameNum = startFrame;
 	head->eventStart->next = NULL;
 }
 
