@@ -439,7 +439,7 @@ static void displaySingleEvent(int index)
 				}
 				update_mhi2( image, motion, -5, buf, last, mhi, node->rect);//更新历史图像
 				cvShowImage( "Motion_Event", image );//显示处理过的图像
-				if( cvWaitKey(50) >= 0 )//10ms中按任意键退出
+				if( cvWaitKey(20) >= 0 )//10ms中按任意键退出
 					break;
 			}
 		}
@@ -492,7 +492,7 @@ static void displaySingleEvent2(int index)
 				cvRectangle( image, cvPoint(node->eventTempNode->rect.x, node->eventTempNode->rect.y),
 				cvPoint(node->eventTempNode->rect.x + node->eventTempNode->rect.width, node->eventTempNode->rect.y + node->eventTempNode->rect.height), s, 1, CV_AA,0);
 				cvShowImage( "Motion_Event", image );//显示处理过的图像
-				if( cvWaitKey(50) >= 0 )//10ms中按任意键退出
+				if( cvWaitKey(20) >= 0 )//10ms中按任意键退出
 					break;
 				int posFrames    = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
 				node->eventTempNode = node->eventTempNode->next;
@@ -502,7 +502,7 @@ static void displaySingleEvent2(int index)
 		cvDestroyWindow( "Motion_Event" );//销毁窗口
 	}
 }
-/*
+
 //显示所有事件
 static void displayAllEvent(int total, int maxEvent)
 {
@@ -613,10 +613,10 @@ static void displayAllEvent(int total, int maxEvent)
 	cvDestroyWindow( "AllEvent" );//销毁窗口
 	cvReleaseVideoWriter( &writer );
 }
-*/
+
 
 //显示所有事件
-static void displayAllEvent(int total, int maxEvent)
+static void displayAllEvent2(int total, int maxEvent)
 {
 	HistNode* node = head;
 	CvSize size = cvSize(300,300);
@@ -624,7 +624,7 @@ static void displayAllEvent(int total, int maxEvent)
 	IplImage* backImage;
 	//USES_CONVERSION;
 	//capture = 
-	//if(capture!=0)
+	if(capture!=0)
 	{
 		cvGrabFrame( capture );
 		backImage = cvRetrieveFrame( capture );
@@ -638,7 +638,22 @@ static void displayAllEvent(int total, int maxEvent)
 		USES_CONVERSION;
 		node->capture = cvCaptureFromAVI(FilePathName);
 
-		cvSetCaptureProperty(node->capture, CV_CAP_PROP_POS_FRAMES, node->startFrame);
+		//精确定位
+		cvSetCaptureProperty(node->capture, CV_CAP_PROP_POS_FRAMES, node->startFrame-1);
+		cvGrabFrame( capture );
+		int posFrames = (int) cvGetCaptureProperty(node->capture, CV_CAP_PROP_POS_FRAMES);
+		for(int i = 1; posFrames>node->startFrame; i++)
+		{
+			cvSetCaptureProperty(node->capture, CV_CAP_PROP_POS_FRAMES, node->startFrame-i-1);
+			cvGrabFrame( node->capture );
+			posFrames = (int) cvGetCaptureProperty(node->capture, CV_CAP_PROP_POS_FRAMES);
+		}
+		while(posFrames<node->startFrame-1)
+		{
+			cvGrabFrame( node->capture );
+			posFrames = (int) cvGetCaptureProperty(node->capture, CV_CAP_PROP_POS_FRAMES);
+		}
+
         node->eventTempNode = node->eventStart;
 		node = node->next;
 	}
