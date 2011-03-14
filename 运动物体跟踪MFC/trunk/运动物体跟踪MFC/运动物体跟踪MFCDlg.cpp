@@ -186,7 +186,9 @@ void C运动物体跟踪MFCDlg::OnBnClickedOpen()
 	CFileDialog dlg(TRUE);///TRUE为OPEN对话框，FALSE为SAVE AS对话框
 	if(dlg.DoModal()==IDOK){
 		FilePathName = dlg.GetPathName();
-		//MessageBox();
+		CString s = readEvents(NULL, "out.txt");
+		
+		MessageBox(s);
 	}
 	FilePath_Edit.SetWindowTextA(FilePathName);
 	Statics_Edit.SetWindowTextA("");
@@ -210,6 +212,7 @@ void C运动物体跟踪MFCDlg::OnBnClickedAnalyse()
 	{
 		process(FilePathName);
 		eventHistFilter(head);
+		printEvents(head, "out");
 		HistNode* node =  head;
 		total = 0;
 		maxEvent = 0; 
@@ -287,6 +290,6 @@ void C运动物体跟踪MFCDlg::OnBnClickedDisplayallevent()
 		MessageBox("没有事件可显示");
 	}else
 	{
-		displayAllEvent(total, maxEvent);
+		displayAllEvent2(total, maxEvent);
 	}
 }

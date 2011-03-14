@@ -29,7 +29,7 @@ const double MAX_TIME_DELTA = 0.5;
 const double MIN_TIME_DELTA = 0.05;
 const int N = 3;
 const int PRE_NUM_FRAME = 4;
-const int JIANGE_FRAME = 1;
+const int JIANGE_FRAME = 2;
 const int LIMIT = 40;
 //
 const int CONTOUR_MAX_AERA = 60000;
@@ -640,7 +640,7 @@ static void displayAllEvent2(int total, int maxEvent)
 
 		//精确定位
 		cvSetCaptureProperty(node->capture, CV_CAP_PROP_POS_FRAMES, node->startFrame-1);
-		cvGrabFrame( capture );
+		cvGrabFrame( node->capture );
 		int posFrames = (int) cvGetCaptureProperty(node->capture, CV_CAP_PROP_POS_FRAMES);
 		for(int i = 1; posFrames>node->startFrame; i++)
 		{
@@ -688,7 +688,7 @@ static void displayAllEvent2(int total, int maxEvent)
 				IplImage* image;
 				if( !(cvGrabFrame(node->capture )))//捕捉一桢
 					break;
-				if(i%JIANGE_FRAME==0)
+				if(i%JIANGE_FRAME==0 && node->eventTempNode)
 				{
 					image = cvRetrieveFrame( node->capture );//取出这个帧
 					if( image )//若取到则判断motion是否为空
@@ -705,6 +705,7 @@ static void displayAllEvent2(int total, int maxEvent)
 						cvResetImageROI(AllEventImage);
 						
 					}
+					node->eventTempNode = node->eventTempNode->next;
 				}
 			}
 			node = node->next;

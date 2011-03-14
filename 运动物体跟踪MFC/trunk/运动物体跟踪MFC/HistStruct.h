@@ -6,10 +6,14 @@
 #include <math.h>
 #include <ctype.h>
 #include <stdio.h>
-#include <string.h>
+#include <string>
+#include <vector>
+
 
 #include "运动物体跟踪MFC.h"
 #include "运动物体跟踪MFCDlg.h"
+
+using namespace std;
 class HistStruct
 {
 public:
@@ -300,4 +304,55 @@ static void printEvents(HistNode* head, CString fileName)
 	fclose(fp);
 }
 
-//fprintf(fp,data.c_str());
+static char *line = NULL;
+static int max_line_len;
+
+static char* readline(FILE *input)
+{
+	int len;
+	
+	if(fgets(line,max_line_len,input) == NULL)
+		return NULL;
+
+	while(strrchr(line,'\n') == NULL)
+	{
+		max_line_len *= 2;
+		line = (char *) realloc(line,max_line_len);
+		len = (int) strlen(line);
+		if(fgets(line+len,max_line_len-len,input) == NULL)
+			break;
+	}
+	return line;
+}
+
+vector<string> splitEx(const string& src, string separate_character)
+{
+    vector<string> strs;
+    
+  int separate_characterLen = separate_character.size();//分割字符串的长度,这样就可以支持如“,,”多字符串的分隔符
+    int lastPosition = 0,index = -1;
+    while (-1 != (index = src.find(separate_character,lastPosition)))
+    {
+        strs.push_back(src.substr(lastPosition,index - lastPosition));
+        lastPosition = index + separate_characterLen;
+    }
+    string lastString = src.substr(lastPosition);//截取最后一个分隔符后的内容
+    if (!lastString.empty())
+        strs.push_back(lastString);//如果最后一个分隔符后还有内容就入队
+    return strs;
+}
+
+
+
+//将事件从文本文件读入
+static CString readEvents(HistNode* head, CString fileName)
+{
+	FILE *fp = fopen("out.txt","r");
+	if(fp)
+	{
+		int a = 0;
+	}
+	char* line = readline(fp);
+	vector<string> p = splitEx(line, ";");  
+	return p[0].c_str();
+}
