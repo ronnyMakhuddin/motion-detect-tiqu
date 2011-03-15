@@ -7,7 +7,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string>
-#include <vector>
+
 
 
 #include "运动物体跟踪MFC.h"
@@ -263,13 +263,21 @@ static HistNode* searchHist(HistNode*head, CvRect r2)
 }
 
 //将所有事件以及轨迹输出到文本文件
-static void printEvents(HistNode* head, CString fileName)
+static void printEvents(HistNode* head, CString fileName, int totalEvent, int jiangeFrame)
 {
 	fileName.Append(".txt");
 	FILE *fp = fopen(fileName,"w");
+	CString totalS;
+	CString jiangeS;
 	CString startFrame;
 	CString endFrame;
 	CString frameInfo;
+	totalS.Format(_T("%d"), totalEvent);
+	jiangeS.Format(_T("%d"), jiangeFrame);
+	fprintf(fp, totalS);
+	fprintf(fp, " ");
+	fprintf(fp, jiangeS);
+	fprintf(fp, "\n");
 	while(head)
 	{
 		startFrame.Format(_T("%d"), head->startFrame);
@@ -278,7 +286,7 @@ static void printEvents(HistNode* head, CString fileName)
 		fprintf(fp, " ");
 		fprintf(fp, endFrame);
 		fprintf(fp, " ");
-		TrackNode* trackNode = head->eventStart;
+		TrackNode*trackNode = head->eventStart;
 		while(trackNode)
 		{
 			frameInfo.Format(_T("%d"), trackNode->rect.x);
@@ -302,55 +310,61 @@ static void printEvents(HistNode* head, CString fileName)
 	fclose(fp);
 }
 
-static char *line = NULL;
-static int max_line_len;
-
-static char* readline(FILE *input)
-{
-	int len;
-	
-	if(fgets(line,max_line_len,input) == NULL)
-		return NULL;
-
-	while(strrchr(line,'\n') == NULL)
-	{
-		max_line_len *= 2;
-		line = (char *) realloc(line,max_line_len);
-		len = (int) strlen(line);
-		if(fgets(line+len,max_line_len-len,input) == NULL)
-			break;
-	}
-	return line;
-}
-
-vector<string> splitEx(const string& src, string separate_character)
-{
-    vector<string> strs;
-    
-  int separate_characterLen = separate_character.size();//分割字符串的长度,这样就可以支持如“,,”多字符串的分隔符
-    int lastPosition = 0,index = -1;
-    while (-1 != (index = src.find(separate_character,lastPosition)))
-    {
-        strs.push_back(src.substr(lastPosition,index - lastPosition));
-        lastPosition = index + separate_characterLen;
-    }
-    string lastString = src.substr(lastPosition);//截取最后一个分隔符后的内容
-    if (!lastString.empty())
-        strs.push_back(lastString);//如果最后一个分隔符后还有内容就入队
-    return strs;
-}
-
-
-
 //将事件从文本文件读入
-static CString readEvents(HistNode* head, CString fileName)
+static void readEvents(HistNode* &head, FILE*f, int &jiange)
 {
-	FILE *fp = fopen("out.txt","r");
-	if(fp)
+	int startFrame, endFrame, totalEvent;
+	int **a;
+	//FILE*f = fopen(fileName,"r");
+	fscanf(f,"%d",&totalEvent);
+	fscanf(f,"%d",&jiange);
+	a = (int**)malloc(sizeof(int)*totalEvent);
+
+	if(head)
+		deleteList(head);
+	head = (HistNode*)malloc(sizeof(HistNode));
+
+	HistNode* node = head;
+	for(int i = 0; i < totalEvent; i++)
 	{
-		int a = 0;
+		if((!node->next) && (i!=0))
+		{
+			node->next = (HistNode*)malloc(sizeof(HistNode));
+			node->next->pre = node;
+			node = node->next;
+		}
+		fscanf(f,"%d",&startFrame);
+		fscanf(f,"%d",&endFrame);
+		node->num = i;
+		node->startFrame = startFrame;
+		node->endFrame = endFrame;
+		node->next = NULL;
+
+		int numFrame = endFrame-startFrame;
+		int numPoint = numFrame/jiange;
+		a[i] = (int*)malloc(sizeof(int)*(4*numPoint));
+		node->eventStart = (TrackNode*)malloc(sizeof(TrackNode));
+		TrackNode*eventTempNode = node->eventStart;
+		eventTempNode->next = NULL;
+		for(int j = 0; j < numPoint; j++)
+		{
+			if(j==33)
+				int a = 0;
+			if((j != 0))
+			{
+				eventTempNode->next = (TrackNode*)malloc(sizeof(TrackNode));
+				eventTempNode = eventTempNode->next;
+			}
+			fscanf(f,"%d",&a[i][j]);
+			eventTempNode->rect.x = a[i][j];
+			fscanf(f,"%d",&a[i][j]);
+			eventTempNode->rect.y = a[i][j];
+			fscanf(f,"%d",&a[i][j]);
+			eventTempNode->rect.width = a[i][j];
+			fscanf(f,"%d",&a[i][j]);
+			eventTempNode->rect.height = a[i][j];
+			eventTempNode->next = NULL;
+		}
 	}
-	char* line = readline(fp);
-	vector<string> p = splitEx(line, ";");  
-	return p[0].c_str();
+	fclose(f);
 }

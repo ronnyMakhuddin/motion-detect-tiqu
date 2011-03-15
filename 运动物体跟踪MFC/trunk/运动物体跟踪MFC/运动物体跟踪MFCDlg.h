@@ -42,4 +42,5 @@ public:
 	afx_msg void OnBnClickedButton2();
 	CEdit Statics_Edit;
 	afx_msg void OnBnClickedDisplayallevent();
+	CEdit jiange_EDit;
 };

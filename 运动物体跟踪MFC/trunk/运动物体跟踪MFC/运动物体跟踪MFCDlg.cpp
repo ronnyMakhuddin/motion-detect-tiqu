@@ -71,6 +71,7 @@ void C运动物体跟踪MFCDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT1, FilePath_Edit);
 	DDX_Control(pDX, IDC_PROGRESS1, analyseProgress);
 	DDX_Control(pDX, IDC_Statics, Statics_Edit);
+	DDX_Control(pDX, IDC_EDIT2, jiange_EDit);
 }
 
 BEGIN_MESSAGE_MAP(C运动物体跟踪MFCDlg, CDialog)
@@ -186,9 +187,10 @@ void C运动物体跟踪MFCDlg::OnBnClickedOpen()
 	CFileDialog dlg(TRUE);///TRUE为OPEN对话框，FALSE为SAVE AS对话框
 	if(dlg.DoModal()==IDOK){
 		FilePathName = dlg.GetPathName();
-		//CString s = readEvents(NULL, "out.txt");
+		FileName = dlg.GetFileName();
+		FileTitle = dlg.GetFileTitle();
 		
-		//MessageBox(s);
+		//MessageBox(dlg.GetFileTitle());
 	}
 	FilePath_Edit.SetWindowTextA(FilePathName);
 	Statics_Edit.SetWindowTextA("");
@@ -199,6 +201,7 @@ void C运动物体跟踪MFCDlg::OnBnClickedOpen()
 int total = 0;
 int maxEvent = 0; 
 int minEvent = 100000;
+int jiange = 3;
 //分析程序按钮
 void C运动物体跟踪MFCDlg::OnBnClickedAnalyse()
 {
@@ -210,9 +213,27 @@ void C运动物体跟踪MFCDlg::OnBnClickedAnalyse()
 		MessageBox("请先选择一个视频文件");
 	}else
 	{
-		process(FilePathName);
-		eventHistFilter(head);
-		printEvents(head, "out");
+		//判断是否存在已经分析好的txt文件
+		CString txtName = FileTitle;
+		txtName.Append(".txt");
+		FILE*f = fopen(txtName,"r");
+		bool isExist = false;
+		if(f)
+		{
+			readEvents(head, f, jiange);
+			fclose(f);
+			isExist = true;
+		}else
+		{
+			CString jiangeS;
+			jiange_EDit.GetWindowTextA(jiangeS);
+			jiange = atoi(jiangeS.GetBuffer());
+			if(jiange == 0)
+				jiange = 2;
+			process(FilePathName,jiange);
+		    eventHistFilter(head);
+		}
+		
 		HistNode* node =  head;
 		total = 0;
 		maxEvent = 0; 
@@ -251,6 +272,9 @@ void C运动物体跟踪MFCDlg::OnBnClickedAnalyse()
 		maxEventCString.Format("%d", maxEvent);
 		statics = "共" + totalCString + "个事件,最长事件" + maxEventCString + "帧, 最小事件" + minEventCString + "帧";
 		Statics_Edit.SetWindowTextA(statics);
+
+		if(!isExist)
+			printEvents(head, FileTitle, total, jiange);
 	}
 
 }
@@ -266,7 +290,7 @@ void C运动物体跟踪MFCDlg::OnLbnDblclkList1()
 	// TODO: 在此添加控件通知处理程序代码
 	int index = EventList.GetCurSel();
 
-	displaySingleEvent(index);
+	displaySingleEvent(index,jiange);
 }
 
 //播放选中事件按钮
@@ -277,7 +301,7 @@ void C运动物体跟踪MFCDlg::OnBnClickedButton2()
 	if(index == -1)
         MessageBox("没有选中事件");
 	else
-	    displaySingleEvent2(index);
+	    displaySingleEvent(index,jiange);
 }
 
 //播放所有事件
@@ -290,6 +314,6 @@ void C运动物体跟踪MFCDlg::OnBnClickedDisplayallevent()
 		MessageBox("没有事件可显示");
 	}else
 	{
-		displayAllEvent2(total, maxEvent);
+		displayAllEvent(total, maxEvent,jiange);
 	}
 }
