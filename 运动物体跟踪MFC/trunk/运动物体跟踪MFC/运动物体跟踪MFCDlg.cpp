@@ -186,9 +186,9 @@ void C运动物体跟踪MFCDlg::OnBnClickedOpen()
 	CFileDialog dlg(TRUE);///TRUE为OPEN对话框，FALSE为SAVE AS对话框
 	if(dlg.DoModal()==IDOK){
 		FilePathName = dlg.GetPathName();
-		CString s = readEvents(NULL, "out.txt");
+		//CString s = readEvents(NULL, "out.txt");
 		
-		MessageBox(s);
+		//MessageBox(s);
 	}
 	FilePath_Edit.SetWindowTextA(FilePathName);
 	Statics_Edit.SetWindowTextA("");

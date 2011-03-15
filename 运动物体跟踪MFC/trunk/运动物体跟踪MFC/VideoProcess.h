@@ -29,11 +29,11 @@ const double MAX_TIME_DELTA = 0.5;
 const double MIN_TIME_DELTA = 0.05;
 const int N = 3;
 const int PRE_NUM_FRAME = 4;
-const int JIANGE_FRAME = 2;
-const int LIMIT = 40;
+const int JIANGE_FRAME = 4;
+const int LIMIT = 120;
 //
 const int CONTOUR_MAX_AERA = 60000;
-const int CONTOUR_MIN_AERA = 1000;
+const int CONTOUR_MIN_AERA = 6000;
 
 static struct HistNode*head;
 static CString FilePathName;
@@ -632,9 +632,14 @@ static void displayAllEvent2(int total, int maxEvent)
 	}
 	
 	cvReleaseCapture( &capture );//释放设备
+
+	int limit = 0;
+			
 	//初始化
 	while(node)
 	{
+		if(limit++>=LIMIT)
+			break;
 		USES_CONVERSION;
 		node->capture = cvCaptureFromAVI(FilePathName);
 
@@ -664,7 +669,7 @@ static void displayAllEvent2(int total, int maxEvent)
 	cvNamedWindow( "AllEvent", 1 );//建立窗口
 	IplImage* AllEventImage = cvCreateImage(cvGetSize(backImage),backImage->depth , backImage->nChannels);
 	cvCopy(backImage,AllEventImage,NULL);
-	for(int i = 0; i < maxEvent + 4; i++)
+	for(int i = 0; i < maxEvent; i++)
 	{
 		if(i%JIANGE_FRAME==0)
 		{
@@ -673,7 +678,7 @@ static void displayAllEvent2(int total, int maxEvent)
 			cvCopy(backImage,AllEventImage,NULL);
 			cvReleaseImage(&tempRelease);
 		}
-		int limit = 0;
+		limit = 0;
 		while(node)
 		{
 			if(limit++>=LIMIT)
@@ -720,8 +725,12 @@ static void displayAllEvent2(int total, int maxEvent)
 			break;
 	}
 	node = head;
+
+	limit = 0;
 	while(node)
 	{
+		if(limit++>=LIMIT)
+			break;
 		cvReleaseCapture( &node->capture );//释放设备
 		node = node->next;
 	}

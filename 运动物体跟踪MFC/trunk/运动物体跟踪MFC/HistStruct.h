@@ -275,27 +275,25 @@ static void printEvents(HistNode* head, CString fileName)
 		startFrame.Format(_T("%d"), head->startFrame);
 		endFrame.Format(_T("%d"), head->endFrame);
 		fprintf(fp, startFrame);
-		fprintf(fp, ",");
+		fprintf(fp, " ");
 		fprintf(fp, endFrame);
-		fprintf(fp, ";");
+		fprintf(fp, " ");
 		TrackNode* trackNode = head->eventStart;
 		while(trackNode)
 		{
 			frameInfo.Format(_T("%d"), trackNode->rect.x);
 			fprintf(fp, frameInfo);
-			fprintf(fp, ",");
+			fprintf(fp, " ");
 			frameInfo.Format(_T("%d"), trackNode->rect.y);
 			fprintf(fp, frameInfo);
-			fprintf(fp, ",");
+			fprintf(fp, " ");
 			frameInfo.Format(_T("%d"), trackNode->rect.width);
 			fprintf(fp, frameInfo);
-			fprintf(fp, ",");
+			fprintf(fp, " ");
 			frameInfo.Format(_T("%d"), trackNode->rect.height);
 			fprintf(fp, frameInfo);
 			if(trackNode = trackNode->next)
-				fprintf(fp, ";");
-
-			//trackNode = trackNode->next;
+				fprintf(fp, " ");
 		}
 		fprintf(fp, "\n");
 		head = head->next;
