@@ -30,10 +30,10 @@ const double MIN_TIME_DELTA = 0.05;
 const int N = 3;
 const int PRE_NUM_FRAME = 4;
 const int JIANGE_FRAME = 3;
-const int LIMIT = 120;
+const int LIMIT = 100;
 //
 const int CONTOUR_MAX_AERA = 60000;
-const int CONTOUR_MIN_AERA = 1000;
+const int CONTOUR_MIN_AERA = 6000;
 
 static struct HistNode*head;
 static CString FilePathName;
@@ -266,6 +266,7 @@ static void displayAllEvent(int total, int maxEvent, int jiange)
 	HistNode* node = head;
 	CvSize size = cvSize(300,300);
     CvCapture* capture = cvCaptureFromAVI( FilePathName);
+	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES,15);
 	IplImage* backImage;
 	if(capture!=0)
 	{
@@ -274,7 +275,7 @@ static void displayAllEvent(int total, int maxEvent, int jiange)
 		size = cvSize(backImage->width,backImage->height);
 	}
 	
-	cvReleaseCapture( &capture );//释放设备
+	//cvReleaseCapture( &capture );//释放设备
 
 	int limit = 0;
 			
@@ -378,5 +379,6 @@ static void displayAllEvent(int total, int maxEvent, int jiange)
 		node = node->next;
 	}
 	cvDestroyWindow( "AllEvent" );//销毁窗口
+	cvReleaseCapture( &capture );//释放设备
 	cvReleaseVideoWriter( &writer );
 }

@@ -271,6 +271,7 @@ static void printEvents(HistNode* head, CString fileName, int totalEvent, int ji
 	CString jiangeS;
 	CString startFrame;
 	CString endFrame;
+	CString eventLength;
 	CString frameInfo;
 	totalS.Format(_T("%d"), totalEvent);
 	jiangeS.Format(_T("%d"), jiangeFrame);
@@ -287,6 +288,17 @@ static void printEvents(HistNode* head, CString fileName, int totalEvent, int ji
 		fprintf(fp, endFrame);
 		fprintf(fp, " ");
 		TrackNode*trackNode = head->eventStart;
+		int eventLengthI = 0;
+		while(trackNode)
+		{
+			eventLengthI++;
+			trackNode = trackNode->next;
+		}
+		eventLength.Format(_T("%d"), eventLengthI);
+		fprintf(fp, eventLength);
+		fprintf(fp, " ");
+
+		trackNode = head->eventStart;
 		while(trackNode)
 		{
 			frameInfo.Format(_T("%d"), trackNode->rect.x);
@@ -313,12 +325,11 @@ static void printEvents(HistNode* head, CString fileName, int totalEvent, int ji
 //将事件从文本文件读入
 static void readEvents(HistNode* &head, FILE*f, int &jiange)
 {
-	int startFrame, endFrame, totalEvent;
-	int **a;
+	int startFrame, endFrame, totalEvent, eventLength;
 	//FILE*f = fopen(fileName,"r");
 	fscanf(f,"%d",&totalEvent);
 	fscanf(f,"%d",&jiange);
-	a = (int**)malloc(sizeof(int)*totalEvent);
+	//a = (int**)malloc(sizeof(int)*totalEvent);
 
 	if(head)
 		deleteList(head);
@@ -335,14 +346,17 @@ static void readEvents(HistNode* &head, FILE*f, int &jiange)
 		}
 		fscanf(f,"%d",&startFrame);
 		fscanf(f,"%d",&endFrame);
+		fscanf(f,"%d",&eventLength);
 		node->num = i;
 		node->startFrame = startFrame;
 		node->endFrame = endFrame;
 		node->next = NULL;
 
 		int numFrame = endFrame-startFrame;
-		int numPoint = numFrame/jiange;
-		a[i] = (int*)malloc(sizeof(int)*(4*numPoint));
+		//int numPoint = numFrame/jiange;
+		int numPoint = eventLength;
+		//a[i] = (int*)malloc(sizeof(int)*(4*numPoint));
+		int value = 0;
 		node->eventStart = (TrackNode*)malloc(sizeof(TrackNode));
 		TrackNode*eventTempNode = node->eventStart;
 		eventTempNode->next = NULL;
@@ -355,14 +369,14 @@ static void readEvents(HistNode* &head, FILE*f, int &jiange)
 				eventTempNode->next = (TrackNode*)malloc(sizeof(TrackNode));
 				eventTempNode = eventTempNode->next;
 			}
-			fscanf(f,"%d",&a[i][j]);
-			eventTempNode->rect.x = a[i][j];
-			fscanf(f,"%d",&a[i][j]);
-			eventTempNode->rect.y = a[i][j];
-			fscanf(f,"%d",&a[i][j]);
-			eventTempNode->rect.width = a[i][j];
-			fscanf(f,"%d",&a[i][j]);
-			eventTempNode->rect.height = a[i][j];
+			fscanf(f,"%d",&value);
+			eventTempNode->rect.x = value;
+			fscanf(f,"%d",&value);
+			eventTempNode->rect.y = value;
+			fscanf(f,"%d",&value);
+			eventTempNode->rect.width = value;
+			fscanf(f,"%d",&value);
+			eventTempNode->rect.height = value;
 			eventTempNode->next = NULL;
 		}
 	}
