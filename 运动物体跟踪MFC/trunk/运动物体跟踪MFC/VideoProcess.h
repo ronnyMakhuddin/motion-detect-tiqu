@@ -33,7 +33,7 @@ const int JIANGE_FRAME = 3;
 const int LIMIT = 100;
 //
 const int CONTOUR_MAX_AERA = 60000;
-const int CONTOUR_MIN_AERA = 6000;
+const int CONTOUR_MIN_AERA = 1000;
 
 static struct HistNode*head;
 static CString FilePathName;
@@ -349,7 +349,8 @@ static void displayAllEvent(int total, int maxEvent, int jiange)
 						// Set the image ROI to display the current image
 						cvSetImageROI(AllEventImage,node->eventTempNode->rect);
 						// Resize the input image and copy the it to the Single Big Image
-						cvResize(sub_img, AllEventImage);
+						cvAddWeighted(sub_img, 0.7, AllEventImage, 1 - 0.7, 0, AllEventImage);
+						//cvResize(sub_img, AllEventImage);
 						// Reset the ROI in order to display the next image
 						cvResetImageROI(AllEventImage);
 						
