@@ -29,11 +29,11 @@ const double MAX_TIME_DELTA = 0.5;
 const double MIN_TIME_DELTA = 0.05;
 const int N = 3;
 const int PRE_NUM_FRAME = 4;
-const int JIANGE_FRAME = 3;
+const int JIANGE_FRAME = 4;
 const int LIMIT = 100;
 //
 const int CONTOUR_MAX_AERA = 60000;
-const int CONTOUR_MIN_AERA = 1000;
+const int CONTOUR_MIN_AERA = 300;
 
 static struct HistNode*head;
 static CString FilePathName;
@@ -313,6 +313,11 @@ static void displayAllEvent(int total, int maxEvent, int jiange)
 	cvNamedWindow( "AllEvent", 1 );//½¨Á¢´°¿Ú
 	IplImage* AllEventImage = cvCreateImage(cvGetSize(backImage),backImage->depth , backImage->nChannels);
 	cvCopy(backImage,AllEventImage,NULL);
+
+	float alpha_value = 0.7;
+	char event_str[10];
+	CvFont font;
+	cvInitFont(&font, CV_FONT_HERSHEY_SIMPLEX, 0.5, 0.5);
 	for(int i = 0; i < maxEvent; i++)
 	{
 		if(i%jiange==0)
@@ -327,6 +332,7 @@ static void displayAllEvent(int total, int maxEvent, int jiange)
 		{
 			if(limit++>=LIMIT)
 				break;
+			sprintf(event_str, "%d", limit);
 			if(node->eventTempNode==NULL)
 			{
 				node = node->next;
@@ -348,9 +354,11 @@ static void displayAllEvent(int total, int maxEvent, int jiange)
 						cvGetImage(cvGetSubRect(image,&test,node->eventTempNode->rect),sub_img);
 						// Set the image ROI to display the current image
 						cvSetImageROI(AllEventImage,node->eventTempNode->rect);
+						cvPutText(sub_img, event_str, cvPoint(10, 20), &font, cvScalar(255, 0, 0));
 						// Resize the input image and copy the it to the Single Big Image
-						cvAddWeighted(sub_img, 0.7, AllEventImage, 1 - 0.7, 0, AllEventImage);
+						cvAddWeighted(sub_img, alpha_value, AllEventImage, 1 - alpha_value, 0, AllEventImage);
 						//cvResize(sub_img, AllEventImage);
+						
 						// Reset the ROI in order to display the next image
 						cvResetImageROI(AllEventImage);
 						
