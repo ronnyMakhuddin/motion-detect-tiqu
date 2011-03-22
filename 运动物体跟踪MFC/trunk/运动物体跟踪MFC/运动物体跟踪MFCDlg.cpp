@@ -72,6 +72,8 @@ void C运动物体跟踪MFCDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PROGRESS1, analyseProgress);
 	DDX_Control(pDX, IDC_Statics, Statics_Edit);
 	DDX_Control(pDX, IDC_EDIT2, jiange_EDit);
+	DDX_Control(pDX, IDOPEN, selectButton);
+	DDX_Control(pDX, IDC_ANALYse, analysisButton);
 }
 
 BEGIN_MESSAGE_MAP(C运动物体跟踪MFCDlg, CDialog)
@@ -119,7 +121,7 @@ BOOL C运动物体跟踪MFCDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-
+	selectButton.SetIcon(m_hIcon);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 

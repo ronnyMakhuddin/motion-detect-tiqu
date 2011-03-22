@@ -43,4 +43,6 @@ public:
 	CEdit Statics_Edit;
 	afx_msg void OnBnClickedDisplayallevent();
 	CEdit jiange_EDit;
+	CButton selectButton;
+	CButton analysisButton;
 };
