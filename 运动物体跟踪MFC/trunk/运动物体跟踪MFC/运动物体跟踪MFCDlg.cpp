@@ -77,6 +77,8 @@ void C运动物体跟踪MFCDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON2, playSingleButton);
 	DDX_Control(pDX, IDC_DisplayAllEvent, playAllButton);
 	DDX_Control(pDX, IDCANCEL, closeButton);
+	DDX_Control(pDX, IDC_EDIT3, minAreaEdit);
+	DDX_Control(pDX, IDC_EDIT4, maxAreaEdit);
 }
 
 BEGIN_MESSAGE_MAP(C运动物体跟踪MFCDlg, CDialog)
@@ -173,6 +175,14 @@ BOOL C运动物体跟踪MFCDlg::OnInitDialog()
 	// TODO: 在此添加额外的初始化代码
 	closeButton.SetBitmap(hBitmap_close);
 
+	//初始化编辑框值
+	CString str;
+	str.Format("%d", 2);
+	jiange_EDit.SetWindowTextA(str);
+	str.Format("%d", 6000);
+	minAreaEdit.SetWindowTextA(str);
+	str.Format("%d", 60000);
+	maxAreaEdit.SetWindowTextA(str);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -284,7 +294,12 @@ void C运动物体跟踪MFCDlg::OnBnClickedAnalyse()
 			jiange = atoi(jiangeS.GetBuffer());
 			if(jiange == 0)
 				jiange = 2;
-			process(FilePathName,jiange);
+			int minArea = 6000, maxArea = 60000;
+			minAreaEdit.GetWindowTextA(jiangeS);
+			minArea = atoi(jiangeS.GetBuffer());
+			maxAreaEdit.GetWindowTextA(jiangeS);
+			maxArea = atoi(jiangeS.GetBuffer());
+			process(FilePathName,jiange,minArea, maxArea);
 		    eventHistFilter(head);
 		}
 		

@@ -48,4 +48,6 @@ public:
 	CButton playSingleButton;
 	CButton playAllButton;
 	CButton closeButton;
+	CEdit minAreaEdit;
+	CEdit maxAreaEdit;
 };

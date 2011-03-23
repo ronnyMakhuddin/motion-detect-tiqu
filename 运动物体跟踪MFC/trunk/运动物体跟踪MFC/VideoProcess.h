@@ -42,7 +42,7 @@ static CString FileName;
 //  参数：
 //  img – 输入视频帧
 //  dst – 检测结果
-static void  update_mhi( IplImage* img, IplImage* dst, int frameNum, IplImage**&buf, int &last, IplImage*&mhi)
+static void  update_mhi( IplImage* img, IplImage* dst, int frameNum, IplImage**&buf, int &last, IplImage*&mhi, int minArea, int maxArea)
 {
 	double timestamp = clock()/100.; // get current time in seconds 时间戳
     CvSize size = cvSize(img->width,img->height);
@@ -111,7 +111,7 @@ static void  update_mhi( IplImage* img, IplImage* dst, int frameNum, IplImage**&
     {
 		CvRect r = ((CvContour*)cont)->rect;
 	  
-	    if(r.height * r.width > CONTOUR_MIN_AERA&&r.height * r.width < CONTOUR_MAX_AERA) // 面积小的方形抛弃掉
+	    if(r.height * r.width > minArea&&r.height * r.width < maxArea) // 面积小的方形抛弃掉
 	    {
 			//提取矩形框图像和直方图
 		    //CvSize size = {r.width,r.height};
@@ -149,7 +149,7 @@ static void  update_mhi( IplImage* img, IplImage* dst, int frameNum, IplImage**&
 }
 
 //分析视频
-static void process(CString str, int jiange)
+static void process(CString str, int jiange, int minArea, int maxArea)
 {
 	CProgressCtrl* p = (CProgressCtrl*)(AfxGetApp()->m_pMainWnd->GetDlgItem(IDC_PROGRESS1));
     IplImage* motion = 0;
@@ -192,7 +192,7 @@ static void process(CString str, int jiange)
 					}
 				}
 				int posFrames    = (int) cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
-				update_mhi( image, motion, posFrames, buf, last, mhi);//更新历史图像
+				update_mhi( image, motion, posFrames, buf, last, mhi, minArea, maxArea);//更新历史图像
 				cvShowImage( "Motion", image );//显示处理过的图像
 				if( cvWaitKey(10) >= 0 )//10ms中按任意键退出
 					break;
