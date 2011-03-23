@@ -264,7 +264,27 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\res\analyze.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\close.bmp"
+				>
+			</File>
+			<File
 				RelativePath=".\res\MFC.rc2"
+				>
+			</File>
+			<File
+				RelativePath=".\res\playAll.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\playSingle.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\selectFile.bmp"
 				>
 			</File>
 			<File

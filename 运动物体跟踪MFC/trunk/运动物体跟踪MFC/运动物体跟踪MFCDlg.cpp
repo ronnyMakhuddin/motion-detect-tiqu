@@ -74,6 +74,9 @@ void C运动物体跟踪MFCDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT2, jiange_EDit);
 	DDX_Control(pDX, IDOPEN, selectButton);
 	DDX_Control(pDX, IDC_ANALYse, analysisButton);
+	DDX_Control(pDX, IDC_BUTTON2, playSingleButton);
+	DDX_Control(pDX, IDC_DisplayAllEvent, playAllButton);
+	DDX_Control(pDX, IDCANCEL, closeButton);
 }
 
 BEGIN_MESSAGE_MAP(C运动物体跟踪MFCDlg, CDialog)
@@ -120,8 +123,57 @@ BOOL C运动物体跟踪MFCDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
+	//选择文件按钮初始化
+    HBITMAP   hBitmap_selectFile;      
+    hBitmap_selectFile = (HBITMAP)::LoadImage( NULL,      
+		"res/selectFile.bmp",                           // 图片全路径     
+		IMAGE_BITMAP,                          // 图片格式     
+		0,0,      
+		LR_LOADFROMFILE|LR_CREATEDIBSECTION);
 	// TODO: 在此添加额外的初始化代码
-	selectButton.SetIcon(m_hIcon);
+	selectButton.SetBitmap(hBitmap_selectFile);
+
+	//分析视频按钮初始化
+    HBITMAP   hBitmap_analyze;      
+    hBitmap_analyze = (HBITMAP)::LoadImage( NULL,      
+		"res/analyze.bmp",                           // 图片全路径     
+		IMAGE_BITMAP,                          // 图片格式     
+		0,0,      
+		LR_LOADFROMFILE|LR_CREATEDIBSECTION);
+	// TODO: 在此添加额外的初始化代码
+	analysisButton.SetBitmap(hBitmap_analyze);
+
+	//播放单个事件按钮初始化
+    HBITMAP   hBitmap_playSingle;      
+    hBitmap_playSingle = (HBITMAP)::LoadImage( NULL,      
+		"res/playSingle.bmp",                           // 图片全路径     
+		IMAGE_BITMAP,                          // 图片格式     
+		0,0,      
+		LR_LOADFROMFILE|LR_CREATEDIBSECTION);
+	// TODO: 在此添加额外的初始化代码
+	playSingleButton.SetBitmap(hBitmap_playSingle);
+
+	//播放所有事件按钮初始化
+    HBITMAP   hBitmap_playAll;      
+    hBitmap_playAll = (HBITMAP)::LoadImage( NULL,      
+		"res/playAll.bmp",                           // 图片全路径     
+		IMAGE_BITMAP,                          // 图片格式     
+		0,0,      
+		LR_LOADFROMFILE|LR_CREATEDIBSECTION);
+	// TODO: 在此添加额外的初始化代码
+	playAllButton.SetBitmap(hBitmap_playAll);
+
+	//关闭按钮初始化
+    HBITMAP   hBitmap_close;      
+    hBitmap_close = (HBITMAP)::LoadImage( NULL,      
+		"res/close.bmp",                           // 图片全路径     
+		IMAGE_BITMAP,                          // 图片格式     
+		0,0,      
+		LR_LOADFROMFILE|LR_CREATEDIBSECTION);
+	// TODO: 在此添加额外的初始化代码
+	closeButton.SetBitmap(hBitmap_close);
+
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 

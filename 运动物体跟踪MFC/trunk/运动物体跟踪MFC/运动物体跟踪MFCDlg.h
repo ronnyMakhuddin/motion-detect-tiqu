@@ -45,4 +45,7 @@ public:
 	CEdit jiange_EDit;
 	CButton selectButton;
 	CButton analysisButton;
+	CButton playSingleButton;
+	CButton playAllButton;
+	CButton closeButton;
 };
