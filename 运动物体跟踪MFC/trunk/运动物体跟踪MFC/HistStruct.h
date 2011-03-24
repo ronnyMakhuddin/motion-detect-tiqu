@@ -110,6 +110,7 @@ static HistNode* insertNode(HistNode*head, CvRect r, int startFrame)
 	node->next = insert;
 	insert->next = NULL;
 	insert->pre = node;
+	insert->mark = true;
 
 	//事件的表头
 	insert->eventStart = (TrackNode*)malloc(sizeof(TrackNode));
