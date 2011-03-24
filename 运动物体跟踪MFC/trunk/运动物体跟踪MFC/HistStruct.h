@@ -14,7 +14,7 @@
 #include "运动物体跟踪MFCDlg.h"
 
 using namespace std;
-class HistStruct
+class HistStruct 
 {
 public:
 	HistStruct(void);
