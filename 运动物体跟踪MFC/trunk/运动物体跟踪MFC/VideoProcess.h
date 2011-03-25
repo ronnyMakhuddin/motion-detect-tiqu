@@ -308,7 +308,8 @@ static void displayAllEvent(int total, int maxEvent, int jiange)
 	}
 	node = head;
     
-	CvVideoWriter*writer = cvCreateVideoWriter("allEvent.avi",-1,50, size);
+	//CvVideoWriter*writer = cvCreateVideoWriter("allEvent.avi",-1,50, size);
+	CvVideoWriter*writer = cvCreateVideoWriter("allEvent.avi",CV_FOURCC('X','V','I','D'),50, size);
 
 	cvNamedWindow( "AllEvent", 1 );//½¨Á¢´°¿Ú
 	IplImage* AllEventImage = cvCreateImage(cvGetSize(backImage),backImage->depth , backImage->nChannels);
