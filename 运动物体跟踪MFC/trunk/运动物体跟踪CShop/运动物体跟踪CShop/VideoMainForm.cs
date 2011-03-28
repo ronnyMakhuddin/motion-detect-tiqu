@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
+using Emgu.Util;
 
 namespace 运动物体跟踪CShop
 {
@@ -49,30 +50,10 @@ namespace 运动物体跟踪CShop
         //分析视频按钮事件响应
         private void analyzeButton_Click(object sender, EventArgs e)
         {
-            //VideoProcess.analyzeVideo(Global.filePath);
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "AVI文件|*.avi";
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                CvInvoke.cvNamedWindow("打开视频");
-                IntPtr capture = CvInvoke.cvCreateFileCapture(openFileDialog.FileName);
-                //Emgu.CV.Capture aa = new Emgu.CV.Capture(openFileDialog.FileName);
-                //IntPtr capture = CvInvoke.cvCreateCameraCapture(-1);
-                //this.video = capture;
-                IntPtr frame = new IntPtr();
-                while (true)
-                {
-                    frame = CvInvoke.cvQueryFrame(capture);
-                    CvInvoke.cvShowImage("打开视频", frame);
-                    //if (!frame) break;
-                    int c = CvInvoke.cvWaitKey(20);
-                    if (c == 13) break;
-                }
-                //this.video = capture;
-                CvInvoke.cvWaitKey(0);
-                CvInvoke.cvReleaseCapture(ref capture);
-                CvInvoke.cvDestroyWindow("打开视频");
-            }
+            if(Global.filePath==null)
+                MessageBox.Show("请先选择一个视频文件");
+            else
+                VideoProcess.analyzeVideo(Global.filePath);
         }
 
         //播放单个事件按钮事件响应
