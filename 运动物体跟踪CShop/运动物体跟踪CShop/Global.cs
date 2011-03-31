@@ -15,6 +15,6 @@ namespace 运动物体跟踪CShop
         static public int jiange = 2;
         static public int maxEventNum = 0;
         static public int minEventNum = 10000000;
-        static public int LIMIT = 100;
+        static public int LIMIT = 100; 
     }
 }
