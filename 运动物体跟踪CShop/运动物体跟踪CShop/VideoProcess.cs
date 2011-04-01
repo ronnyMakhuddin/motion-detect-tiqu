@@ -343,12 +343,13 @@ namespace 运动物体跟踪CShop
 
             CvInvoke.cvNamedWindow("摄像头");
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 frame = CvInvoke.cvQueryFrame(capture);
                 CvInvoke.cvWriteFrame(write, frame);
                 CvInvoke.cvShowImage("摄像头", frame);
-                CvInvoke.cvWaitKey(25);
+                if(CvInvoke.cvWaitKey(25) > 0)
+                    break ;
             }
 
             CvInvoke.cvDestroyWindow("摄像头");
