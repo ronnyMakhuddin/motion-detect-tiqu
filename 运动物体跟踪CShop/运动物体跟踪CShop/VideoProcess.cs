@@ -323,5 +323,40 @@ namespace 运动物体跟踪CShop
             CvInvoke.cvReleaseCapture(ref capture);
             CvInvoke.cvReleaseVideoWriter(ref writer);
         }
+
+        //摄像头保存视频
+        static public void cameralSaveVideo()
+        {
+            IntPtr capture = CvInvoke.cvCreateCameraCapture(0);
+            IntPtr frame = new IntPtr();
+            if (capture.ToInt32() == 0)
+            {
+                MessageBox.Show("没有发现摄像头");
+                return;
+            }
+            //double fps = CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FPS);
+            int fps = 25;
+            Size captureSize = new Size((int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH),
+                    (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
+
+            IntPtr write = CvInvoke.cvCreateVideoWriter("cameral.avi", CvInvoke.CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
+
+            CvInvoke.cvNamedWindow("摄像头");
+
+            for (int i = 0; i < 1000; i++)
+            {
+                frame = CvInvoke.cvQueryFrame(capture);
+                CvInvoke.cvWriteFrame(write, frame);
+                CvInvoke.cvShowImage("摄像头", frame);
+                CvInvoke.cvWaitKey(25);
+            }
+
+            CvInvoke.cvDestroyWindow("摄像头");
+            CvInvoke.cvReleaseImage(ref frame);
+            CvInvoke.cvReleaseCapture(ref capture);
+            CvInvoke.cvReleaseVideoWriter(ref write);
+
+        }
     }
 }
+
