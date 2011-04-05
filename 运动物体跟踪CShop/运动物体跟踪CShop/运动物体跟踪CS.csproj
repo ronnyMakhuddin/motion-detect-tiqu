@@ -98,6 +98,12 @@
     </Compile>
     <Compile Include="VideoProcess.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\透明图标.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Media_Player_Icons_001.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

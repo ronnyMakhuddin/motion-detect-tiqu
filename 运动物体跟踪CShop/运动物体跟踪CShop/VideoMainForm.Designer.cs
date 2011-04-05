@@ -45,8 +45,10 @@
             this.areaLable = new System.Windows.Forms.Label();
             this.filePathLable = new System.Windows.Forms.Label();
             this.openFile = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cameralButton = new System.Windows.Forms.Button();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -55,16 +57,20 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(1, 1);
+            this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.ItemSize = new System.Drawing.Size(150, 50);
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
+            this.tabControl1.Padding = new System.Drawing.Point(58, 3);
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(670, 450);
+            this.tabControl1.Size = new System.Drawing.Size(671, 411);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.Gainsboro;
+            this.tabPage1.BackColor = System.Drawing.Color.LightGray;
             this.tabPage1.Controls.Add(this.eventListBox);
             this.tabPage1.Controls.Add(this.playAllEventButton);
             this.tabPage1.Controls.Add(this.playSingleEventButton);
@@ -80,10 +86,10 @@
             this.tabPage1.Controls.Add(this.areaLable);
             this.tabPage1.Controls.Add(this.filePathLable);
             this.tabPage1.Controls.Add(this.openFile);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 54);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(662, 424);
+            this.tabPage1.Size = new System.Drawing.Size(663, 353);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "视频摘要";
             // 
@@ -93,7 +99,7 @@
             this.eventListBox.ItemHeight = 12;
             this.eventListBox.Location = new System.Drawing.Point(373, 9);
             this.eventListBox.Name = "eventListBox";
-            this.eventListBox.Size = new System.Drawing.Size(283, 364);
+            this.eventListBox.Size = new System.Drawing.Size(283, 328);
             this.eventListBox.TabIndex = 14;
             this.eventListBox.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             this.eventListBox.DoubleClick += new System.EventHandler(this.eventListBox_DoubleClick);
@@ -220,16 +226,25 @@
             this.openFile.UseVisualStyleBackColor = true;
             this.openFile.Click += new System.EventHandler(this.openFile_Click);
             // 
+            // tabPage3
+            // 
+            this.tabPage3.BackColor = System.Drawing.Color.LightGray;
+            this.tabPage3.Location = new System.Drawing.Point(4, 54);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(663, 353);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "车流计数";
+            // 
             // tabPage2
             // 
+            this.tabPage2.BackColor = System.Drawing.Color.LightGray;
             this.tabPage2.Controls.Add(this.cameralButton);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 54);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(662, 424);
+            this.tabPage2.Size = new System.Drawing.Size(663, 353);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabPage2.Text = "摄像头录像";
             // 
             // cameralButton
             // 
@@ -241,12 +256,22 @@
             this.cameralButton.UseVisualStyleBackColor = true;
             this.cameralButton.Click += new System.EventHandler(this.cameralButton_Click);
             // 
+            // tabPage4
+            // 
+            this.tabPage4.BackColor = System.Drawing.Color.LightGray;
+            this.tabPage4.Location = new System.Drawing.Point(4, 54);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(663, 353);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "软件信息";
+            // 
             // VideoMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(671, 408);
+            this.ClientSize = new System.Drawing.Size(669, 408);
             this.Controls.Add(this.tabControl1);
+            this.MaximizeBox = false;
             this.Name = "VideoMainForm";
             this.Text = "视频摘要软件";
             this.Load += new System.EventHandler(this.VideoMainForm_Load);
@@ -279,6 +304,8 @@
         private System.Windows.Forms.Button playAllEventButton;
         public System.Windows.Forms.ProgressBar analyzeProgressBar;
         private System.Windows.Forms.Button cameralButton;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPage4;
     }
 }
 
