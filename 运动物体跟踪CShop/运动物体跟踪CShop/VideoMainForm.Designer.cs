@@ -240,7 +240,7 @@
             this.playAllEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.playAllEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playAllEventButton;
             this.playAllEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.playAllEventButton.Location = new System.Drawing.Point(203, 287);
+            this.playAllEventButton.Location = new System.Drawing.Point(203, 292);
             this.playAllEventButton.Name = "playAllEventButton";
             this.playAllEventButton.Size = new System.Drawing.Size(152, 50);
             this.playAllEventButton.TabIndex = 13;
@@ -254,7 +254,7 @@
             this.playSingleEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.playSingleEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playSingleEventButton;
             this.playSingleEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.playSingleEventButton.Location = new System.Drawing.Point(30, 287);
+            this.playSingleEventButton.Location = new System.Drawing.Point(30, 292);
             this.playSingleEventButton.Name = "playSingleEventButton";
             this.playSingleEventButton.Size = new System.Drawing.Size(152, 50);
             this.playSingleEventButton.TabIndex = 12;
