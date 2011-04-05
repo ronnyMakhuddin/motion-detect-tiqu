@@ -60,10 +60,11 @@
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage4);
-            this.tabControl1.ItemSize = new System.Drawing.Size(150, 50);
+            this.tabControl1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.tabControl1.ItemSize = new System.Drawing.Size(0, 50);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
-            this.tabControl1.Padding = new System.Drawing.Point(58, 3);
+            this.tabControl1.Padding = new System.Drawing.Point(0, 0);
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(671, 411);
             this.tabControl1.TabIndex = 0;
@@ -91,15 +92,16 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(663, 353);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "视频摘要";
+            this.tabPage1.Text = "      视频摘要      ";
+            this.tabPage1.ToolTipText = "111";
             // 
             // eventListBox
             // 
             this.eventListBox.FormattingEnabled = true;
-            this.eventListBox.ItemHeight = 12;
+            this.eventListBox.ItemHeight = 16;
             this.eventListBox.Location = new System.Drawing.Point(373, 9);
             this.eventListBox.Name = "eventListBox";
-            this.eventListBox.Size = new System.Drawing.Size(283, 328);
+            this.eventListBox.Size = new System.Drawing.Size(283, 324);
             this.eventListBox.TabIndex = 14;
             this.eventListBox.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             this.eventListBox.DoubleClick += new System.EventHandler(this.eventListBox_DoubleClick);
@@ -203,7 +205,8 @@
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(663, 353);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "车流计数";
+            this.tabPage3.Text = "      车流计数    ";
+            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -214,7 +217,8 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(663, 353);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "摄像头录像";
+            this.tabPage2.Text = "     摄像头录像     ";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // cameralButton
             // 
@@ -233,10 +237,12 @@
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(663, 353);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "软件信息";
+            this.tabPage4.Text = "     软件信息     ";
+            this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // playAllEventButton
             // 
+            this.playAllEventButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.playAllEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.playAllEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playAllEventButton;
             this.playAllEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -251,6 +257,7 @@
             // 
             // playSingleEventButton
             // 
+            this.playSingleEventButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.playSingleEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.playSingleEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playSingleEventButton;
             this.playSingleEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -265,6 +272,7 @@
             // 
             // analyzeButton
             // 
+            this.analyzeButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.analyzeButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.analyzeButton.Image = global::运动物体跟踪CShop.Properties.Resources.analyzeButton;
             this.analyzeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -280,6 +288,7 @@
             // openFile
             // 
             this.openFile.BackColor = System.Drawing.Color.Transparent;
+            this.openFile.Cursor = System.Windows.Forms.Cursors.Hand;
             this.openFile.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.openFile.Image = global::运动物体跟踪CShop.Properties.Resources.openFileButton;
             this.openFile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
