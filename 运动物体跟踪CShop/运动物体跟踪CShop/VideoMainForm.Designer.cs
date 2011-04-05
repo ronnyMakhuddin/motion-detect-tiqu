@@ -31,24 +31,24 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.eventListBox = new System.Windows.Forms.ListBox();
-            this.playAllEventButton = new System.Windows.Forms.Button();
-            this.playSingleEventButton = new System.Windows.Forms.Button();
             this.analyzeResultLabel = new System.Windows.Forms.Label();
             this.analyzeProgressBar = new System.Windows.Forms.ProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.jiangeTextBox = new System.Windows.Forms.TextBox();
             this.meiLabel = new System.Windows.Forms.Label();
-            this.analyzeButton = new System.Windows.Forms.Button();
             this.maxAreaTextBox = new System.Windows.Forms.TextBox();
             this.daoLabel = new System.Windows.Forms.Label();
             this.minAreaTextBox = new System.Windows.Forms.TextBox();
             this.areaLable = new System.Windows.Forms.Label();
             this.filePathLable = new System.Windows.Forms.Label();
-            this.openFile = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cameralButton = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.playAllEventButton = new System.Windows.Forms.Button();
+            this.playSingleEventButton = new System.Windows.Forms.Button();
+            this.analyzeButton = new System.Windows.Forms.Button();
+            this.openFile = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -104,38 +104,19 @@
             this.eventListBox.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             this.eventListBox.DoubleClick += new System.EventHandler(this.eventListBox_DoubleClick);
             // 
-            // playAllEventButton
-            // 
-            this.playAllEventButton.Location = new System.Drawing.Point(163, 294);
-            this.playAllEventButton.Name = "playAllEventButton";
-            this.playAllEventButton.Size = new System.Drawing.Size(100, 30);
-            this.playAllEventButton.TabIndex = 13;
-            this.playAllEventButton.Text = "播放所有事件";
-            this.playAllEventButton.UseVisualStyleBackColor = true;
-            this.playAllEventButton.Click += new System.EventHandler(this.playAllEventButton_Click);
-            // 
-            // playSingleEventButton
-            // 
-            this.playSingleEventButton.Location = new System.Drawing.Point(30, 294);
-            this.playSingleEventButton.Name = "playSingleEventButton";
-            this.playSingleEventButton.Size = new System.Drawing.Size(100, 30);
-            this.playSingleEventButton.TabIndex = 12;
-            this.playSingleEventButton.Text = "播放选中事件";
-            this.playSingleEventButton.UseVisualStyleBackColor = true;
-            this.playSingleEventButton.Click += new System.EventHandler(this.playSingleEventButton_Click);
-            // 
             // analyzeResultLabel
             // 
             this.analyzeResultLabel.AutoSize = true;
-            this.analyzeResultLabel.Location = new System.Drawing.Point(28, 257);
+            this.analyzeResultLabel.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.analyzeResultLabel.Location = new System.Drawing.Point(28, 262);
             this.analyzeResultLabel.Name = "analyzeResultLabel";
-            this.analyzeResultLabel.Size = new System.Drawing.Size(59, 12);
+            this.analyzeResultLabel.Size = new System.Drawing.Size(70, 14);
             this.analyzeResultLabel.TabIndex = 11;
             this.analyzeResultLabel.Text = "分析结果:";
             // 
             // analyzeProgressBar
             // 
-            this.analyzeProgressBar.Location = new System.Drawing.Point(30, 208);
+            this.analyzeProgressBar.Location = new System.Drawing.Point(30, 221);
             this.analyzeProgressBar.Name = "analyzeProgressBar";
             this.analyzeProgressBar.Size = new System.Drawing.Size(300, 25);
             this.analyzeProgressBar.TabIndex = 10;
@@ -143,88 +124,77 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(210, 171);
+            this.label1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(241, 170);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 12);
+            this.label1.Size = new System.Drawing.Size(77, 14);
             this.label1.TabIndex = 9;
             this.label1.Text = "帧处理一次";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // jiangeTextBox
             // 
-            this.jiangeTextBox.Location = new System.Drawing.Point(163, 162);
+            this.jiangeTextBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.jiangeTextBox.Location = new System.Drawing.Point(194, 165);
             this.jiangeTextBox.Name = "jiangeTextBox";
-            this.jiangeTextBox.Size = new System.Drawing.Size(41, 21);
+            this.jiangeTextBox.Size = new System.Drawing.Size(41, 23);
             this.jiangeTextBox.TabIndex = 8;
             // 
             // meiLabel
             // 
             this.meiLabel.AutoSize = true;
-            this.meiLabel.Location = new System.Drawing.Point(140, 170);
+            this.meiLabel.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.meiLabel.Location = new System.Drawing.Point(167, 170);
             this.meiLabel.Name = "meiLabel";
-            this.meiLabel.Size = new System.Drawing.Size(17, 12);
+            this.meiLabel.Size = new System.Drawing.Size(21, 14);
             this.meiLabel.TabIndex = 7;
             this.meiLabel.Text = "每";
             // 
-            // analyzeButton
-            // 
-            this.analyzeButton.Location = new System.Drawing.Point(30, 153);
-            this.analyzeButton.Name = "analyzeButton";
-            this.analyzeButton.Size = new System.Drawing.Size(100, 30);
-            this.analyzeButton.TabIndex = 6;
-            this.analyzeButton.Text = "分析视频";
-            this.analyzeButton.UseVisualStyleBackColor = true;
-            this.analyzeButton.Click += new System.EventHandler(this.analyzeButton_Click);
-            // 
             // maxAreaTextBox
             // 
-            this.maxAreaTextBox.Location = new System.Drawing.Point(224, 103);
+            this.maxAreaTextBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.maxAreaTextBox.Location = new System.Drawing.Point(249, 105);
             this.maxAreaTextBox.Name = "maxAreaTextBox";
-            this.maxAreaTextBox.Size = new System.Drawing.Size(70, 21);
+            this.maxAreaTextBox.Size = new System.Drawing.Size(70, 23);
             this.maxAreaTextBox.TabIndex = 5;
             // 
             // daoLabel
             // 
             this.daoLabel.AutoSize = true;
-            this.daoLabel.Location = new System.Drawing.Point(203, 112);
+            this.daoLabel.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.daoLabel.Location = new System.Drawing.Point(222, 110);
             this.daoLabel.Name = "daoLabel";
-            this.daoLabel.Size = new System.Drawing.Size(17, 12);
+            this.daoLabel.Size = new System.Drawing.Size(21, 14);
             this.daoLabel.TabIndex = 4;
             this.daoLabel.Text = "到";
             // 
             // minAreaTextBox
             // 
-            this.minAreaTextBox.Location = new System.Drawing.Point(130, 103);
+            this.minAreaTextBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.minAreaTextBox.Location = new System.Drawing.Point(146, 105);
             this.minAreaTextBox.Name = "minAreaTextBox";
-            this.minAreaTextBox.Size = new System.Drawing.Size(70, 21);
+            this.minAreaTextBox.Size = new System.Drawing.Size(70, 23);
             this.minAreaTextBox.TabIndex = 3;
             // 
             // areaLable
             // 
             this.areaLable.AutoSize = true;
-            this.areaLable.Location = new System.Drawing.Point(28, 112);
+            this.areaLable.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.areaLable.Location = new System.Drawing.Point(28, 110);
             this.areaLable.Name = "areaLable";
-            this.areaLable.Size = new System.Drawing.Size(95, 12);
+            this.areaLable.Size = new System.Drawing.Size(112, 14);
             this.areaLable.TabIndex = 2;
             this.areaLable.Text = "感兴趣面积范围:";
             // 
             // filePathLable
             // 
             this.filePathLable.AutoSize = true;
+            this.filePathLable.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.filePathLable.Location = new System.Drawing.Point(28, 81);
             this.filePathLable.Name = "filePathLable";
-            this.filePathLable.Size = new System.Drawing.Size(59, 12);
+            this.filePathLable.Size = new System.Drawing.Size(70, 14);
             this.filePathLable.TabIndex = 1;
             this.filePathLable.Text = "文件路径:";
-            // 
-            // openFile
-            // 
-            this.openFile.Location = new System.Drawing.Point(30, 30);
-            this.openFile.Name = "openFile";
-            this.openFile.Size = new System.Drawing.Size(100, 30);
-            this.openFile.TabIndex = 0;
-            this.openFile.Text = "选择视频文件";
-            this.openFile.UseVisualStyleBackColor = true;
-            this.openFile.Click += new System.EventHandler(this.openFile_Click);
             // 
             // tabPage3
             // 
@@ -264,6 +234,63 @@
             this.tabPage4.Size = new System.Drawing.Size(663, 353);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "软件信息";
+            // 
+            // playAllEventButton
+            // 
+            this.playAllEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.playAllEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playAllEventButton;
+            this.playAllEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.playAllEventButton.Location = new System.Drawing.Point(203, 287);
+            this.playAllEventButton.Name = "playAllEventButton";
+            this.playAllEventButton.Size = new System.Drawing.Size(152, 50);
+            this.playAllEventButton.TabIndex = 13;
+            this.playAllEventButton.Text = "播放所有事件";
+            this.playAllEventButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.playAllEventButton.UseVisualStyleBackColor = true;
+            this.playAllEventButton.Click += new System.EventHandler(this.playAllEventButton_Click);
+            // 
+            // playSingleEventButton
+            // 
+            this.playSingleEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.playSingleEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playSingleEventButton;
+            this.playSingleEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.playSingleEventButton.Location = new System.Drawing.Point(30, 287);
+            this.playSingleEventButton.Name = "playSingleEventButton";
+            this.playSingleEventButton.Size = new System.Drawing.Size(152, 50);
+            this.playSingleEventButton.TabIndex = 12;
+            this.playSingleEventButton.Text = "播放选中事件";
+            this.playSingleEventButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.playSingleEventButton.UseVisualStyleBackColor = true;
+            this.playSingleEventButton.Click += new System.EventHandler(this.playSingleEventButton_Click);
+            // 
+            // analyzeButton
+            // 
+            this.analyzeButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.analyzeButton.Image = global::运动物体跟踪CShop.Properties.Resources.analyzeButton;
+            this.analyzeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.analyzeButton.Location = new System.Drawing.Point(30, 151);
+            this.analyzeButton.Name = "analyzeButton";
+            this.analyzeButton.Size = new System.Drawing.Size(120, 50);
+            this.analyzeButton.TabIndex = 6;
+            this.analyzeButton.Text = "分析视频";
+            this.analyzeButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.analyzeButton.UseVisualStyleBackColor = true;
+            this.analyzeButton.Click += new System.EventHandler(this.analyzeButton_Click);
+            // 
+            // openFile
+            // 
+            this.openFile.BackColor = System.Drawing.Color.Transparent;
+            this.openFile.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.openFile.Image = global::运动物体跟踪CShop.Properties.Resources.openFileButton;
+            this.openFile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.openFile.Location = new System.Drawing.Point(30, 18);
+            this.openFile.Name = "openFile";
+            this.openFile.Size = new System.Drawing.Size(152, 50);
+            this.openFile.TabIndex = 0;
+            this.openFile.Text = "选择视频文件";
+            this.openFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.openFile.UseVisualStyleBackColor = false;
+            this.openFile.Click += new System.EventHandler(this.openFile_Click);
             // 
             // VideoMainForm
             // 

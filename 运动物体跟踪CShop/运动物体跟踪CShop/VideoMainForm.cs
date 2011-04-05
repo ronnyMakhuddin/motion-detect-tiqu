@@ -103,5 +103,10 @@ namespace 运动物体跟踪CShop
         {
             VideoProcess.cameralSaveVideo();
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
