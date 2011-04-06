@@ -35,13 +35,14 @@ namespace 运动物体跟踪CShop
                 Global.filePath = openFileDialog.FileName;
                 Global.fileName = openFileDialog.SafeFileName;
                 filePathLable.Text = "文件路径:" + Global.filePath;
+                eventListBox.Items.Clear();
                 Global.eventList.Clear();
             }
         }
 
         private void VideoMainForm_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -117,6 +118,19 @@ namespace 运动物体跟踪CShop
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void carsFromLocalFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "avi文件|*.avi|所有文件|*.*";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Global.filePath = openFileDialog.FileName;
+                Global.fileName = openFileDialog.SafeFileName;
+                filePathLable.Text = "文件路径:" + Global.filePath;
+                Global.eventList.Clear();
+            }
         }
     }
 }

@@ -49,8 +49,12 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cameralButton = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.carsFromLocalFile = new System.Windows.Forms.Button();
+            this.carsFromCamera = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,6 +67,7 @@
             this.tabControl1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabControl1.ItemSize = new System.Drawing.Size(0, 50);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.Padding = new System.Drawing.Point(0, 0);
             this.tabControl1.SelectedIndex = 0;
@@ -263,12 +268,14 @@
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.LightGray;
+            this.tabPage3.Controls.Add(this.progressBar1);
+            this.tabPage3.Controls.Add(this.carsFromCamera);
+            this.tabPage3.Controls.Add(this.carsFromLocalFile);
             this.tabPage3.Location = new System.Drawing.Point(4, 54);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(663, 353);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "      车流计数    ";
-            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -302,6 +309,32 @@
             this.tabPage4.Text = "     软件信息     ";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // carsFromLocalFile
+            // 
+            this.carsFromLocalFile.Location = new System.Drawing.Point(152, 45);
+            this.carsFromLocalFile.Name = "carsFromLocalFile";
+            this.carsFromLocalFile.Size = new System.Drawing.Size(124, 50);
+            this.carsFromLocalFile.TabIndex = 0;
+            this.carsFromLocalFile.Text = "本地车流视频";
+            this.carsFromLocalFile.UseVisualStyleBackColor = true;
+            this.carsFromLocalFile.Click += new System.EventHandler(this.carsFromLocalFile_Click);
+            // 
+            // carsFromCamera
+            // 
+            this.carsFromCamera.Location = new System.Drawing.Point(379, 45);
+            this.carsFromCamera.Name = "carsFromCamera";
+            this.carsFromCamera.Size = new System.Drawing.Size(124, 50);
+            this.carsFromCamera.TabIndex = 1;
+            this.carsFromCamera.Text = "摄像头车流";
+            this.carsFromCamera.UseVisualStyleBackColor = true;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(152, 139);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(351, 26);
+            this.progressBar1.TabIndex = 2;
+            // 
             // VideoMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -315,6 +348,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -343,6 +377,9 @@
         private System.Windows.Forms.Button cameralButton;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Button carsFromLocalFile;
+        private System.Windows.Forms.Button carsFromCamera;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 
