@@ -71,7 +71,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.tabPage1.BackColor = System.Drawing.Color.LightGray;
             this.tabPage1.Controls.Add(this.eventListBox);
             this.tabPage1.Controls.Add(this.playAllEventButton);
             this.tabPage1.Controls.Add(this.playSingleEventButton);
@@ -245,12 +245,13 @@
             // 
             // openFile
             // 
-            this.openFile.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.openFile.BackColor = System.Drawing.Color.Transparent;
             this.openFile.Cursor = System.Windows.Forms.Cursors.Hand;
             this.openFile.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.openFile.Image = global::运动物体跟踪CShop.Properties.Resources.openFileButton;
             this.openFile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.openFile.Location = new System.Drawing.Point(30, 18);
+            this.openFile.Margin = new System.Windows.Forms.Padding(0);
             this.openFile.Name = "openFile";
             this.openFile.Size = new System.Drawing.Size(152, 50);
             this.openFile.TabIndex = 0;
