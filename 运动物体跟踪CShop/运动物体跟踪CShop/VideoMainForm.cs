@@ -90,12 +90,22 @@ namespace 运动物体跟踪CShop
         //播放单个事件按钮事件响应
         private void playSingleEventButton_Click(object sender, EventArgs e)
         {
+            if (eventListBox.SelectedIndex < 0)
+            {
+                MessageBox.Show("没有选中事件");
+                return;
+            }
             VideoProcess.playSingleEvent(eventListBox.SelectedIndex);
         }
 
         //播放所有事件按钮事件响应
         private void playAllEventButton_Click(object sender, EventArgs e)
         {
+            if (Global.eventList.Count == 0)
+            {
+                MessageBox.Show("事件列表为空,没有可显示的事件");
+                return;
+            }
             VideoProcess.playAllEvents();
         }
 
