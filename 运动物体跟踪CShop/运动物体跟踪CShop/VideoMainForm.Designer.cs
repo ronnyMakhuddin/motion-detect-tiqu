@@ -31,27 +31,28 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.eventListBox = new System.Windows.Forms.ListBox();
-            this.playAllEventButton = new System.Windows.Forms.Button();
-            this.playSingleEventButton = new System.Windows.Forms.Button();
             this.analyzeResultLabel = new System.Windows.Forms.Label();
             this.analyzeProgressBar = new System.Windows.Forms.ProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.jiangeTextBox = new System.Windows.Forms.TextBox();
             this.meiLabel = new System.Windows.Forms.Label();
-            this.analyzeButton = new System.Windows.Forms.Button();
             this.maxAreaTextBox = new System.Windows.Forms.TextBox();
             this.daoLabel = new System.Windows.Forms.Label();
             this.minAreaTextBox = new System.Windows.Forms.TextBox();
             this.areaLable = new System.Windows.Forms.Label();
             this.filePathLable = new System.Windows.Forms.Label();
-            this.openFile = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cameralButton = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.carsFromLocalFile = new System.Windows.Forms.Button();
+            this.playAllEventButton = new System.Windows.Forms.Button();
+            this.playSingleEventButton = new System.Windows.Forms.Button();
+            this.analyzeButton = new System.Windows.Forms.Button();
+            this.openFile = new System.Windows.Forms.Button();
             this.carsFromCamera = new System.Windows.Forms.Button();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.carsFromLocalFile = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -111,36 +112,6 @@
             this.eventListBox.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             this.eventListBox.DoubleClick += new System.EventHandler(this.eventListBox_DoubleClick);
             // 
-            // playAllEventButton
-            // 
-            this.playAllEventButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.playAllEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.playAllEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playAllEventButton;
-            this.playAllEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.playAllEventButton.Location = new System.Drawing.Point(203, 292);
-            this.playAllEventButton.Name = "playAllEventButton";
-            this.playAllEventButton.Size = new System.Drawing.Size(152, 50);
-            this.playAllEventButton.TabIndex = 13;
-            this.playAllEventButton.Text = "播放所有事件";
-            this.playAllEventButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.playAllEventButton.UseVisualStyleBackColor = true;
-            this.playAllEventButton.Click += new System.EventHandler(this.playAllEventButton_Click);
-            // 
-            // playSingleEventButton
-            // 
-            this.playSingleEventButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.playSingleEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.playSingleEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playSingleEventButton;
-            this.playSingleEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.playSingleEventButton.Location = new System.Drawing.Point(30, 292);
-            this.playSingleEventButton.Name = "playSingleEventButton";
-            this.playSingleEventButton.Size = new System.Drawing.Size(152, 50);
-            this.playSingleEventButton.TabIndex = 12;
-            this.playSingleEventButton.Text = "播放选中事件";
-            this.playSingleEventButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.playSingleEventButton.UseVisualStyleBackColor = true;
-            this.playSingleEventButton.Click += new System.EventHandler(this.playSingleEventButton_Click);
-            // 
             // analyzeResultLabel
             // 
             this.analyzeResultLabel.AutoSize = true;
@@ -186,21 +157,6 @@
             this.meiLabel.Size = new System.Drawing.Size(21, 14);
             this.meiLabel.TabIndex = 7;
             this.meiLabel.Text = "每";
-            // 
-            // analyzeButton
-            // 
-            this.analyzeButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.analyzeButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.analyzeButton.Image = global::运动物体跟踪CShop.Properties.Resources.analyzeButton;
-            this.analyzeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.analyzeButton.Location = new System.Drawing.Point(30, 151);
-            this.analyzeButton.Name = "analyzeButton";
-            this.analyzeButton.Size = new System.Drawing.Size(120, 50);
-            this.analyzeButton.TabIndex = 6;
-            this.analyzeButton.Text = "分析视频";
-            this.analyzeButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.analyzeButton.UseVisualStyleBackColor = true;
-            this.analyzeButton.Click += new System.EventHandler(this.analyzeButton_Click);
             // 
             // maxAreaTextBox
             // 
@@ -248,26 +204,10 @@
             this.filePathLable.TabIndex = 1;
             this.filePathLable.Text = "文件路径:";
             // 
-            // openFile
-            // 
-            this.openFile.BackColor = System.Drawing.Color.Transparent;
-            this.openFile.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.openFile.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.openFile.Image = global::运动物体跟踪CShop.Properties.Resources.openFileButton;
-            this.openFile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.openFile.Location = new System.Drawing.Point(30, 18);
-            this.openFile.Margin = new System.Windows.Forms.Padding(0);
-            this.openFile.Name = "openFile";
-            this.openFile.Size = new System.Drawing.Size(152, 50);
-            this.openFile.TabIndex = 0;
-            this.openFile.Text = "选择视频文件";
-            this.openFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.openFile.UseVisualStyleBackColor = false;
-            this.openFile.Click += new System.EventHandler(this.openFile_Click);
-            // 
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.Color.LightGray;
+            this.tabPage3.Controls.Add(this.label2);
             this.tabPage3.Controls.Add(this.progressBar1);
             this.tabPage3.Controls.Add(this.carsFromCamera);
             this.tabPage3.Controls.Add(this.carsFromLocalFile);
@@ -276,6 +216,13 @@
             this.tabPage3.Size = new System.Drawing.Size(663, 353);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "      车流计数    ";
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(152, 139);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(367, 26);
+            this.progressBar1.TabIndex = 2;
             // 
             // tabPage2
             // 
@@ -309,31 +256,103 @@
             this.tabPage4.Text = "     软件信息     ";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // carsFromLocalFile
+            // playAllEventButton
             // 
-            this.carsFromLocalFile.Location = new System.Drawing.Point(152, 45);
-            this.carsFromLocalFile.Name = "carsFromLocalFile";
-            this.carsFromLocalFile.Size = new System.Drawing.Size(124, 50);
-            this.carsFromLocalFile.TabIndex = 0;
-            this.carsFromLocalFile.Text = "本地车流视频";
-            this.carsFromLocalFile.UseVisualStyleBackColor = true;
-            this.carsFromLocalFile.Click += new System.EventHandler(this.carsFromLocalFile_Click);
+            this.playAllEventButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.playAllEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.playAllEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playAllEventButton;
+            this.playAllEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.playAllEventButton.Location = new System.Drawing.Point(203, 292);
+            this.playAllEventButton.Name = "playAllEventButton";
+            this.playAllEventButton.Size = new System.Drawing.Size(152, 50);
+            this.playAllEventButton.TabIndex = 13;
+            this.playAllEventButton.Text = "播放所有事件";
+            this.playAllEventButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.playAllEventButton.UseVisualStyleBackColor = true;
+            this.playAllEventButton.Click += new System.EventHandler(this.playAllEventButton_Click);
+            // 
+            // playSingleEventButton
+            // 
+            this.playSingleEventButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.playSingleEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.playSingleEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playSingleEventButton;
+            this.playSingleEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.playSingleEventButton.Location = new System.Drawing.Point(30, 292);
+            this.playSingleEventButton.Name = "playSingleEventButton";
+            this.playSingleEventButton.Size = new System.Drawing.Size(152, 50);
+            this.playSingleEventButton.TabIndex = 12;
+            this.playSingleEventButton.Text = "播放选中事件";
+            this.playSingleEventButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.playSingleEventButton.UseVisualStyleBackColor = true;
+            this.playSingleEventButton.Click += new System.EventHandler(this.playSingleEventButton_Click);
+            // 
+            // analyzeButton
+            // 
+            this.analyzeButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.analyzeButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.analyzeButton.Image = global::运动物体跟踪CShop.Properties.Resources.analyzeButton;
+            this.analyzeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.analyzeButton.Location = new System.Drawing.Point(30, 151);
+            this.analyzeButton.Name = "analyzeButton";
+            this.analyzeButton.Size = new System.Drawing.Size(120, 50);
+            this.analyzeButton.TabIndex = 6;
+            this.analyzeButton.Text = "分析视频";
+            this.analyzeButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.analyzeButton.UseVisualStyleBackColor = true;
+            this.analyzeButton.Click += new System.EventHandler(this.analyzeButton_Click);
+            // 
+            // openFile
+            // 
+            this.openFile.BackColor = System.Drawing.Color.Transparent;
+            this.openFile.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.openFile.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.openFile.Image = global::运动物体跟踪CShop.Properties.Resources.openFileButton;
+            this.openFile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.openFile.Location = new System.Drawing.Point(30, 18);
+            this.openFile.Margin = new System.Windows.Forms.Padding(0);
+            this.openFile.Name = "openFile";
+            this.openFile.Size = new System.Drawing.Size(152, 50);
+            this.openFile.TabIndex = 0;
+            this.openFile.Text = "选择视频文件";
+            this.openFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.openFile.UseVisualStyleBackColor = false;
+            this.openFile.Click += new System.EventHandler(this.openFile_Click);
             // 
             // carsFromCamera
             // 
-            this.carsFromCamera.Location = new System.Drawing.Point(379, 45);
+            this.carsFromCamera.Image = global::运动物体跟踪CShop.Properties.Resources.cameral;
+            this.carsFromCamera.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.carsFromCamera.Location = new System.Drawing.Point(362, 45);
             this.carsFromCamera.Name = "carsFromCamera";
-            this.carsFromCamera.Size = new System.Drawing.Size(124, 50);
+            this.carsFromCamera.Size = new System.Drawing.Size(157, 50);
             this.carsFromCamera.TabIndex = 1;
             this.carsFromCamera.Text = "摄像头车流";
+            this.carsFromCamera.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.carsFromCamera.UseVisualStyleBackColor = true;
+            this.carsFromCamera.Click += new System.EventHandler(this.carsFromCamera_Click);
             // 
-            // progressBar1
+            // carsFromLocalFile
             // 
-            this.progressBar1.Location = new System.Drawing.Point(152, 139);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(351, 26);
-            this.progressBar1.TabIndex = 2;
+            this.carsFromLocalFile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.carsFromLocalFile.Image = global::运动物体跟踪CShop.Properties.Resources.openFileButton;
+            this.carsFromLocalFile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.carsFromLocalFile.Location = new System.Drawing.Point(152, 45);
+            this.carsFromLocalFile.Name = "carsFromLocalFile";
+            this.carsFromLocalFile.Size = new System.Drawing.Size(154, 50);
+            this.carsFromLocalFile.TabIndex = 0;
+            this.carsFromLocalFile.Text = "本地车流视频";
+            this.carsFromLocalFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.carsFromLocalFile.UseVisualStyleBackColor = true;
+            this.carsFromLocalFile.Click += new System.EventHandler(this.carsFromLocalFile_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(149, 202);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(88, 16);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "车流计数：";
             // 
             // VideoMainForm
             // 
@@ -349,6 +368,7 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -380,6 +400,7 @@
         private System.Windows.Forms.Button carsFromLocalFile;
         private System.Windows.Forms.Button carsFromCamera;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

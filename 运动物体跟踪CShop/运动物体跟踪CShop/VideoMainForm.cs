@@ -132,5 +132,10 @@ namespace 运动物体跟踪CShop
                 Global.eventList.Clear();
             }
         }
+
+        private void carsFromCamera_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
