@@ -42,7 +42,7 @@
             this.areaLable = new System.Windows.Forms.Label();
             this.filePathLable = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.carCountBar = new System.Windows.Forms.ProgressBar();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cameralButton = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -208,7 +208,7 @@
             // 
             this.tabPage3.BackColor = System.Drawing.Color.LightGray;
             this.tabPage3.Controls.Add(this.label2);
-            this.tabPage3.Controls.Add(this.progressBar1);
+            this.tabPage3.Controls.Add(this.carCountBar);
             this.tabPage3.Controls.Add(this.carsFromCamera);
             this.tabPage3.Controls.Add(this.carsFromLocalFile);
             this.tabPage3.Location = new System.Drawing.Point(4, 54);
@@ -217,12 +217,12 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "      车流计数    ";
             // 
-            // progressBar1
+            // carCountBar
             // 
-            this.progressBar1.Location = new System.Drawing.Point(152, 139);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(367, 26);
-            this.progressBar1.TabIndex = 2;
+            this.carCountBar.Location = new System.Drawing.Point(152, 139);
+            this.carCountBar.Name = "carCountBar";
+            this.carCountBar.Size = new System.Drawing.Size(367, 26);
+            this.carCountBar.TabIndex = 2;
             // 
             // tabPage2
             // 
@@ -399,7 +399,7 @@
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.Button carsFromLocalFile;
         private System.Windows.Forms.Button carsFromCamera;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar carCountBar;
         private System.Windows.Forms.Label label2;
     }
 }

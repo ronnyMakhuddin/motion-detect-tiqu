@@ -128,8 +128,9 @@ namespace 运动物体跟踪CShop
             {
                 Global.filePath = openFileDialog.FileName;
                 Global.fileName = openFileDialog.SafeFileName;
-                filePathLable.Text = "文件路径:" + Global.filePath;
-                Global.eventList.Clear();
+                //filePathLable.Text = "文件路径:" + Global.filePath;
+                Global.carList.Clear();
+                CarCountProcess.carCount(Global.filePath, this);
             }
         }
 
