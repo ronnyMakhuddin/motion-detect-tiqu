@@ -80,6 +80,7 @@ namespace 运动物体跟踪CShop
             insert.rect = r;
             insert.endFrame = -1;
             insert.mark = true;
+            carList.Add(insert);
             return insert;
         }
 
@@ -95,11 +96,12 @@ namespace 运动物体跟踪CShop
                     if (carList[i].endFrame == -1)
                     {
                         carList[i].endFrame = endFrame;
-                        if (carList[i].endFrame - carList[i].startFrame < 30)
+                        if (carList[i].endFrame - carList[i].startFrame >= 40)
                         {
-                            carList.RemoveAt(i);
-                            i--;
+                            Global.carCount++;
                         }
+                        carList.RemoveAt(i);
+                        i--;
                     }
                 }
                 else

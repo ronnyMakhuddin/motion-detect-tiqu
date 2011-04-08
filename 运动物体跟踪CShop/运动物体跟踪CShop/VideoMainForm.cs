@@ -23,6 +23,8 @@ namespace 运动物体跟踪CShop
             minAreaTextBox.Text = Global.minArea.ToString();
             maxAreaTextBox.Text = Global.maxArea.ToString();
             jiangeTextBox.Text = Global.jiange.ToString();
+            carMinAreaTextBox.Text = Global.minCarArea.ToString();
+            carMaxAreaTextBox.Text = Global.maxCarArea.ToString();
         }
 
         //打开视频文件按钮事件响应
@@ -58,6 +60,10 @@ namespace 运动物体跟踪CShop
         //分析视频按钮事件响应
         private void analyzeButton_Click(object sender, EventArgs e)
         {
+            eventListBox.Items.Clear();
+            Global.eventList.Clear();
+            Global.minArea = Convert.ToInt32(minAreaTextBox.Text);
+            Global.maxArea = Convert.ToInt32(maxAreaTextBox.Text);
             if (Global.filePath == null)
                 MessageBox.Show("请先选择一个视频文件");
             else
@@ -126,17 +132,30 @@ namespace 运动物体跟踪CShop
             openFileDialog.Filter = "avi文件|*.avi|所有文件|*.*";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                Global.filePath = openFileDialog.FileName;
-                Global.fileName = openFileDialog.SafeFileName;
-                //filePathLable.Text = "文件路径:" + Global.filePath;
+                Global.carFilePath = openFileDialog.FileName;
+                Global.carFileName = openFileDialog.SafeFileName;
                 Global.carList.Clear();
-                CarCountProcess.carCount(Global.filePath, this);
+                carVideoPathLabel.Text = "文件路径：" + Global.carFilePath;
             }
         }
 
         private void carsFromCamera_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void carResultLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void carCountButton_Click(object sender, EventArgs e)
+        {
+            Global.carList.Clear();
+            Global.minCarArea = Convert.ToInt32(carMinAreaTextBox.Text);
+            Global.maxCarArea = Convert.ToInt32(carMaxAreaTextBox.Text);
+            CarCountProcess.carCount(Global.carFilePath, this);
+            Global.carCount = 0;
         }
     }
 }

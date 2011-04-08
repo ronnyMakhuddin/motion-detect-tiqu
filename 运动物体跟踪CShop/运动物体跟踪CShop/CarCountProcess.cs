@@ -77,7 +77,7 @@ namespace 运动物体跟踪CShop
             for (; DyncontourTemp != null && DyncontourTemp.Ptr.ToInt32() != 0; DyncontourTemp = DyncontourTemp.HNext)
             {
                 Rectangle r = DyncontourTemp.BoundingRectangle;
-                if (r.Height * r.Width > Global.minArea && r.Height * r.Width < Global.maxArea)
+                if (r.Height * r.Width > Global.minCarArea && r.Height * r.Width < Global.maxCarArea)
                 {
                     MCvScalar s;
 
@@ -120,6 +120,7 @@ namespace 运动物体跟踪CShop
             {
                 Size captureSize = new Size((int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH),
                     (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
+                int fps = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FPS);
 
                 mhi = CvInvoke.cvCreateImage(captureSize, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 1);
                 CvInvoke.cvZero(mhi);
@@ -131,14 +132,16 @@ namespace 运动物体跟踪CShop
                     CvInvoke.cvZero(buf[i]);
                 }
 
-                CvInvoke.cvNamedWindow("analyze");
+                CvInvoke.cvNamedWindow("carCount");
                 int totalFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_COUNT);
                 IntPtr frame = new IntPtr();
                 int frameNum = 0;
                 while (true)
                 {
                     //VideoMainForm.analyzeProgressBar.Increment((int)100*frameNum/totalFrames);
-                    form.analyzeProgressBar.Value = (int)100 * frameNum / totalFrames;
+                    form.carCountBar.Value = (int)100 * frameNum / totalFrames;
+                    form.carResultLabel.Text = Global.carCount.ToString();
+
                     frame = CvInvoke.cvQueryFrame(capture);
                     if (frame.ToInt32() == 0)
                     {
@@ -156,12 +159,12 @@ namespace 运动物体跟踪CShop
                             }
                         }
                         update_mhi(ref frame, ref motion, frameNum, ref buf, ref last, ref mhi, captureSize, ref lastTime);
-                        CvInvoke.cvShowImage("analyze", frame);
+                        CvInvoke.cvShowImage("carCount", frame);
                         CvInvoke.cvWaitKey(10);
                     }
                     frameNum++;
                 }
-                CvInvoke.cvDestroyWindow("analyze");
+                CvInvoke.cvDestroyWindow("carCount");
             }
 
             CvInvoke.cvReleaseCapture(ref capture);
