@@ -52,7 +52,7 @@ namespace 运动物体跟踪CShop
 
         private void eventListBox_DoubleClick(object sender, EventArgs e)
         {
-            VideoProcess.playSingleEvent(eventListBox.SelectedIndex);
+            VideoAnalyzeProcess.playSingleEvent(eventListBox.SelectedIndex);
         }
 
         //分析视频按钮事件响应
@@ -64,7 +64,7 @@ namespace 运动物体跟踪CShop
             {
                 if (!File.Exists(Global.fileName + ".txt"))
                 {
-                    VideoProcess.analyzeVideo(Global.filePath, this);
+                    VideoAnalyzeProcess.analyzeVideo(Global.filePath, this);
                     EventNodeOperation.eventFilter(ref Global.eventList);
                     FileOperation.writeToFile(Global.fileName + ".txt");
                 }
@@ -96,7 +96,7 @@ namespace 运动物体跟踪CShop
                 MessageBox.Show("没有选中事件");
                 return;
             }
-            VideoProcess.playSingleEvent(eventListBox.SelectedIndex);
+            VideoAnalyzeProcess.playSingleEvent(eventListBox.SelectedIndex);
         }
 
         //播放所有事件按钮事件响应
@@ -107,12 +107,12 @@ namespace 运动物体跟踪CShop
                 MessageBox.Show("事件列表为空,没有可显示的事件");
                 return;
             }
-            VideoProcess.playAllEvents();
+            VideoAnalyzeProcess.playAllEvents();
         }
 
         private void cameralButton_Click(object sender, EventArgs e)
         {
-            VideoProcess.cameralSaveVideo();
+            VideoAnalyzeProcess.cameralSaveVideo();
         }
 
         private void label1_Click(object sender, EventArgs e)

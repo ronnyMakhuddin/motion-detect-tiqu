@@ -9,7 +9,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.UI;
 namespace 运动物体跟踪CShop
 {
-    class VideoProcess
+    class VideoAnalyzeProcess
     {
         //  参数：
         //  img – 输入视频帧

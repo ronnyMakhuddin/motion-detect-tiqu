@@ -98,7 +98,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="VideoProcess.cs" />
+    <Compile Include="VideoAnalyzeProcess.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\openFileButton.png" />
