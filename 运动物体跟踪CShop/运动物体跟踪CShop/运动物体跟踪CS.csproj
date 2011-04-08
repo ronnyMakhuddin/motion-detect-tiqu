@@ -64,6 +64,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CarCountProcess.cs" />
+    <Compile Include="CarNode.cs" />
     <Compile Include="EventNode.cs" />
     <Compile Include="FileOperation.cs" />
     <Compile Include="VideoMainForm.cs">
