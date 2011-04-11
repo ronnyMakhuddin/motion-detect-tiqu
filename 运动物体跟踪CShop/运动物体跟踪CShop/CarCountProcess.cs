@@ -136,11 +136,17 @@ namespace 运动物体跟踪CShop
                 int totalFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_COUNT);
                 IntPtr frame = new IntPtr();
                 int frameNum = 0;
+                String analyzeMessage;
                 while (true)
                 {
                     //VideoMainForm.analyzeProgressBar.Increment((int)100*frameNum/totalFrames);
                     form.carCountBar.Value = (int)100 * frameNum / totalFrames;
-                    form.carResultLabel.Text = Global.carCount.ToString();
+                    int nowSecond = frameNum / fps;
+                    int hour = nowSecond / 3600;
+                    int minute = (nowSecond % 3600) / 60;
+                    int second = (nowSecond % 3600) % 60;
+                    analyzeMessage = "车辆数：" + Global.carCount.ToString() + "     时间：" + hour.ToString() + "小时" + minute.ToString() + "分钟" + second.ToString() + "秒";
+                    form.carResultLabel.Text = analyzeMessage;
 
                     frame = CvInvoke.cvQueryFrame(capture);
                     if (frame.ToInt32() == 0)
