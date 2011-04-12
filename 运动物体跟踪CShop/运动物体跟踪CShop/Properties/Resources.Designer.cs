@@ -74,6 +74,13 @@ namespace 运动物体跟踪CShop.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap jishu {
+            get {
+                object obj = ResourceManager.GetObject("jishu", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap openFileButton {
             get {
                 object obj = ResourceManager.GetObject("openFileButton", resourceCulture);

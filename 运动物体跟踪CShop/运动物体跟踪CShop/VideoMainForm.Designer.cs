@@ -42,6 +42,12 @@
             this.areaLable = new System.Windows.Forms.Label();
             this.filePathLable = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.carMaxAreaTextBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.carMinAreaTextBox = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.carVideoPathLabel = new System.Windows.Forms.Label();
+            this.carResultLabel = new System.Windows.Forms.Label();
             this.carCountBar = new System.Windows.Forms.ProgressBar();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cameralButton = new System.Windows.Forms.Button();
@@ -50,15 +56,9 @@
             this.playSingleEventButton = new System.Windows.Forms.Button();
             this.analyzeButton = new System.Windows.Forms.Button();
             this.openFile = new System.Windows.Forms.Button();
+            this.carCountButton = new System.Windows.Forms.Button();
             this.carsFromCamera = new System.Windows.Forms.Button();
             this.carsFromLocalFile = new System.Windows.Forms.Button();
-            this.carResultLabel = new System.Windows.Forms.Label();
-            this.carVideoPathLabel = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.carMinAreaTextBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.carMaxAreaTextBox = new System.Windows.Forms.TextBox();
-            this.carCountButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -229,6 +229,57 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "      车流计数    ";
             // 
+            // carMaxAreaTextBox
+            // 
+            this.carMaxAreaTextBox.Location = new System.Drawing.Point(362, 130);
+            this.carMaxAreaTextBox.Name = "carMaxAreaTextBox";
+            this.carMaxAreaTextBox.Size = new System.Drawing.Size(78, 26);
+            this.carMaxAreaTextBox.TabIndex = 8;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(334, 133);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(24, 16);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "到";
+            // 
+            // carMinAreaTextBox
+            // 
+            this.carMinAreaTextBox.Location = new System.Drawing.Point(250, 130);
+            this.carMinAreaTextBox.Name = "carMinAreaTextBox";
+            this.carMinAreaTextBox.Size = new System.Drawing.Size(78, 26);
+            this.carMinAreaTextBox.TabIndex = 6;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(138, 133);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(120, 16);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "车辆面积范围：";
+            // 
+            // carVideoPathLabel
+            // 
+            this.carVideoPathLabel.AutoSize = true;
+            this.carVideoPathLabel.Location = new System.Drawing.Point(138, 88);
+            this.carVideoPathLabel.Name = "carVideoPathLabel";
+            this.carVideoPathLabel.Size = new System.Drawing.Size(88, 16);
+            this.carVideoPathLabel.TabIndex = 4;
+            this.carVideoPathLabel.Text = "文件路径：";
+            // 
+            // carResultLabel
+            // 
+            this.carResultLabel.AutoSize = true;
+            this.carResultLabel.Location = new System.Drawing.Point(138, 297);
+            this.carResultLabel.Name = "carResultLabel";
+            this.carResultLabel.Size = new System.Drawing.Size(88, 16);
+            this.carResultLabel.TabIndex = 3;
+            this.carResultLabel.Text = "车流计数：";
+            this.carResultLabel.Click += new System.EventHandler(this.carResultLabel_Click);
+            // 
             // carCountBar
             // 
             this.carCountBar.Location = new System.Drawing.Point(141, 245);
@@ -330,6 +381,19 @@
             this.openFile.UseVisualStyleBackColor = false;
             this.openFile.Click += new System.EventHandler(this.openFile_Click);
             // 
+            // carCountButton
+            // 
+            this.carCountButton.Image = global::运动物体跟踪CShop.Properties.Resources.jishu;
+            this.carCountButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.carCountButton.Location = new System.Drawing.Point(141, 175);
+            this.carCountButton.Name = "carCountButton";
+            this.carCountButton.Size = new System.Drawing.Size(136, 50);
+            this.carCountButton.TabIndex = 9;
+            this.carCountButton.Text = "车流计数";
+            this.carCountButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.carCountButton.UseVisualStyleBackColor = true;
+            this.carCountButton.Click += new System.EventHandler(this.carCountButton_Click);
+            // 
             // carsFromCamera
             // 
             this.carsFromCamera.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -358,67 +422,6 @@
             this.carsFromLocalFile.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.carsFromLocalFile.UseVisualStyleBackColor = true;
             this.carsFromLocalFile.Click += new System.EventHandler(this.carsFromLocalFile_Click);
-            // 
-            // carResultLabel
-            // 
-            this.carResultLabel.AutoSize = true;
-            this.carResultLabel.Location = new System.Drawing.Point(138, 297);
-            this.carResultLabel.Name = "carResultLabel";
-            this.carResultLabel.Size = new System.Drawing.Size(88, 16);
-            this.carResultLabel.TabIndex = 3;
-            this.carResultLabel.Text = "车流计数：";
-            this.carResultLabel.Click += new System.EventHandler(this.carResultLabel_Click);
-            // 
-            // carVideoPathLabel
-            // 
-            this.carVideoPathLabel.AutoSize = true;
-            this.carVideoPathLabel.Location = new System.Drawing.Point(138, 88);
-            this.carVideoPathLabel.Name = "carVideoPathLabel";
-            this.carVideoPathLabel.Size = new System.Drawing.Size(88, 16);
-            this.carVideoPathLabel.TabIndex = 4;
-            this.carVideoPathLabel.Text = "文件路径：";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(138, 133);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(120, 16);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "车辆面积范围：";
-            // 
-            // carMinAreaTextBox
-            // 
-            this.carMinAreaTextBox.Location = new System.Drawing.Point(250, 130);
-            this.carMinAreaTextBox.Name = "carMinAreaTextBox";
-            this.carMinAreaTextBox.Size = new System.Drawing.Size(78, 26);
-            this.carMinAreaTextBox.TabIndex = 6;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(334, 133);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(24, 16);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "到";
-            // 
-            // carMaxAreaTextBox
-            // 
-            this.carMaxAreaTextBox.Location = new System.Drawing.Point(362, 130);
-            this.carMaxAreaTextBox.Name = "carMaxAreaTextBox";
-            this.carMaxAreaTextBox.Size = new System.Drawing.Size(78, 26);
-            this.carMaxAreaTextBox.TabIndex = 8;
-            // 
-            // carCountButton
-            // 
-            this.carCountButton.Location = new System.Drawing.Point(141, 175);
-            this.carCountButton.Name = "carCountButton";
-            this.carCountButton.Size = new System.Drawing.Size(136, 50);
-            this.carCountButton.TabIndex = 9;
-            this.carCountButton.Text = "车流计数";
-            this.carCountButton.UseVisualStyleBackColor = true;
-            this.carCountButton.Click += new System.EventHandler(this.carCountButton_Click);
             // 
             // VideoMainForm
             // 
