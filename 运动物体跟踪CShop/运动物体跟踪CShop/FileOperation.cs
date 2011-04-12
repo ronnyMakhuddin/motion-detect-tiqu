@@ -12,7 +12,7 @@ namespace 运动物体跟踪CShop
     {
         static public void writeToFile(string filePath)
         {
-            FileStream fs = new FileStream(filePath, FileMode.Create);
+            FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate);
             StreamWriter sw = new StreamWriter(fs);
             sw.Write(Global.eventList.Count.ToString() + " " + Global.jiange.ToString());
             sw.Write("\r\n");
@@ -66,6 +66,7 @@ namespace 运动物体跟踪CShop
                 }
                 Global.eventList.Add(node);
             }
+            fileReader.Close();
         }
     }
 }

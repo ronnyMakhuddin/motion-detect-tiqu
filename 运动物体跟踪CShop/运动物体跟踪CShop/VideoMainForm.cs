@@ -70,13 +70,24 @@ namespace 运动物体跟踪CShop
             {
                 if (!File.Exists(Global.fileName + ".txt"))
                 {
+
                     VideoAnalyzeProcess.analyzeVideo(Global.filePath, this);
                     EventNodeOperation.eventFilter(ref Global.eventList);
                     FileOperation.writeToFile(Global.fileName + ".txt");
                 }
                 else
                 {
-                    FileOperation.readFromFile(Global.fileName + ".txt");
+                    if (MessageBox.Show("检测到已存在此视频的分析文件，是否要读入？", "此视频曾经分析过", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                    {
+                        VideoAnalyzeProcess.analyzeVideo(Global.filePath, this);
+                        EventNodeOperation.eventFilter(ref Global.eventList);
+                        FileOperation.writeToFile(Global.fileName + ".txt");
+                    }
+                    else
+                    {
+                        FileOperation.readFromFile(Global.fileName + ".txt");
+                    }
+
                 }
 
                 for (int i = 0; i < Global.eventList.Count; i++)
