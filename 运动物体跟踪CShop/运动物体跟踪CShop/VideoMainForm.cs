@@ -31,7 +31,7 @@ namespace 运动物体跟踪CShop
         private void openFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "avi文件|*.avi|所有文件|*.*";
+            openFileDialog.Filter = "avi文件|*.avi";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 Global.filePath = openFileDialog.FileName;
