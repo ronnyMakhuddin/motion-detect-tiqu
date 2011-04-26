@@ -113,7 +113,7 @@ namespace 运动物体跟踪CShop
             IntPtr mhi;
             int last = 0;
             double lastTime = 0;
-           
+
             if (capture.ToInt32() != 0)
             {
                 Size captureSize = new Size((int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH),
@@ -160,6 +160,10 @@ namespace 运动物体跟踪CShop
                     frameNum++;
                 }
                 CvInvoke.cvDestroyWindow("analyze");
+            }
+            else
+            {
+                MessageBox.Show("视频文件损坏或格式不正确，无法打开！");
             }
 
             CvInvoke.cvReleaseCapture(ref capture);
