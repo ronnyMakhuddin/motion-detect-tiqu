@@ -20,8 +20,9 @@ namespace 运动物体跟踪CShop
         public VideoMainForm()
         {
             InitializeComponent();
-            minAreaTextBox.Text = Global.minArea.ToString();
-            maxAreaTextBox.Text = Global.maxArea.ToString();
+            //minAreaTextBox.Text = Global.minArea.ToString();
+            //maxAreaTextBox.Text = Global.maxArea.ToString();
+            visualAngelComboBox.SelectedIndex = 0;
             jiangeTextBox.Text = Global.jiange.ToString();
             carMinAreaTextBox.Text = Global.minCarArea.ToString();
             carMaxAreaTextBox.Text = Global.maxCarArea.ToString();
@@ -62,8 +63,8 @@ namespace 运动物体跟踪CShop
         {
             eventListBox.Items.Clear();
             Global.eventList.Clear();
-            Global.minArea = Convert.ToInt32(minAreaTextBox.Text);
-            Global.maxArea = Convert.ToInt32(maxAreaTextBox.Text);
+            //Global.minArea = Convert.ToInt32(minAreaTextBox.Text);
+            //Global.maxArea = Convert.ToInt32(maxAreaTextBox.Text);
             if (Global.filePath == null)
                 MessageBox.Show("请先选择一个视频文件");
             else
@@ -71,7 +72,7 @@ namespace 运动物体跟踪CShop
                 if (!File.Exists(Global.fileName + ".txt"))
                 {
 
-                    VideoAnalyzeProcess.analyzeVideo(Global.filePath, this);
+                    VideoAnalyzeProcess.analyzeVideo(Global.filePath, this, visualAngelComboBox.SelectedIndex);
                     EventNodeOperation.eventFilter(ref Global.eventList);
                     FileOperation.writeToFile(Global.fileName + ".txt");
                 }
@@ -79,7 +80,7 @@ namespace 运动物体跟踪CShop
                 {
                     if (MessageBox.Show("检测到已存在此视频的分析文件，是否要读入？", "此视频曾经分析过", MessageBoxButtons.YesNo) != DialogResult.Yes)
                     {
-                        VideoAnalyzeProcess.analyzeVideo(Global.filePath, this);
+                        VideoAnalyzeProcess.analyzeVideo(Global.filePath, this, visualAngelComboBox.SelectedIndex);
                         EventNodeOperation.eventFilter(ref Global.eventList);
                         FileOperation.writeToFile(Global.fileName + ".txt");
                     }
@@ -168,5 +169,6 @@ namespace 运动物体跟踪CShop
             CarCountProcess.carCount(Global.carFilePath, this);
             Global.carCount = 0;
         }
+
     }
 }
