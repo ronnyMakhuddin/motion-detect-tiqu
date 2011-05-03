@@ -199,31 +199,37 @@ namespace 运动物体跟踪CShop
         {
             EventNode eventNode = Global.eventList[index];
             IntPtr capture = CvInvoke.cvCreateFileCapture(Global.filePath);
+            IntPtr tempImage = CvInvoke.cvQueryFrame(capture);
+            /*
+            int posFrames_ = 0;
+            for (int i = 0, posFrame = 0; i < 100; i++)
+            {
+                CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, i);
+                
+                CvInvoke.cvQueryFrame(capture);
+                posFrame = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
+                posFrame = posFrame;
+            }
+            */
             if (capture.ToInt32() != 0)
             {
                 //精确定位
-                CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, eventNode.startFrame);
-                int posFrames = 0;
+                int posFrames = ((eventNode.startFrame - Global.jiange + 1) / 12) * 12;
+                CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, posFrames);
                 CvInvoke.cvQueryFrame(capture);
-                posFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
-                for (int i = 6; posFrames > eventNode.startFrame; i+=6)
+                while (posFrames < eventNode.startFrame-Global.jiange)
                 {
-                    CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, eventNode.startFrame-i);
-                    CvInvoke.cvQueryFrame(capture);
-                    posFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
-                }
-                while (posFrames < eventNode.startFrame)
-                {
-                    CvInvoke.cvQueryFrame(capture);
+                    tempImage = CvInvoke.cvQueryFrame(capture);
                     posFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
                 }
 
                 string eventName = "事件" + index.ToString();
                 CvInvoke.cvNamedWindow(eventName);
                 int total = 0;
+                IntPtr image = CvInvoke.cvQueryFrame(capture);
                 while (posFrames <= eventNode.endFrame)
                 {
-                    IntPtr image = CvInvoke.cvQueryFrame(capture);
+                    
                     if (posFrames % Global.jiange == 0 && total < eventNode.trackList.Count)
                     {
                         MCvScalar s = new MCvScalar(255, 0, 0);
@@ -234,6 +240,7 @@ namespace 运动物体跟踪CShop
                         CvInvoke.cvWaitKey(100);
                         total++;
                     }
+                    image = CvInvoke.cvQueryFrame(capture);
                     posFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
                     //CvInvoke.cvReleaseImage(ref image);
                 }
@@ -266,17 +273,10 @@ namespace 运动物体跟踪CShop
                 Global.eventList[i].capture = CvInvoke.cvCreateFileCapture(Global.filePath);
 
                 //精确定位
-                CvInvoke.cvSetCaptureProperty(Global.eventList[i].capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, Global.eventList[i].startFrame);
-                int posFrames = 0;
+                int posFrames = ((Global.eventList[i].startFrame - Global.jiange + 1) / 12) * 12;
+                CvInvoke.cvSetCaptureProperty(Global.eventList[i].capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, posFrames);
                 CvInvoke.cvQueryFrame(Global.eventList[i].capture);
-                posFrames = (int)CvInvoke.cvGetCaptureProperty(Global.eventList[i].capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
-                for (int j = 6; posFrames > Global.eventList[i].startFrame; j += 6)
-                {
-                    CvInvoke.cvSetCaptureProperty(Global.eventList[i].capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, Global.eventList[i].startFrame - j);
-                    CvInvoke.cvQueryFrame(Global.eventList[i].capture);
-                    posFrames = (int)CvInvoke.cvGetCaptureProperty(Global.eventList[i].capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
-                }
-                while (posFrames < Global.eventList[i].startFrame)
+                while (posFrames < Global.eventList[i].startFrame - Global.jiange)
                 {
                     CvInvoke.cvQueryFrame(Global.eventList[i].capture);
                     posFrames = (int)CvInvoke.cvGetCaptureProperty(Global.eventList[i].capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
