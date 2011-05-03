@@ -72,6 +72,11 @@ namespace 运动物体跟踪CShop
             int n = CvInvoke.cvFindContours(dst, stor, ref cont, System.Runtime.InteropServices.Marshal.SizeOf(typeof(MCvContour)), Emgu.CV.CvEnum.RETR_TYPE.CV_RETR_LIST, 
                 Emgu.CV.CvEnum.CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_SIMPLE, new Point(0, 0));
             Seq<Point> DyncontourTemp = new Seq<Point>(cont, null);
+            if (frameNum == 314)
+            {
+                int a = 0;
+                a++;
+            }
             for (; DyncontourTemp != null && DyncontourTemp.Ptr.ToInt32() != 0; DyncontourTemp = DyncontourTemp.HNext)
             {
                 Rectangle r = DyncontourTemp.BoundingRectangle;
@@ -104,7 +109,7 @@ namespace 运动物体跟踪CShop
         }
 
         //分析视频
-        static public void analyzeVideo(string filePath, VideoMainForm form)
+        static public void analyzeVideo(string filePath, VideoMainForm form, int angelIndex)
         {
             int N = 3;
             IntPtr capture = CvInvoke.cvCreateFileCapture(filePath);
@@ -118,6 +123,25 @@ namespace 运动物体跟踪CShop
             {
                 Size captureSize = new Size((int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH),
                     (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
+                /*
+                switch (angelIndex)
+                {
+                    case 0:
+                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.1);
+                        Global.maxArea = Global.minArea * 10;
+                        break;
+                    case 1:
+                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.05);
+                        Global.maxArea = Global.minArea * 20;
+                        break;
+                    case 2:
+                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.01);
+                        Global.maxArea = Global.minArea * 50;
+                        break;
+                }
+                 * */
+                Global.minArea = 100;
+                Global.maxArea = 1000000;
 
                 mhi = CvInvoke.cvCreateImage(captureSize, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 1);
                 CvInvoke.cvZero(mhi);
@@ -155,7 +179,7 @@ namespace 运动物体跟踪CShop
                         }
                         update_mhi(ref frame, ref motion, frameNum, ref buf, ref last, ref mhi, captureSize, ref lastTime);
                         CvInvoke.cvShowImage("analyze", frame);
-                        CvInvoke.cvWaitKey(10);
+                        CvInvoke.cvWaitKey(100);
                     }
                     frameNum++;
                 }
@@ -207,7 +231,7 @@ namespace 运动物体跟踪CShop
                             new Point(eventNode.trackList[total].X + eventNode.trackList[total].Width, eventNode.trackList[total].Y + eventNode.trackList[total].Height), s, 1,
                             Emgu.CV.CvEnum.LINE_TYPE.CV_AA, 0);
                         CvInvoke.cvShowImage(eventName, image);
-                        CvInvoke.cvWaitKey(20);
+                        CvInvoke.cvWaitKey(100);
                         total++;
                     }
                     posFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
