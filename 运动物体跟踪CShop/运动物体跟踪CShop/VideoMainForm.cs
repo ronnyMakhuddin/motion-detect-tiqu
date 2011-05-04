@@ -170,5 +170,26 @@ namespace 运动物体跟踪CShop
             Global.carCount = 0;
         }
 
+        private void batchSecectButton_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog();
+            folderDialog.RootFolder = Environment.SpecialFolder.MyComputer;
+            if (folderDialog.ShowDialog() == DialogResult.OK)
+            {
+                filePathLable.Text = "文件路径：" + folderDialog.SelectedPath;
+                string[] allFileNames = Directory.GetFiles(folderDialog.SelectedPath);
+                List<string> fileNamesList = new List<string>();
+                for (int i = 0; i < allFileNames.Length; i++)
+                {
+                    FileInfo fi = new FileInfo(allFileNames[i]);
+                    if (fi.Extension.ToLower() == ".avi")
+                    {
+                        fileNamesList.Add(allFileNames[i]);
+                    }
+                }
+                VideoAnalyzeProcess.batchProcess(fileNamesList, folderDialog.SelectedPath, this, visualAngelComboBox.SelectedIndex);
+            }
+        }
+
     }
 }

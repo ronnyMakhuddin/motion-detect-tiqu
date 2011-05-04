@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.visualAngelComboBox = new System.Windows.Forms.ComboBox();
             this.eventListBox = new System.Windows.Forms.ListBox();
             this.playAllEventButton = new System.Windows.Forms.Button();
             this.playSingleEventButton = new System.Windows.Forms.Button();
@@ -56,7 +57,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cameralButton = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.visualAngelComboBox = new System.Windows.Forms.ComboBox();
+            this.batchSecectButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -82,6 +83,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.LightGray;
+            this.tabPage1.Controls.Add(this.batchSecectButton);
             this.tabPage1.Controls.Add(this.visualAngelComboBox);
             this.tabPage1.Controls.Add(this.eventListBox);
             this.tabPage1.Controls.Add(this.playAllEventButton);
@@ -103,6 +105,18 @@
             this.tabPage1.Text = "      视频摘要      ";
             this.tabPage1.ToolTipText = "111";
             // 
+            // visualAngelComboBox
+            // 
+            this.visualAngelComboBox.FormattingEnabled = true;
+            this.visualAngelComboBox.Items.AddRange(new object[] {
+            "近景",
+            "中景",
+            "远景"});
+            this.visualAngelComboBox.Location = new System.Drawing.Point(84, 105);
+            this.visualAngelComboBox.Name = "visualAngelComboBox";
+            this.visualAngelComboBox.Size = new System.Drawing.Size(121, 24);
+            this.visualAngelComboBox.TabIndex = 15;
+            // 
             // eventListBox
             // 
             this.eventListBox.FormattingEnabled = true;
@@ -120,7 +134,7 @@
             this.playAllEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.playAllEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playAllEventButton;
             this.playAllEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.playAllEventButton.Location = new System.Drawing.Point(203, 292);
+            this.playAllEventButton.Location = new System.Drawing.Point(188, 292);
             this.playAllEventButton.Name = "playAllEventButton";
             this.playAllEventButton.Size = new System.Drawing.Size(152, 50);
             this.playAllEventButton.TabIndex = 13;
@@ -135,7 +149,7 @@
             this.playSingleEventButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.playSingleEventButton.Image = global::运动物体跟踪CShop.Properties.Resources.playSingleEventButton;
             this.playSingleEventButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.playSingleEventButton.Location = new System.Drawing.Point(30, 292);
+            this.playSingleEventButton.Location = new System.Drawing.Point(15, 292);
             this.playSingleEventButton.Name = "playSingleEventButton";
             this.playSingleEventButton.Size = new System.Drawing.Size(152, 50);
             this.playSingleEventButton.TabIndex = 12;
@@ -148,7 +162,7 @@
             // 
             this.analyzeResultLabel.AutoSize = true;
             this.analyzeResultLabel.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.analyzeResultLabel.Location = new System.Drawing.Point(28, 262);
+            this.analyzeResultLabel.Location = new System.Drawing.Point(13, 262);
             this.analyzeResultLabel.Name = "analyzeResultLabel";
             this.analyzeResultLabel.Size = new System.Drawing.Size(70, 14);
             this.analyzeResultLabel.TabIndex = 11;
@@ -156,7 +170,7 @@
             // 
             // analyzeProgressBar
             // 
-            this.analyzeProgressBar.Location = new System.Drawing.Point(30, 221);
+            this.analyzeProgressBar.Location = new System.Drawing.Point(15, 221);
             this.analyzeProgressBar.Name = "analyzeProgressBar";
             this.analyzeProgressBar.Size = new System.Drawing.Size(300, 25);
             this.analyzeProgressBar.TabIndex = 10;
@@ -165,7 +179,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(241, 170);
+            this.label1.Location = new System.Drawing.Point(226, 170);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 14);
             this.label1.TabIndex = 9;
@@ -175,7 +189,7 @@
             // jiangeTextBox
             // 
             this.jiangeTextBox.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.jiangeTextBox.Location = new System.Drawing.Point(194, 165);
+            this.jiangeTextBox.Location = new System.Drawing.Point(179, 165);
             this.jiangeTextBox.Name = "jiangeTextBox";
             this.jiangeTextBox.Size = new System.Drawing.Size(41, 23);
             this.jiangeTextBox.TabIndex = 8;
@@ -184,7 +198,7 @@
             // 
             this.meiLabel.AutoSize = true;
             this.meiLabel.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.meiLabel.Location = new System.Drawing.Point(167, 170);
+            this.meiLabel.Location = new System.Drawing.Point(152, 170);
             this.meiLabel.Name = "meiLabel";
             this.meiLabel.Size = new System.Drawing.Size(21, 14);
             this.meiLabel.TabIndex = 7;
@@ -196,7 +210,7 @@
             this.analyzeButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.analyzeButton.Image = global::运动物体跟踪CShop.Properties.Resources.analyzeButton;
             this.analyzeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.analyzeButton.Location = new System.Drawing.Point(30, 151);
+            this.analyzeButton.Location = new System.Drawing.Point(15, 151);
             this.analyzeButton.Name = "analyzeButton";
             this.analyzeButton.Size = new System.Drawing.Size(120, 50);
             this.analyzeButton.TabIndex = 6;
@@ -209,7 +223,7 @@
             // 
             this.areaLable.AutoSize = true;
             this.areaLable.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.areaLable.Location = new System.Drawing.Point(28, 110);
+            this.areaLable.Location = new System.Drawing.Point(13, 110);
             this.areaLable.Name = "areaLable";
             this.areaLable.Size = new System.Drawing.Size(77, 14);
             this.areaLable.TabIndex = 2;
@@ -219,7 +233,7 @@
             // 
             this.filePathLable.AutoSize = true;
             this.filePathLable.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.filePathLable.Location = new System.Drawing.Point(28, 81);
+            this.filePathLable.Location = new System.Drawing.Point(13, 81);
             this.filePathLable.Name = "filePathLable";
             this.filePathLable.Size = new System.Drawing.Size(70, 14);
             this.filePathLable.TabIndex = 1;
@@ -232,7 +246,7 @@
             this.openFile.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.openFile.Image = global::运动物体跟踪CShop.Properties.Resources.openFileButton;
             this.openFile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.openFile.Location = new System.Drawing.Point(30, 18);
+            this.openFile.Location = new System.Drawing.Point(15, 18);
             this.openFile.Margin = new System.Windows.Forms.Padding(0);
             this.openFile.Name = "openFile";
             this.openFile.Size = new System.Drawing.Size(152, 50);
@@ -393,17 +407,15 @@
             this.tabPage4.Text = "     软件信息     ";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // visualAngelComboBox
+            // batchSecectButton
             // 
-            this.visualAngelComboBox.FormattingEnabled = true;
-            this.visualAngelComboBox.Items.AddRange(new object[] {
-            "近景",
-            "中景",
-            "远景"});
-            this.visualAngelComboBox.Location = new System.Drawing.Point(99, 105);
-            this.visualAngelComboBox.Name = "visualAngelComboBox";
-            this.visualAngelComboBox.Size = new System.Drawing.Size(121, 24);
-            this.visualAngelComboBox.TabIndex = 15;
+            this.batchSecectButton.Location = new System.Drawing.Point(188, 18);
+            this.batchSecectButton.Name = "batchSecectButton";
+            this.batchSecectButton.Size = new System.Drawing.Size(152, 50);
+            this.batchSecectButton.TabIndex = 16;
+            this.batchSecectButton.Text = "选择文件夹";
+            this.batchSecectButton.UseVisualStyleBackColor = true;
+            this.batchSecectButton.Click += new System.EventHandler(this.batchSecectButton_Click);
             // 
             // VideoMainForm
             // 
@@ -456,6 +468,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button carCountButton;
         private System.Windows.Forms.ComboBox visualAngelComboBox;
+        private System.Windows.Forms.Button batchSecectButton;
     }
 }
 

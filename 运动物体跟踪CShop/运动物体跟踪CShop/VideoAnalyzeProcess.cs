@@ -179,7 +179,7 @@ namespace 运动物体跟踪CShop
                         }
                         update_mhi(ref frame, ref motion, frameNum, ref buf, ref last, ref mhi, captureSize, ref lastTime);
                         CvInvoke.cvShowImage("analyze", frame);
-                        CvInvoke.cvWaitKey(100);
+                        CvInvoke.cvWaitKey(10);
                     }
                     frameNum++;
                 }
@@ -194,23 +194,110 @@ namespace 运动物体跟踪CShop
             
         }
 
+        //批处理分析视频
+        static public void batchAnalyzeVideo(string filePath, VideoMainForm form, int angelIndex)
+        {
+            int N = 3;
+            IntPtr capture = CvInvoke.cvCreateFileCapture(filePath);
+            IntPtr motion = new IntPtr();
+            IntPtr[] buf;
+            IntPtr mhi;
+            int last = 0;
+            double lastTime = 0;
+
+            if (capture.ToInt32() != 0)
+            {
+                Size captureSize = new Size((int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH),
+                    (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
+                /*
+                switch (angelIndex)
+                {
+                    case 0:
+                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.1);
+                        Global.maxArea = Global.minArea * 10;
+                        break;
+                    case 1:
+                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.05);
+                        Global.maxArea = Global.minArea * 20;
+                        break;
+                    case 2:
+                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.01);
+                        Global.maxArea = Global.minArea * 50;
+                        break;
+                }
+                 * */
+                Global.minArea = 100;
+                Global.maxArea = 1000000;
+
+                mhi = CvInvoke.cvCreateImage(captureSize, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_32F, 1);
+                CvInvoke.cvZero(mhi);
+                buf = new IntPtr[N];
+                for (int i = 0; i < N; i++)
+                {
+                    CvInvoke.cvReleaseImage(ref buf[i]);
+                    buf[i] = CvInvoke.cvCreateImage(captureSize, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8U, 1);
+                    CvInvoke.cvZero(buf[i]);
+                }
+
+                CvInvoke.cvNamedWindow("analyze");
+                int totalFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_COUNT);
+                IntPtr frame = new IntPtr();
+                int frameNum = 0;
+                while (true)
+                {
+                    //VideoMainForm.analyzeProgressBar.Increment((int)100*frameNum/totalFrames);
+                    form.analyzeProgressBar.Value = (int)100 * frameNum / totalFrames;
+                    frame = CvInvoke.cvQueryFrame(capture);
+                    if (frame.ToInt32() == 0)
+                    {
+                        form.analyzeProgressBar.Value = 100;
+                        break;
+                    }
+                    if (frameNum % Global.jiange == 0)
+                    {
+                        if (frame.ToInt32() != 0)
+                        {
+                            if (motion.ToInt32() == 0)
+                            {
+                                motion = CvInvoke.cvCreateImage(captureSize, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8U, 1);
+                                CvInvoke.cvZero(motion);
+                            }
+                        }
+                        update_mhi(ref frame, ref motion, frameNum, ref buf, ref last, ref mhi, captureSize, ref lastTime);
+                        CvInvoke.cvShowImage("analyze", frame);
+                        CvInvoke.cvWaitKey(10);
+                    }
+                    frameNum++;
+                }
+                CvInvoke.cvDestroyWindow("analyze");
+            }
+            else
+            {
+                MessageBox.Show("视频文件损坏或格式不正确，无法打开！");
+            }
+
+            CvInvoke.cvReleaseCapture(ref capture);
+
+        }
+
+        //批处理
+        static public void batchProcess(List<string> filePaths, string foldPath, VideoMainForm form, int angelIndex)
+        {
+            for (int i = 0; i < filePaths.Count; i++)
+            {
+                Global.eventList.Clear();
+                VideoAnalyzeProcess.batchAnalyzeVideo(filePaths[i], form, angelIndex);
+                EventNodeOperation.eventFilter(ref Global.eventList);
+                FileOperation.writeToFile(filePaths[i] + ".txt");
+            }
+        }
+
         //播放单个事件
         static public void playSingleEvent(int index)
         {
             EventNode eventNode = Global.eventList[index];
             IntPtr capture = CvInvoke.cvCreateFileCapture(Global.filePath);
             IntPtr tempImage = CvInvoke.cvQueryFrame(capture);
-            /*
-            int posFrames_ = 0;
-            for (int i = 0, posFrame = 0; i < 100; i++)
-            {
-                CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, i);
-                
-                CvInvoke.cvQueryFrame(capture);
-                posFrame = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
-                posFrame = posFrame;
-            }
-            */
             if (capture.ToInt32() != 0)
             {
                 //精确定位
@@ -237,7 +324,7 @@ namespace 运动物体跟踪CShop
                             new Point(eventNode.trackList[total].X + eventNode.trackList[total].Width, eventNode.trackList[total].Y + eventNode.trackList[total].Height), s, 1,
                             Emgu.CV.CvEnum.LINE_TYPE.CV_AA, 0);
                         CvInvoke.cvShowImage(eventName, image);
-                        CvInvoke.cvWaitKey(100);
+                        CvInvoke.cvWaitKey(10);
                         total++;
                     }
                     image = CvInvoke.cvQueryFrame(capture);
