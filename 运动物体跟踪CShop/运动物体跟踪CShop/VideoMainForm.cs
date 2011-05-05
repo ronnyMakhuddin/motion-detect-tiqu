@@ -170,6 +170,7 @@ namespace 运动物体跟踪CShop
             Global.carCount = 0;
         }
 
+        //选择文件夹按钮
         private void batchSecectButton_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
@@ -187,7 +188,12 @@ namespace 运动物体跟踪CShop
                         fileNamesList.Add(allFileNames[i]);
                     }
                 }
-                VideoAnalyzeProcess.batchProcess(fileNamesList, folderDialog.SelectedPath, this, visualAngelComboBox.SelectedIndex);
+                FileInfo file = new FileInfo(allFileNames[0]);
+                if(!Directory.Exists(file.DirectoryName + "\\analyze"))
+                {
+                    Directory.CreateDirectory(file.DirectoryName + "\\analyze");
+                }
+                VideoAnalyzeProcess.batchProcess(fileNamesList, this, visualAngelComboBox.SelectedIndex);
             }
         }
 
