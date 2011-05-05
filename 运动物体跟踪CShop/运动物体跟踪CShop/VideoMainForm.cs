@@ -69,12 +69,17 @@ namespace 运动物体跟踪CShop
                 MessageBox.Show("请先选择一个视频文件");
             else
             {
-                if (!File.Exists(Global.fileName + ".txt"))
+                FileInfo fi = new FileInfo(Global.filePath);
+                if (!File.Exists(fi.DirectoryName + "\\analyze\\" + fi.Name + ".txt"))
                 {
 
                     VideoAnalyzeProcess.analyzeVideo(Global.filePath, this, visualAngelComboBox.SelectedIndex);
                     EventNodeOperation.eventFilter(ref Global.eventList);
-                    FileOperation.writeToFile(Global.fileName + ".txt");
+                    if (!Directory.Exists(fi.DirectoryName + "\\analyze"))
+                    {
+                        Directory.CreateDirectory(fi.DirectoryName + "\\analyze");
+                    }
+                    FileOperation.writeToFile(fi.DirectoryName + "\\analyze\\" + fi.Name + ".txt");
                 }
                 else
                 {
@@ -82,11 +87,11 @@ namespace 运动物体跟踪CShop
                     {
                         VideoAnalyzeProcess.analyzeVideo(Global.filePath, this, visualAngelComboBox.SelectedIndex);
                         EventNodeOperation.eventFilter(ref Global.eventList);
-                        FileOperation.writeToFile(Global.fileName + ".txt");
+                        FileOperation.writeToFile(fi.DirectoryName + "\\analyze\\" + fi.Name + ".txt");
                     }
                     else
                     {
-                        FileOperation.readFromFile(Global.fileName + ".txt");
+                        FileOperation.readFromFile(fi.DirectoryName + "\\analyze\\" + fi.Name + ".txt");
                     }
 
                 }
