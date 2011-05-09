@@ -165,7 +165,7 @@
             // 
             this.analyzeProgressBar.Location = new System.Drawing.Point(15, 201);
             this.analyzeProgressBar.Name = "analyzeProgressBar";
-            this.analyzeProgressBar.Size = new System.Drawing.Size(300, 25);
+            this.analyzeProgressBar.Size = new System.Drawing.Size(254, 25);
             this.analyzeProgressBar.TabIndex = 10;
             // 
             // analyzeButton
