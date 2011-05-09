@@ -110,7 +110,7 @@ namespace 运动物体跟踪CShop
         }
 
         //分析视频
-        static public void analyzeVideo(string filePath, VideoMainForm form, int angelIndex)
+        static public void analyzeVideo(string filePath, VideoMainForm form)
         {
             int N = 3;
             IntPtr capture = CvInvoke.cvCreateFileCapture(filePath);
@@ -196,7 +196,7 @@ namespace 运动物体跟踪CShop
         }
 
         //批处理分析视频
-        static public void batchAnalyzeVideo(string filePath, VideoMainForm form, int angelIndex)
+        static public void batchAnalyzeVideo(string filePath, VideoMainForm form)
         {
             int N = 3;
             IntPtr capture = CvInvoke.cvCreateFileCapture(filePath);
@@ -282,18 +282,20 @@ namespace 运动物体跟踪CShop
         }
 
         //批处理
-        static public void batchProcess(List<string> filePaths, VideoMainForm form, int angelIndex)
+        static public void batchProcess(List<string> filePaths, VideoMainForm form)
         {
             for (int i = 0; i < filePaths.Count; i++)
             {
                 Global.eventList.Clear();
-                VideoAnalyzeProcess.batchAnalyzeVideo(filePaths[i], form, angelIndex);
+                form.analyzeResultLabel.Text = "分析过程：正在处理第" + (i+1).ToString() + "个视频，共" + filePaths.Count.ToString() + "个视频";
+                VideoAnalyzeProcess.batchAnalyzeVideo(filePaths[i], form);
                 EventNodeOperation.eventFilter(ref Global.eventList);
                 FileInfo fi = new FileInfo(filePaths[i]);
                 string str = fi.DirectoryName;
                 FileOperation.writeToFile(fi.DirectoryName + "\\analyze\\" + fi.Name + ".txt");
                 batchPlayAllEvents(filePaths[i]);
             }
+            form.analyzeResultLabel.Text = "所有视频分析完毕！";
         }
 
         //播放单个事件
@@ -353,6 +355,7 @@ namespace 运动物体跟踪CShop
                     (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
             CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, 15);
             IntPtr backGroundImage = CvInvoke.cvQueryFrame(capture);
+            int fps = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FPS);
 
             int limit = 0;
 
@@ -374,7 +377,7 @@ namespace 运动物体跟踪CShop
                 }
             }
 
-            IntPtr writer = CvInvoke.cvCreateVideoWriter("allEvents.avi", CvInvoke.CV_FOURCC('X', 'V', 'I', 'D'), 20, captureSize, 1);
+            IntPtr writer = CvInvoke.cvCreateVideoWriter("allEvents.avi", CvInvoke.CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
             CvInvoke.cvNamedWindow("AllEvents");
 
             IntPtr allEventImage = CvInvoke.cvCreateImage(captureSize, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8U, 3);
@@ -480,7 +483,7 @@ namespace 运动物体跟踪CShop
 
             FileInfo fi = new FileInfo(filePath);
             IntPtr writer = CvInvoke.cvCreateVideoWriter(fi.DirectoryName + "\\analyze\\" + fi.Name, CvInvoke.CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
-            CvInvoke.cvNamedWindow("AllEvents");
+            //CvInvoke.cvNamedWindow("AllEvents");
 
             IntPtr allEventImage = CvInvoke.cvCreateImage(captureSize, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8U, 3);
             CvInvoke.cvCopy(backGroundImage, allEventImage, new IntPtr());
@@ -532,7 +535,7 @@ namespace 运动物体跟踪CShop
 
                 if (i % Global.jiange == 0)
                 {
-                    CvInvoke.cvShowImage("AllEvents", allEventImage);
+                    //CvInvoke.cvShowImage("AllEvents", allEventImage);
                     CvInvoke.cvWaitKey(10);
                 }
 
@@ -549,7 +552,7 @@ namespace 运动物体跟踪CShop
                     break;
                 CvInvoke.cvReleaseCapture(ref Global.eventList[i].capture);
             }
-            CvInvoke.cvDestroyWindow("AllEvents");
+            //CvInvoke.cvDestroyWindow("AllEvents");
             CvInvoke.cvReleaseCapture(ref capture);
             CvInvoke.cvReleaseVideoWriter(ref writer);
         }

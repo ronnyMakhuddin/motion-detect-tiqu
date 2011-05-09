@@ -22,8 +22,8 @@ namespace 运动物体跟踪CShop
             InitializeComponent();
             //minAreaTextBox.Text = Global.minArea.ToString();
             //maxAreaTextBox.Text = Global.maxArea.ToString();
-            visualAngelComboBox.SelectedIndex = 0;
-            jiangeTextBox.Text = Global.jiange.ToString();
+            //visualAngelComboBox.SelectedIndex = 0;
+            //jiangeTextBox.Text = Global.jiange.ToString();
             carMinAreaTextBox.Text = Global.minCarArea.ToString();
             carMaxAreaTextBox.Text = Global.maxCarArea.ToString();
         }
@@ -73,7 +73,7 @@ namespace 运动物体跟踪CShop
                 if (!File.Exists(fi.DirectoryName + "\\analyze\\" + fi.Name + ".txt"))
                 {
 
-                    VideoAnalyzeProcess.analyzeVideo(Global.filePath, this, visualAngelComboBox.SelectedIndex);
+                    VideoAnalyzeProcess.analyzeVideo(Global.filePath, this);
                     EventNodeOperation.eventFilter(ref Global.eventList);
                     if (!Directory.Exists(fi.DirectoryName + "\\analyze"))
                     {
@@ -85,7 +85,7 @@ namespace 运动物体跟踪CShop
                 {
                     if (MessageBox.Show("检测到已存在此视频的分析文件，是否要读入？", "此视频曾经分析过", MessageBoxButtons.YesNo) != DialogResult.Yes)
                     {
-                        VideoAnalyzeProcess.analyzeVideo(Global.filePath, this, visualAngelComboBox.SelectedIndex);
+                        VideoAnalyzeProcess.analyzeVideo(Global.filePath, this);
                         EventNodeOperation.eventFilter(ref Global.eventList);
                         FileOperation.writeToFile(fi.DirectoryName + "\\analyze\\" + fi.Name + ".txt");
                     }
@@ -108,6 +108,9 @@ namespace 运动物体跟踪CShop
                     string str = "事件" + (i + 1).ToString() + ",从" + startFrame.ToString() + "到" + endFrame.ToString();
                     eventListBox.Items.Add(str);
                 }
+
+                //显示分析结果
+                analyzeResultLabel.Text = "分析结果：共" + Global.eventList.Count.ToString() + "个事件，最大事件为" + Global.maxEventNum.ToString() + "帧";
             }
         }
 
@@ -198,7 +201,7 @@ namespace 运动物体跟踪CShop
                 {
                     Directory.CreateDirectory(file.DirectoryName + "\\analyze");
                 }
-                VideoAnalyzeProcess.batchProcess(fileNamesList, this, visualAngelComboBox.SelectedIndex);
+                VideoAnalyzeProcess.batchProcess(fileNamesList, this);
             }
         }
 
