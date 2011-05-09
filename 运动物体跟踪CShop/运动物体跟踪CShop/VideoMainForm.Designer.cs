@@ -53,6 +53,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cameralButton = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -78,6 +79,7 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.LightGray;
+            this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.batchSecectButton);
             this.tabPage1.Controls.Add(this.eventListBox);
             this.tabPage1.Controls.Add(this.playAllEventButton);
@@ -112,9 +114,9 @@
             // 
             this.eventListBox.FormattingEnabled = true;
             this.eventListBox.ItemHeight = 16;
-            this.eventListBox.Location = new System.Drawing.Point(373, 9);
+            this.eventListBox.Location = new System.Drawing.Point(373, 41);
             this.eventListBox.Name = "eventListBox";
-            this.eventListBox.Size = new System.Drawing.Size(283, 324);
+            this.eventListBox.Size = new System.Drawing.Size(283, 292);
             this.eventListBox.TabIndex = 14;
             this.eventListBox.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             this.eventListBox.DoubleClick += new System.EventHandler(this.eventListBox_DoubleClick);
@@ -172,7 +174,7 @@
             this.analyzeButton.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.analyzeButton.Image = global::运动物体跟踪CShop.Properties.Resources.analyzeButton;
             this.analyzeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.analyzeButton.Location = new System.Drawing.Point(15, 122);
+            this.analyzeButton.Location = new System.Drawing.Point(15, 125);
             this.analyzeButton.Name = "analyzeButton";
             this.analyzeButton.Size = new System.Drawing.Size(152, 50);
             this.analyzeButton.TabIndex = 6;
@@ -359,6 +361,15 @@
             this.tabPage4.Text = "     软件信息     ";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(370, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(88, 16);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "事件列表：";
+            // 
             // VideoMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -406,6 +417,7 @@
         private System.Windows.Forms.Button carCountButton;
         private System.Windows.Forms.Button batchSecectButton;
         public System.Windows.Forms.Label analyzeResultLabel;
+        private System.Windows.Forms.Label label1;
     }
 }
 
