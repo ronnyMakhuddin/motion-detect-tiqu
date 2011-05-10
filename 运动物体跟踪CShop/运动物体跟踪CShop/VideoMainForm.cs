@@ -105,35 +105,67 @@ namespace 运动物体跟踪CShop
                         Global.maxEventNum = totalFrame;
                     if (totalFrame < Global.minEventNum)
                         Global.minEventNum = totalFrame;
-                    string str = "事件" + (i + 1).ToString() + ",从" + startFrame.ToString() + "到" + endFrame.ToString();
+                    string str = "事件" + (i + 1).ToString() + ",从" + Global.getTimeString(Global.fps, startFrame) + "到" + Global.getTimeString(Global.fps, endFrame);
                     eventListBox.Items.Add(str);
                 }
 
                 //显示分析结果
-                analyzeResultLabel.Text = "分析结果：共" + Global.eventList.Count.ToString() + "个事件，最大事件为" + Global.maxEventNum.ToString() + "帧";
+                analyzeResultLabel.Text = "分析结果：共" + Global.eventList.Count.ToString() + "个事件，最大事件为" + (Global.maxEventNum/Global.fps + 1).ToString() + "秒";
             }
         }
 
         //播放单个事件按钮事件响应
         private void playSingleEventButton_Click(object sender, EventArgs e)
         {
+            /*
             if (eventListBox.SelectedIndex < 0)
             {
                 MessageBox.Show("没有选中事件");
                 return;
             }
             VideoAnalyzeProcess.playSingleEvent(eventListBox.SelectedIndex);
+            */
+
+            if (eventListBox.SelectedIndex < 0)
+            {
+                MessageBox.Show("没有选中事件");
+                return;
+            }
+            EventNode eventNode = Global.eventList[eventListBox.SelectedIndex];
+
+            PlayForm playForm = new PlayForm();
+            playForm.wmPlayer.URL = Global.filePath;
+
+            playForm.wmPlayer.Ctlcontrols.currentPosition = eventNode.startFrame / Global.fps -1 ;
+            playForm.Show();
+            //playForm.Hide();
         }
 
         //播放所有事件按钮事件响应
         private void playAllEventButton_Click(object sender, EventArgs e)
         {
-            if (Global.eventList.Count == 0)
+            if (eventListBox.Items.Count == 0)
             {
                 MessageBox.Show("事件列表为空,没有可显示的事件");
                 return;
             }
+
+            /** 旧版本的播放所有事件
             VideoAnalyzeProcess.playAllEvents();
+             * */
+
+            //调用控件来播放所有事件
+            PlayForm playForm = new PlayForm();
+            FileInfo file = new FileInfo(Global.filePath);
+
+            if (!File.Exists(file.DirectoryName + "\\analyze\\" + file.Name))
+            {
+                MessageBox.Show("找不到所有事件的视频文件");
+                return;
+            }
+
+            playForm.wmPlayer.URL = file.DirectoryName + "\\analyze\\" + file.Name;
+            playForm.Show();
         }
 
         private void cameralButton_Click(object sender, EventArgs e)
@@ -185,6 +217,9 @@ namespace 运动物体跟踪CShop
             folderDialog.RootFolder = Environment.SpecialFolder.MyComputer;
             if (folderDialog.ShowDialog() == DialogResult.OK)
             {
+                eventListBox.Items.Clear();
+                Global.eventList.Clear();
+
                 filePathLable.Text = "文件路径：" + folderDialog.SelectedPath;
                 string[] allFileNames = Directory.GetFiles(folderDialog.SelectedPath);
                 List<string> fileNamesList = new List<string>();
