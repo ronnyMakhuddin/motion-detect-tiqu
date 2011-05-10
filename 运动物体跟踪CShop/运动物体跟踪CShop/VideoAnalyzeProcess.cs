@@ -208,7 +208,7 @@ namespace 运动物体跟踪CShop
                     CvInvoke.cvZero(buf[i]);
                 }
 
-                CvInvoke.cvNamedWindow("analyze");
+                //CvInvoke.cvNamedWindow("analyze");
                 int totalFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_COUNT);
                 IntPtr frame = new IntPtr();
                 int frameNum = 0;
@@ -217,7 +217,8 @@ namespace 运动物体跟踪CShop
                 {
                     
                     form.analyzeProgressBar.Value = frameNum;
-                    form.analyzeProgressBar.Refresh();
+                    form.analyzeProgressBar.PerformStep();
+                    //form.analyzeProgressBar.Refresh();
 
                     frame = CvInvoke.cvQueryFrame(capture);
                     if (frame.ToInt32() == 0)
@@ -236,12 +237,12 @@ namespace 运动物体跟踪CShop
                             }
                         }
                         update_mhi(ref frame, ref motion, frameNum, ref buf, ref last, ref mhi, captureSize, ref lastTime);
-                        CvInvoke.cvShowImage("analyze", frame);
+                        //CvInvoke.cvShowImage("analyze", frame);
                         CvInvoke.cvWaitKey(10);
                     }
                     frameNum++;
                 }
-                CvInvoke.cvDestroyWindow("analyze");
+                //CvInvoke.cvDestroyWindow("analyze");
             }
             else
             {
@@ -259,6 +260,7 @@ namespace 运动物体跟踪CShop
             {
                 Global.eventList.Clear();
                 form.analyzeResultLabel.Text = "分析过程：正在处理第" + (i+1).ToString() + "个视频，共" + filePaths.Count.ToString() + "个视频";
+                form.analyzeResultLabel.Refresh();
                 VideoAnalyzeProcess.batchAnalyzeVideo(filePaths[i], form);
                 EventNodeOperation.eventFilter(ref Global.eventList);
                 FileInfo fi = new FileInfo(filePaths[i]);
