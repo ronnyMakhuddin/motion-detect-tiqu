@@ -14,7 +14,7 @@ namespace 运动物体跟踪CShop
         {
             FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate);
             StreamWriter sw = new StreamWriter(fs);
-            sw.Write(Global.eventList.Count.ToString() + " " + Global.jiange.ToString());
+            sw.Write(Global.eventList.Count.ToString() + " " + Global.jiange.ToString() + " " + Global.fps.ToString());
             sw.Write("\r\n");
             for (int i = 0; i < Global.eventList.Count; i++)
             {
@@ -45,6 +45,7 @@ namespace 运动物体跟踪CShop
             string[] temp = head.Split(' ');
             int total = Convert.ToInt32(temp[0]);
             Global.jiange = Convert.ToInt32(temp[1]);
+            Global.fps = Convert.ToInt32(temp[2]);
             Global.eventList.Clear();
             for (int i = 0; i < total; i++)
             {

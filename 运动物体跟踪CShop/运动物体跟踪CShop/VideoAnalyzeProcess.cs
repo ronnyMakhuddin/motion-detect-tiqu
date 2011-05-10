@@ -124,23 +124,8 @@ namespace 运动物体跟踪CShop
             {
                 Size captureSize = new Size((int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH),
                     (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
-                /*
-                switch (angelIndex)
-                {
-                    case 0:
-                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.1);
-                        Global.maxArea = Global.minArea * 10;
-                        break;
-                    case 1:
-                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.05);
-                        Global.maxArea = Global.minArea * 20;
-                        break;
-                    case 2:
-                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.01);
-                        Global.maxArea = Global.minArea * 50;
-                        break;
-                }
-                 * */
+                Global.fps = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FPS);
+
                 Global.minArea = 100;
                 Global.maxArea = 1000000;
 
@@ -160,7 +145,6 @@ namespace 运动物体跟踪CShop
                 int frameNum = 0;
                 while (true)
                 {
-                    //VideoMainForm.analyzeProgressBar.Increment((int)100*frameNum/totalFrames);
                     form.analyzeProgressBar.Value = (int)100 * frameNum / totalFrames;
                     frame = CvInvoke.cvQueryFrame(capture);
                     if (frame.ToInt32() == 0)
@@ -210,23 +194,7 @@ namespace 运动物体跟踪CShop
             {
                 Size captureSize = new Size((int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH),
                     (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
-                /*
-                switch (angelIndex)
-                {
-                    case 0:
-                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.1);
-                        Global.maxArea = Global.minArea * 10;
-                        break;
-                    case 1:
-                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.05);
-                        Global.maxArea = Global.minArea * 20;
-                        break;
-                    case 2:
-                        Global.minArea = (int)(captureSize.Height * captureSize.Width * 0.01);
-                        Global.maxArea = Global.minArea * 50;
-                        break;
-                }
-                 * */
+                Global.fps = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FPS);
                 Global.minArea = 100;
                 Global.maxArea = 1000000;
 
@@ -247,9 +215,10 @@ namespace 运动物体跟踪CShop
                 form.analyzeProgressBar.Maximum = totalFrames;
                 while (true)
                 {
-                    //VideoMainForm.analyzeProgressBar.Increment((int)100*frameNum/totalFrames);
+                    
                     form.analyzeProgressBar.Value = frameNum;
                     form.analyzeProgressBar.Refresh();
+
                     frame = CvInvoke.cvQueryFrame(capture);
                     if (frame.ToInt32() == 0)
                     {
@@ -332,7 +301,7 @@ namespace 运动物体跟踪CShop
                             new Point(eventNode.trackList[total].X + eventNode.trackList[total].Width, eventNode.trackList[total].Y + eventNode.trackList[total].Height), s, 1,
                             Emgu.CV.CvEnum.LINE_TYPE.CV_AA, 0);
                         CvInvoke.cvShowImage(eventName, image);
-                        CvInvoke.cvWaitKey(10);
+                        CvInvoke.cvWaitKey(Global.fps*Global.jiange*2);
                         total++;
                     }
                     image = CvInvoke.cvQueryFrame(capture);

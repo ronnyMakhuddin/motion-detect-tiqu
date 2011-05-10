@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label1 = new System.Windows.Forms.Label();
             this.batchSecectButton = new System.Windows.Forms.Button();
             this.eventListBox = new System.Windows.Forms.ListBox();
             this.playAllEventButton = new System.Windows.Forms.Button();
@@ -53,7 +54,6 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cameralButton = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -96,6 +96,15 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "      视频摘要      ";
             this.tabPage1.ToolTipText = "111";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(370, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(88, 16);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "事件列表：";
             // 
             // batchSecectButton
             // 
@@ -360,15 +369,6 @@
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "     软件信息     ";
             this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(370, 18);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(88, 16);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "事件列表：";
             // 
             // VideoMainForm
             // 
