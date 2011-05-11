@@ -55,6 +55,11 @@ namespace 运动物体跟踪CShop
 
         private void eventListBox_DoubleClick(object sender, EventArgs e)
         {
+            if (eventListBox.SelectedIndex < 0)
+            {
+                MessageBox.Show("没有选中事件");
+                return;
+            }
             VideoAnalyzeProcess.playSingleEvent(eventListBox.SelectedIndex);
         }
 
