@@ -143,13 +143,19 @@ namespace 运动物体跟踪CShop
                 int totalFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_COUNT);
                 IntPtr frame = new IntPtr();
                 int frameNum = 0;
+
+                form.analyzeProgressBar.Maximum = totalFrames;
+
+                    
+                   
                 while (true)
                 {
-                    form.analyzeProgressBar.Value = (int)100 * frameNum / totalFrames;
+                    form.analyzeProgressBar.Value = frameNum;
+                    form.analyzeProgressBar.PerformStep();
+
                     frame = CvInvoke.cvQueryFrame(capture);
                     if (frame.ToInt32() == 0)
                     {
-                        form.analyzeProgressBar.Value = 100;
                         break;
                     }
                     if (frameNum % Global.jiange == 0)
