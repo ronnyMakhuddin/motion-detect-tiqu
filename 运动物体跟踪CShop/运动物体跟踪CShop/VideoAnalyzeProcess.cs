@@ -176,6 +176,9 @@ namespace 运动物体跟踪CShop
             }
 
             CvInvoke.cvReleaseCapture(ref capture);
+
+            //生成所有视频
+            batchPlayAllEvents(filePath);
             
         }
 
