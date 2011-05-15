@@ -182,9 +182,6 @@ namespace 运动物体跟踪CShop
             }
 
             CvInvoke.cvReleaseCapture(ref capture);
-
-            //生成所有视频
-            batchPlayAllEvents(filePath);
             
         }
 
@@ -275,7 +272,19 @@ namespace 运动物体跟踪CShop
                 FileInfo fi = new FileInfo(filePaths[i]);
                 string str = fi.DirectoryName;
                 FileOperation.writeToFile(fi.DirectoryName + "\\analyze\\" + fi.Name + ".txt");
-                batchPlayAllEvents(filePaths[i]);
+
+                for (int j = 0; j < Global.eventList.Count; j++)
+                {
+                    int startFrame = Global.eventList[j].startFrame;
+                    int endFrame = Global.eventList[j].endFrame;
+                    int totalFrame = endFrame - startFrame;
+                    if (totalFrame > Global.maxEventNum)
+                        Global.maxEventNum = totalFrame;
+                    if (totalFrame < Global.minEventNum)
+                        Global.minEventNum = totalFrame;
+                }
+
+                playAllEvents(filePaths[i]);
             }
             form.analyzeResultLabel.Text = "所有视频分析完毕！";
         }
@@ -325,9 +334,9 @@ namespace 运动物体跟踪CShop
         }
 
         //播放所有事件
-        static public void playAllEvents()
+        static public void playAllEvents(string filePath)
         {
-            IntPtr capture = CvInvoke.cvCreateFileCapture(Global.filePath);
+            IntPtr capture = CvInvoke.cvCreateFileCapture(filePath);
             if (capture.ToInt32() == 0)
             {
                 MessageBox.Show("无法打开视频文件");
@@ -346,7 +355,7 @@ namespace 运动物体跟踪CShop
             {
                 if (limit++ >= Global.LIMIT)
                     break;
-                Global.eventList[i].capture = CvInvoke.cvCreateFileCapture(Global.filePath);
+                Global.eventList[i].capture = CvInvoke.cvCreateFileCapture(filePath);
 
                 //精确定位
                 int posFrames = ((Global.eventList[i].startFrame - Global.jiange + 1) / 12) * 12;
@@ -359,7 +368,8 @@ namespace 运动物体跟踪CShop
                 }
             }
 
-            IntPtr writer = CvInvoke.cvCreateVideoWriter("allEvents.avi", CvInvoke.CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
+            FileInfo fi = new FileInfo(filePath);
+            IntPtr writer = CvInvoke.cvCreateVideoWriter(fi.DirectoryName + "\\analyze\\" + fi.Name, CvInvoke.CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
             CvInvoke.cvNamedWindow("AllEvents");
 
             IntPtr allEventImage = CvInvoke.cvCreateImage(captureSize, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8U, 3);
