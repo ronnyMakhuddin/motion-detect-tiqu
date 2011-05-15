@@ -116,6 +116,8 @@ namespace 运动物体跟踪CShop
 
                 //显示分析结果
                 analyzeResultLabel.Text = "分析结果：共" + Global.eventList.Count.ToString() + "个事件，最大事件为" + (Global.maxEventNum/Global.fps + 1).ToString() + "秒";
+                //生成所有视频
+                VideoAnalyzeProcess.playAllEvents(Global.filePath);
             }
         }
 
