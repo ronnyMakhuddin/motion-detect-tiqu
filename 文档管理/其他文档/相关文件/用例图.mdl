@@ -11,7 +11,43 @@
 	(object Attribute
 	    tool       	"Java"
 	    name       	"IDE"
-	    value      	"Internal Editor"))
+	    value      	"Internal Editor")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagName1"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagText1"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagApply1"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagName2"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagText2"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagApply2"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagName3"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagText3"
+	    value      	"")
+	(object Attribute
+	    tool       	"Java"
+	    name       	"UserDefineTagApply3"
+	    value      	""))
     quid       	"4DB52ECF0064"
     enforceClosureAutoLoad 	FALSE
     defaults   	(object defaults
@@ -69,7 +105,23 @@
 		    (object Dependency_Relationship
 			quid       	"4DB53284006C"
 			supplier   	"Use Case View::写入分析文件"
-			quidu      	"4DB5327202A4")))
+			quidu      	"4DB5327202A4")
+		    (object Dependency_Relationship
+			quid       	"4DD2049E0261"
+			supplier   	"Use Case View::视频处理"
+			quidu      	"4DD20490016E")
+		    (object Dependency_Relationship
+			quid       	"4DD2053D020F"
+			supplier   	"Use Case View::产生摘要事件列表"
+			quidu      	"4DD204B5001A")
+		    (object Dependency_Relationship
+			quid       	"4DD2053F03C0"
+			supplier   	"Use Case View::过滤摘要事件"
+			quidu      	"4DD204DB0328")
+		    (object Dependency_Relationship
+			quid       	"4DD205420042"
+			supplier   	"Use Case View::生成所有事件视频"
+			quidu      	"4DD2052702DD")))
 	    (object UseCase "播放单个事件"
 		quid       	"4DB52FD203D1")
 	    (object UseCase "播放所有事件"
@@ -89,6 +141,16 @@
 		quid       	"4DB532630038")
 	    (object UseCase "写入分析文件"
 		quid       	"4DB5327202A4")
+	    (object UseCase "选择本地文件夹"
+		quid       	"4DD2041301FB")
+	    (object UseCase "视频处理"
+		quid       	"4DD20490016E")
+	    (object UseCase "产生摘要事件列表"
+		quid       	"4DD204B5001A")
+	    (object UseCase "过滤摘要事件"
+		quid       	"4DD204DB0328")
+	    (object UseCase "生成所有事件视频"
+		quid       	"4DD2052702DD")
 	    (object Association "$UNNAMED$0"
 		quid       	"4DB530630075"
 		roles      	(list role_list
@@ -124,6 +186,18 @@
 		    (object Role "$UNNAMED$8"
 			quid       	"4DB5306A0077"
 			supplier   	"Use Case View::监控人员"
+			quidu      	"4DB52EEC0165")))
+	    (object Association "$UNNAMED$9"
+		quid       	"4DD204220369"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$10"
+			quid       	"4DD204230220"
+			supplier   	"Use Case View::选择本地文件夹"
+			quidu      	"4DD2041301FB"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$11"
+			quid       	"4DD204230222"
+			supplier   	"Use Case View::监控人员"
 			quidu      	"4DB52EEC0165"))))
 	logical_presentations 	(list unit_reference_list
 	    (object UseCaseDiagram "Main"
@@ -135,8 +209,8 @@
 		origin_x   	0
 		origin_y   	0
 		items      	(list diagram_item_list
-		    (object UseCaseView "Use Case View::输入感兴趣的面积范围" @1
-			location   	(1734, 641)
+		    (object UseCaseView "Use Case View::播放单个事件" @1
+			location   	(1495, 1931)
 			font       	(object Font
 			    size       	12
 			    face       	"Arial"
@@ -148,20 +222,19 @@
 			    default_color 	TRUE)
 			label      	(object ItemLabel
 			    Parent_View 	@1
-			    location   	(1734, 798)
+			    location   	(1495, 2069)
 			    anchor_loc 	1
 			    nlines     	2
 			    max_width  	630
 			    justify    	0
-			    label      	"输入感兴趣的面积范围")
+			    label      	"播放单个事件")
 			icon_style 	"Icon"
 			line_color 	3342489
 			fill_color 	13434879
-			quidu      	"4DB52F330197"
-			width      	469
-			height     	156)
-		    (object UseCaseView "Use Case View::输入处理间隔帧数" @2
-			location   	(1718, 942)
+			quidu      	"4DB52FD203D1"
+			height     	118)
+		    (object UseCaseView "Use Case View::播放所有事件" @2
+			location   	(1498, 2202)
 			font       	(object Font
 			    size       	12
 			    face       	"Arial"
@@ -173,20 +246,19 @@
 			    default_color 	TRUE)
 			label      	(object ItemLabel
 			    Parent_View 	@2
-			    location   	(1718, 1084)
+			    location   	(1498, 2340)
 			    anchor_loc 	1
 			    nlines     	2
 			    max_width  	630
 			    justify    	0
-			    label      	"输入处理间隔帧数")
+			    label      	"播放所有事件")
 			icon_style 	"Icon"
 			line_color 	3342489
 			fill_color 	13434879
-			quidu      	"4DB52F650309"
-			width      	325
-			height     	125)
-		    (object UseCaseView "Use Case View::播放单个事件" @3
-			location   	(1733, 1822)
+			quidu      	"4DB52FDA0359"
+			height     	118)
+		    (object UseCaseView "Use Case View::选择本地视频" @3
+			location   	(1146, 474)
 			font       	(object Font
 			    size       	12
 			    face       	"Arial"
@@ -198,19 +270,19 @@
 			    default_color 	TRUE)
 			label      	(object ItemLabel
 			    Parent_View 	@3
-			    location   	(1733, 1960)
+			    location   	(1146, 612)
 			    anchor_loc 	1
 			    nlines     	2
 			    max_width  	630
 			    justify    	0
-			    label      	"播放单个事件")
+			    label      	"选择本地视频")
 			icon_style 	"Icon"
 			line_color 	3342489
 			fill_color 	13434879
-			quidu      	"4DB52FD203D1"
+			quidu      	"4DB52F1C02F5"
 			height     	118)
-		    (object UseCaseView "Use Case View::播放所有事件" @4
-			location   	(1729, 2169)
+		    (object UseCaseView "Use Case View::分析视频" @4
+			location   	(1468, 1304)
 			font       	(object Font
 			    size       	12
 			    face       	"Arial"
@@ -222,19 +294,19 @@
 			    default_color 	TRUE)
 			label      	(object ItemLabel
 			    Parent_View 	@4
-			    location   	(1729, 2307)
+			    location   	(1468, 1442)
 			    anchor_loc 	1
 			    nlines     	2
 			    max_width  	630
 			    justify    	0
-			    label      	"播放所有事件")
+			    label      	"分析视频")
 			icon_style 	"Icon"
 			line_color 	3342489
 			fill_color 	13434879
-			quidu      	"4DB52FDA0359"
+			quidu      	"4DB52F9A011B"
 			height     	118)
-		    (object UseCaseView "Use Case View::选择本地视频" @5
-			location   	(937, 587)
+		    (object UseCaseView "Use Case View::播放事件" @5
+			location   	(1008, 1974)
 			font       	(object Font
 			    size       	12
 			    face       	"Arial"
@@ -246,19 +318,33 @@
 			    default_color 	TRUE)
 			label      	(object ItemLabel
 			    Parent_View 	@5
-			    location   	(937, 725)
+			    location   	(1008, 2112)
 			    anchor_loc 	1
 			    nlines     	2
 			    max_width  	630
 			    justify    	0
-			    label      	"选择本地视频")
+			    label      	"播放事件")
 			icon_style 	"Icon"
 			line_color 	3342489
 			fill_color 	13434879
-			quidu      	"4DB52F1C02F5"
+			quidu      	"4DB5303002B7"
 			height     	118)
-		    (object UseCaseView "Use Case View::分析视频" @6
-			location   	(958, 1099)
+		    (object DependencyView "" @6
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"4DB5304B0055"
+			client     	@5
+			supplier   	@1
+			line_style 	0)
+		    (object DependencyView "" @7
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"4DB5304D00E1"
+			client     	@5
+			supplier   	@2
+			line_style 	0)
+		    (object UseCaseView "Use Case View::读入分析文件" @8
+			location   	(1197, 971)
 			font       	(object Font
 			    size       	12
 			    face       	"Arial"
@@ -269,33 +355,57 @@
 			    color      	0
 			    default_color 	TRUE)
 			label      	(object ItemLabel
-			    Parent_View 	@6
-			    location   	(958, 1237)
+			    Parent_View 	@8
+			    location   	(1197, 1109)
 			    anchor_loc 	1
 			    nlines     	2
 			    max_width  	630
 			    justify    	0
-			    label      	"分析视频")
+			    label      	"读入分析文件")
 			icon_style 	"Icon"
 			line_color 	3342489
 			fill_color 	13434879
-			quidu      	"4DB52F9A011B"
+			quidu      	"4DB532630038"
 			height     	118)
-		    (object DependencyView "" @7
+		    (object UseCaseView "Use Case View::写入分析文件" @9
+			location   	(1211, 1609)
+			font       	(object Font
+			    size       	12
+			    face       	"Arial"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@9
+			    location   	(1211, 1747)
+			    anchor_loc 	1
+			    nlines     	2
+			    max_width  	630
+			    justify    	0
+			    label      	"写入分析文件")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"4DB5327202A4"
+			height     	118)
+		    (object DependencyView "" @10
 			stereotype 	TRUE
 			line_color 	3342489
-			quidu      	"4DB53045000F"
-			client     	@6
-			supplier   	@1
+			quidu      	"4DB5328102D8"
+			client     	@4
+			supplier   	@8
 			line_style 	0)
-		    (object DependencyView "" @8
+		    (object DependencyView "" @11
 			stereotype 	TRUE
 			line_color 	3342489
-			quidu      	"4DB5304801C7"
-			client     	@6
-			supplier   	@2
+			quidu      	"4DB53284006C"
+			client     	@4
+			supplier   	@9
 			line_style 	0)
-		    (object ClassView "Class" "Use Case View::监控人员" @9
+		    (object ClassView "Class" "Use Case View::监控人员" @12
 			ShowCompartmentStereotypes 	TRUE
 			IncludeAttribute 	TRUE
 			IncludeOperation 	TRUE
@@ -310,7 +420,7 @@
 			    color      	0
 			    default_color 	TRUE)
 			label      	(object ItemLabel
-			    Parent_View 	@9
+			    Parent_View 	@12
 			    location   	(373, 1207)
 			    anchor_loc 	1
 			    nlines     	2
@@ -323,8 +433,8 @@
 			quidu      	"4DB52EEC0165"
 			annotation 	8
 			autoResize 	TRUE)
-		    (object AssociationViewNew "$UNNAMED$0" @10
-			location   	(605, 853)
+		    (object AssociationViewNew "$UNNAMED$0" @13
+			location   	(710, 795)
 			font       	(object Font
 			    size       	12
 			    face       	"Arial"
@@ -338,26 +448,26 @@
 			line_color 	3342489
 			quidu      	"4DB530630075"
 			roleview_list 	(list RoleViews
-			    (object RoleView "$UNNAMED$1" @11
-				Parent_View 	@10
-				location   	(232, -194)
+			    (object RoleView "$UNNAMED$1" @14
+				Parent_View 	@13
+				location   	(337, -252)
 				stereotype 	TRUE
 				line_color 	3342489
 				quidu      	"4DB5306501DD"
-				client     	@10
-				supplier   	@5
+				client     	@13
+				supplier   	@3
 				line_style 	0)
-			    (object RoleView "$UNNAMED$2" @12
-				Parent_View 	@10
-				location   	(232, -194)
+			    (object RoleView "$UNNAMED$2" @15
+				Parent_View 	@13
+				location   	(337, -252)
 				stereotype 	TRUE
 				line_color 	3342489
 				quidu      	"4DB5306501DF"
-				client     	@10
-				supplier   	@9
+				client     	@13
+				supplier   	@12
 				line_style 	0)))
-		    (object AssociationViewNew "$UNNAMED$3" @13
-			location   	(638, 1068)
+		    (object AssociationViewNew "$UNNAMED$3" @16
+			location   	(893, 1166)
 			font       	(object Font
 			    size       	12
 			    face       	"Arial"
@@ -371,64 +481,26 @@
 			line_color 	3342489
 			quidu      	"4DB530670165"
 			roleview_list 	(list RoleViews
-			    (object RoleView "$UNNAMED$4" @14
-				Parent_View 	@13
-				location   	(265, 21)
+			    (object RoleView "$UNNAMED$4" @17
+				Parent_View 	@16
+				location   	(520, 119)
 				stereotype 	TRUE
 				line_color 	3342489
 				quidu      	"4DB5306703A9"
-				client     	@13
-				supplier   	@6
+				client     	@16
+				supplier   	@4
 				line_style 	0)
-			    (object RoleView "$UNNAMED$5" @15
-				Parent_View 	@13
-				location   	(265, 21)
+			    (object RoleView "$UNNAMED$5" @18
+				Parent_View 	@16
+				location   	(520, 119)
 				stereotype 	TRUE
 				line_color 	3342489
 				quidu      	"4DB5306703AB"
-				client     	@13
-				supplier   	@9
+				client     	@16
+				supplier   	@12
 				line_style 	0)))
-		    (object UseCaseView "Use Case View::播放事件" @16
-			location   	(1009, 1693)
-			font       	(object Font
-			    size       	12
-			    face       	"Arial"
-			    bold       	FALSE
-			    italics    	FALSE
-			    underline  	FALSE
-			    strike     	FALSE
-			    color      	0
-			    default_color 	TRUE)
-			label      	(object ItemLabel
-			    Parent_View 	@16
-			    location   	(1009, 1831)
-			    anchor_loc 	1
-			    nlines     	2
-			    max_width  	630
-			    justify    	0
-			    label      	"播放事件")
-			icon_style 	"Icon"
-			line_color 	3342489
-			fill_color 	13434879
-			quidu      	"4DB5303002B7"
-			height     	118)
-		    (object DependencyView "" @17
-			stereotype 	TRUE
-			line_color 	3342489
-			quidu      	"4DB5304B0055"
-			client     	@16
-			supplier   	@3
-			line_style 	0)
-		    (object DependencyView "" @18
-			stereotype 	TRUE
-			line_color 	3342489
-			quidu      	"4DB5304D00E1"
-			client     	@16
-			supplier   	@4
-			line_style 	0)
 		    (object AssociationViewNew "$UNNAMED$6" @19
-			location   	(715, 1394)
+			location   	(722, 1559)
 			font       	(object Font
 			    size       	12
 			    face       	"Arial"
@@ -444,24 +516,24 @@
 			roleview_list 	(list RoleViews
 			    (object RoleView "$UNNAMED$7" @20
 				Parent_View 	@19
-				location   	(342, 347)
+				location   	(349, 512)
 				stereotype 	TRUE
 				line_color 	3342489
 				quidu      	"4DB5306A0075"
 				client     	@19
-				supplier   	@16
+				supplier   	@5
 				line_style 	0)
 			    (object RoleView "$UNNAMED$8" @21
 				Parent_View 	@19
-				location   	(342, 347)
+				location   	(349, 512)
 				stereotype 	TRUE
 				line_color 	3342489
 				quidu      	"4DB5306A0077"
 				client     	@19
-				supplier   	@9
+				supplier   	@12
 				line_style 	0)))
-		    (object UseCaseView "Use Case View::读入分析文件" @22
-			location   	(1725, 1228)
+		    (object UseCaseView "Use Case View::选择本地文件夹" @22
+			location   	(1218, 743)
 			font       	(object Font
 			    size       	12
 			    face       	"Arial"
@@ -473,19 +545,52 @@
 			    default_color 	TRUE)
 			label      	(object ItemLabel
 			    Parent_View 	@22
-			    location   	(1725, 1366)
+			    location   	(1218, 881)
 			    anchor_loc 	1
 			    nlines     	2
 			    max_width  	630
 			    justify    	0
-			    label      	"读入分析文件")
+			    label      	"选择本地文件夹")
 			icon_style 	"Icon"
 			line_color 	3342489
 			fill_color 	13434879
-			quidu      	"4DB532630038"
+			quidu      	"4DD2041301FB"
 			height     	118)
-		    (object UseCaseView "Use Case View::写入分析文件" @23
-			location   	(1732, 1519)
+		    (object AssociationViewNew "$UNNAMED$9" @23
+			location   	(733, 914)
+			font       	(object Font
+			    size       	12
+			    face       	"Arial"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"4DD204220369"
+			roleview_list 	(list RoleViews
+			    (object RoleView "$UNNAMED$10" @24
+				Parent_View 	@23
+				location   	(360, -133)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"4DD204230220"
+				client     	@23
+				supplier   	@22
+				line_style 	0)
+			    (object RoleView "$UNNAMED$11" @25
+				Parent_View 	@23
+				location   	(360, -133)
+				stereotype 	TRUE
+				line_color 	3342489
+				quidu      	"4DD204230222"
+				client     	@23
+				supplier   	@12
+				line_style 	0)))
+		    (object UseCaseView "Use Case View::视频处理" @26
+			location   	(1622, 980)
 			font       	(object Font
 			    size       	12
 			    face       	"Arial"
@@ -496,31 +601,117 @@
 			    color      	0
 			    default_color 	TRUE)
 			label      	(object ItemLabel
-			    Parent_View 	@23
-			    location   	(1732, 1657)
+			    Parent_View 	@26
+			    location   	(1622, 1118)
 			    anchor_loc 	1
 			    nlines     	2
 			    max_width  	630
 			    justify    	0
-			    label      	"写入分析文件")
+			    label      	"视频处理")
 			icon_style 	"Icon"
 			line_color 	3342489
 			fill_color 	13434879
-			quidu      	"4DB5327202A4"
+			quidu      	"4DD20490016E"
 			height     	118)
-		    (object DependencyView "" @24
+		    (object DependencyView "" @27
 			stereotype 	TRUE
 			line_color 	3342489
-			quidu      	"4DB5328102D8"
-			client     	@6
-			supplier   	@22
+			quidu      	"4DD2049E0261"
+			client     	@4
+			supplier   	@26
 			line_style 	0)
-		    (object DependencyView "" @25
+		    (object UseCaseView "Use Case View::产生摘要事件列表" @28
+			location   	(2059, 1284)
+			font       	(object Font
+			    size       	12
+			    face       	"Arial"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@28
+			    location   	(2059, 1422)
+			    anchor_loc 	1
+			    nlines     	2
+			    max_width  	630
+			    justify    	0
+			    label      	"产生摘要事件列表")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"4DD204B5001A"
+			height     	118)
+		    (object UseCaseView "Use Case View::过滤摘要事件" @29
+			location   	(2024, 1595)
+			font       	(object Font
+			    size       	12
+			    face       	"Arial"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@29
+			    location   	(2024, 1733)
+			    anchor_loc 	1
+			    nlines     	2
+			    max_width  	630
+			    justify    	0
+			    label      	"过滤摘要事件")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"4DD204DB0328"
+			height     	118)
+		    (object UseCaseView "Use Case View::生成所有事件视频" @30
+			location   	(1617, 1606)
+			font       	(object Font
+			    size       	12
+			    face       	"Arial"
+			    bold       	FALSE
+			    italics    	FALSE
+			    underline  	FALSE
+			    strike     	FALSE
+			    color      	0
+			    default_color 	TRUE)
+			label      	(object ItemLabel
+			    Parent_View 	@30
+			    location   	(1617, 1744)
+			    anchor_loc 	1
+			    nlines     	2
+			    max_width  	630
+			    justify    	0
+			    label      	"生成所有事件视频")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"4DD2052702DD"
+			height     	118)
+		    (object DependencyView "" @31
 			stereotype 	TRUE
 			line_color 	3342489
-			quidu      	"4DB53284006C"
-			client     	@6
-			supplier   	@23
+			quidu      	"4DD2053D020F"
+			client     	@4
+			supplier   	@28
+			line_style 	0)
+		    (object DependencyView "" @32
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"4DD2053F03C0"
+			client     	@4
+			supplier   	@29
+			line_style 	0)
+		    (object DependencyView "" @33
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"4DD205420042"
+			client     	@4
+			supplier   	@30
 			line_style 	0)))))
     root_category 	(object Class_Category "Logical View"
 	quid       	"4DB52ECF0065"
@@ -3433,7 +3624,7 @@
 		    (object Attribute
 			tool       	"Java"
 			name       	"ClassPath"
-			value      	".;.;C:\\PROGRA~2\\JMF21~1.1E\\lib\\sound.jar;C:\\PROGRA~2\\JMF21~1.1E\\lib\\jmf.jar;C:\\PROGRA~2\\JMF21~1.1E\\lib;")
+			value      	"")
 		    (object Attribute
 			tool       	"Java"
 			name       	"ReferenceClasspath"
