@@ -144,14 +144,14 @@ namespace 运动物体跟踪CShop
                 IntPtr frame = new IntPtr();
                 int frameNum = 0;
 
-                form.analyzeProgressBar.Maximum = totalFrames;
+                form.analyzeProgressBarSetMaxValue(totalFrames.ToString());
 
                     
                    
                 while (true)
                 {
-                    form.analyzeProgressBar.Value = frameNum;
-                    form.analyzeProgressBar.PerformStep();
+                    form.analyzeProgressBarSetValue(frameNum.ToString());
+                    //form.analyzeProgressBar.PerformStep();
 
                     frame = CvInvoke.cvQueryFrame(capture);
                     if (frame.ToInt32() == 0)

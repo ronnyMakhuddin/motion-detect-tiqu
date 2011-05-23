@@ -69,7 +69,14 @@ namespace 运动物体跟踪CShop
         //分析视频按钮事件响应
         private void analyzeButton_Click(object sender, EventArgs e)
         {
-            eventListBox.Items.Clear();
+            Thread analyzeSingleVideoThread = new Thread(new ThreadStart(analyzeSigleVideo));
+            analyzeSingleVideoThread.Start();
+        }
+
+        //分析单个视频线程函数
+        public void analyzeSigleVideo()
+        {
+            eventListBoxClearItem(null);
             Global.eventList.Clear();
             //Global.minArea = Convert.ToInt32(minAreaTextBox.Text);
             //Global.maxArea = Convert.ToInt32(maxAreaTextBox.Text);
@@ -114,11 +121,11 @@ namespace 运动物体跟踪CShop
                     if (totalFrame < Global.minEventNum)
                         Global.minEventNum = totalFrame;
                     string str = "事件" + (i + 1).ToString() + ",从" + Global.getTimeString(Global.fps, startFrame) + "到" + Global.getTimeString(Global.fps, endFrame);
-                    eventListBox.Items.Add(str);
+                    eventListBoxAddItem(str);
                 }
 
                 //显示分析结果
-                analyzeResultLabel.Text = "分析结果：共" + Global.eventList.Count.ToString() + "个事件，最大事件为" + (Global.maxEventNum/Global.fps + 1).ToString() + "秒";
+                analyzeResultLabelSetText("分析结果：共" + Global.eventList.Count.ToString() + "个事件，最大事件为" + (Global.maxEventNum / Global.fps + 1).ToString() + "秒");
                 //生成所有视频
                 VideoAnalyzeProcess.playAllEvents(Global.filePath);
             }
@@ -256,6 +263,7 @@ namespace 运动物体跟踪CShop
             }
         }
 
+        //线程批处理
         public void threadBathProcess()
         {
             VideoAnalyzeProcess.batchProcess(fileNamesList, this);
@@ -311,8 +319,35 @@ namespace 运动物体跟踪CShop
                 this.analyzeProgressBar.PerformStep();
             }
         }
-        
 
+        //在线程中添加eventListBox的Item
+        public void eventListBoxAddItem(string item)
+        {
+            if (this.eventListBox.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(eventListBoxAddItem);
+                this.Invoke(d, new object[] { item });
+            }
+            else
+            {
+                this.eventListBox.Items.Add(item);
+            }
+        }
+
+        //在线程中删除eventListBox所有的Item
+        public void eventListBoxClearItem(string text)
+        {
+            if (this.eventListBox.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(eventListBoxClearItem);
+                this.Invoke(d, new object[]{text});
+                
+            }
+            else
+            {
+                this.eventListBox.Items.Clear();
+            }
+        }
 
     }
 }
