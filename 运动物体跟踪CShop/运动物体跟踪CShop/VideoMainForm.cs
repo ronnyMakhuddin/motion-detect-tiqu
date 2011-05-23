@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -17,6 +18,8 @@ namespace 运动物体跟踪CShop
 {
     public partial class VideoMainForm : Form
     {
+        delegate void SetTextCallback(string text);
+
         public VideoMainForm()
         {
             InitializeComponent();
@@ -217,6 +220,7 @@ namespace 运动物体跟踪CShop
             Global.carCount = 0;
         }
 
+        List<string> fileNamesList;
         //选择文件夹按钮
         private void batchSecectButton_Click(object sender, EventArgs e)
         {
@@ -243,9 +247,72 @@ namespace 运动物体跟踪CShop
                 {
                     Directory.CreateDirectory(file.DirectoryName + "\\analyze");
                 }
-                VideoAnalyzeProcess.batchProcess(fileNamesList, this);
+
+                this.fileNamesList = fileNamesList;
+                Thread batchThread = new Thread(new ThreadStart(threadBathProcess));
+                batchThread.Start();
+
+                //VideoAnalyzeProcess.batchProcess(fileNamesList, this);
             }
         }
+
+        public void threadBathProcess()
+        {
+            VideoAnalyzeProcess.batchProcess(fileNamesList, this);
+        }
+
+        //在线程中设置结果框的值
+        public void analyzeResultLabelSetText(string text)
+        {
+            // InvokeRequired需要比较调用线程ID和创建线程ID
+            // 如果它们不相同则返回true
+            if (this.analyzeResultLabel.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(analyzeResultLabelSetText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.analyzeResultLabel.Text = text;
+                this.analyzeResultLabel.Refresh();
+            }
+        }
+        
+        //在线程中设置进度条的值
+        public void analyzeProgressBarSetValue(string value)
+        {
+            // InvokeRequired需要比较调用线程ID和创建线程ID
+            // 如果它们不相同则返回true
+            if (this.analyzeProgressBar.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(analyzeProgressBarSetValue);
+                this.Invoke(d, new object[] { value });
+            }
+            else
+            {
+                this.analyzeProgressBar.Value = Convert.ToInt32(value);
+                this.analyzeProgressBar.PerformStep();
+            }
+        }
+
+        //在线程中设置进度条的最大值
+        public void analyzeProgressBarSetMaxValue(string maxValue)
+        {
+            // InvokeRequired需要比较调用线程ID和创建线程ID
+            // 如果它们不相同则返回true
+            if (this.analyzeProgressBar.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(analyzeProgressBarSetMaxValue);
+                this.Invoke(d, new object[] { maxValue });
+            }
+            else
+            {
+                this.analyzeProgressBar.Maximum = Convert.ToInt32(maxValue);
+                this.analyzeProgressBar.PerformStep();
+            }
+        }
+        
+
 
     }
 }
