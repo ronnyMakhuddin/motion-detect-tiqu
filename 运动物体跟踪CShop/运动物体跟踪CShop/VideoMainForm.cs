@@ -84,11 +84,13 @@ namespace 运动物体跟踪CShop
                 MessageBox.Show("请先选择一个视频文件");
             else
             {
+                bool mark = false;
                 FileInfo fi = new FileInfo(Global.filePath);
                 if (!File.Exists(fi.DirectoryName + "\\analyze\\" + fi.Name + ".txt"))
                 {
 
                     VideoAnalyzeProcess.analyzeVideo(Global.filePath, this);
+                    mark = true;
                     EventNodeOperation.eventFilter(ref Global.eventList);
                     if (!Directory.Exists(fi.DirectoryName + "\\analyze"))
                     {
@@ -101,6 +103,7 @@ namespace 运动物体跟踪CShop
                     if (MessageBox.Show("检测到已存在此视频的分析文件，是否要读入？", "此视频曾经分析过", MessageBoxButtons.YesNo) != DialogResult.Yes)
                     {
                         VideoAnalyzeProcess.analyzeVideo(Global.filePath, this);
+                        mark = true;
                         EventNodeOperation.eventFilter(ref Global.eventList);
                         FileOperation.writeToFile(fi.DirectoryName + "\\analyze\\" + fi.Name + ".txt");
                     }
@@ -127,7 +130,11 @@ namespace 运动物体跟踪CShop
                 //显示分析结果
                 analyzeResultLabelSetText("分析结果：共" + Global.eventList.Count.ToString() + "个事件，最大事件为" + (Global.maxEventNum / Global.fps + 1).ToString() + "秒");
                 //生成所有视频
-                VideoAnalyzeProcess.playAllEvents(Global.filePath);
+                if (mark)
+                {
+                    VideoAnalyzeProcess.playAllEvents(Global.filePath);
+                }
+               
             }
         }
 
