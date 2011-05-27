@@ -422,7 +422,7 @@ namespace 运动物体跟踪CShop
                             IntPtr sub_img = CvInvoke.cvCreateImage(pre_size, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8U, 3);
                             //CvInvoke.cvGetImage(CvInvoke.cvGetSubRect(image, test.refcount, Global.eventList[j].trackList[i]), sub_img);
                             CvInvoke.cvGetSubRect(image, sub_img, Global.eventList[j].trackList[i / Global.jiange]);
-                            event_str = j.ToString();
+                            event_str = (j+1).ToString();
                             CvInvoke.cvPutText(sub_img, event_str, new Point(10, 15), ref font, EventNodeOperation.sampleColor[1]);
 
                             CvInvoke.cvSetImageROI(allEventImage, Global.eventList[j].trackList[i / Global.jiange]);
