@@ -22,7 +22,7 @@ namespace 运动物体跟踪CShop
         static public int jiange = 4;
         static public int maxEventNum = 0;
         static public int minEventNum = 10000000;
-        static public int LIMIT = 100;
+        static public int LIMIT = 1000;
         static public PlayForm playForm = new PlayForm();
 
         static public string getTimeString(int fps, int frameNum)

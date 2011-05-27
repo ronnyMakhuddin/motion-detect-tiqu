@@ -69,5 +69,12 @@ namespace 运动物体跟踪CShop
             }
             fileReader.Close();
         }
+
+        //写出测试分析的信息
+        static public void writeTest(StreamWriter sw, int number, int time, int numOfEvent)
+        {
+            sw.Write(number.ToString() + "  " + time.ToString() + " " + numOfEvent.ToString());
+            sw.Write("\r\n");
+        }
     }
 }

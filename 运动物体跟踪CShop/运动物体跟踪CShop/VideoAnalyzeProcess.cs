@@ -262,8 +262,15 @@ namespace 运动物体跟踪CShop
         //批处理
         static public void batchProcess(List<string> filePaths, VideoMainForm form)
         {
+            //////
+            FileStream fs = new FileStream("analyze.txt", FileMode.OpenOrCreate);
+            StreamWriter sw = new StreamWriter(fs);
+            //////
             for (int i = 0; i < filePaths.Count; i++)
             {
+                //////
+                long secondS = System.DateTime.Now.Ticks;
+                /////
                 Global.eventList.Clear();
                 form.analyzeResultLabelSetText("分析过程：正在处理第" + (i+1).ToString() + "个视频，共" + filePaths.Count.ToString() + "个视频");
                 //form.analyzeResultLabel.Refresh();
@@ -285,9 +292,19 @@ namespace 运动物体跟踪CShop
                 }
 
                 playAllEvents(filePaths[i]);
+                //////
+                long secondE = System.DateTime.Now.Ticks;
+                FileOperation.writeTest(sw, i + 1, (int)((secondE - secondS) / 1000), Global.eventList.Count);
+                //////
             }
             form.analyzeResultLabelSetText("所有视频分析完毕！");
+
+            //////
+            sw.Close();
+            fs.Close();
+            //////
         }
+
 
         //播放单个事件
         static public void playSingleEvent(int index)
