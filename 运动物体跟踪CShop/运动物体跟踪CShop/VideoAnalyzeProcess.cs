@@ -85,7 +85,7 @@ namespace 运动物体跟踪CShop
                 {
                     MCvScalar s;
 
-                    EventNode node = new EventNode(); ;
+                    EventNode node = new EventNode();
                     if (Global.eventList.Count == 0)
                     {
                         EventNodeOperation.insertEventNode(ref Global.eventList, r, frameNum);
