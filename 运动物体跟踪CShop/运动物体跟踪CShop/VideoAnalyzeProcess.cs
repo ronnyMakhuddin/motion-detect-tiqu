@@ -291,7 +291,7 @@ namespace 运动物体跟踪CShop
                         Global.minEventNum = totalFrame;
                 }
 
-                playAllEvents(filePaths[i]);
+                playAllEvents_v2(filePaths[i]);
                 //////
                 long secondE = System.DateTime.Now.Ticks;
                 FileOperation.writeTest(sw, i + 1, (int)((secondE - secondS) / 1000), Global.eventList.Count);
@@ -350,7 +350,8 @@ namespace 运动物体跟踪CShop
             CvInvoke.cvReleaseCapture(ref capture);
         }
 
-        //播放所有事件
+        
+        //播放所有事件V1.0
         static public void playAllEvents(string filePath)
         {
             IntPtr capture = CvInvoke.cvCreateFileCapture(filePath);
@@ -455,7 +456,126 @@ namespace 运动物体跟踪CShop
             CvInvoke.cvReleaseVideoWriter(ref writer);
         }
 
-        //批处理播放所有事件
+        //播放所有事件V2.0
+        static public void playAllEvents_v2(string filePath)
+        {
+            IntPtr capture = CvInvoke.cvCreateFileCapture(filePath);
+            if (capture.ToInt32() == 0)
+            {
+                MessageBox.Show("无法打开视频文件");
+                return;
+            }
+            Size captureSize = new Size((int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_WIDTH),
+                    (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FRAME_HEIGHT));
+            CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, 15);
+            IntPtr backGroundImage = CvInvoke.cvQueryFrame(capture);
+            int fps = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FPS);
+
+            int limit = 0;
+            List<IntPtr> captures = new List<IntPtr>();
+            //初始化
+            for (int i = 0; i < Global.LIMIT; i++)
+            {
+                captures.Add(CvInvoke.cvCreateFileCapture(filePath));
+            }
+
+            FileInfo fi = new FileInfo(filePath);
+            IntPtr writer = CvInvoke.cvCreateVideoWriter(fi.DirectoryName + "\\analyze\\" + fi.Name, CvInvoke.CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
+            CvInvoke.cvNamedWindow("AllEvents");
+
+            IntPtr allEventImage = CvInvoke.cvCreateImage(captureSize, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8U, 3);
+            CvInvoke.cvCopy(backGroundImage, allEventImage, new IntPtr());
+
+            double alpha_value = 0.7;
+            string event_str = "";
+            MCvFont font = new MCvFont();
+            CvInvoke.cvInitFont(ref font, Emgu.CV.CvEnum.FONT.CV_FONT_HERSHEY_SIMPLEX, 0.5, 0.5, 0.5, 1, Emgu.CV.CvEnum.LINE_TYPE.CV_AA);
+
+            int last_number = Global.eventList.Count % Global.LIMIT;
+            for (int i = 0; i <= Global.eventList.Count / Global.LIMIT; i++)
+            {
+                int max_event = 0;
+                //重新定位
+                for (int j = 0; j < Global.LIMIT; j++)
+                {
+                    //精确定位
+                    int number = i*Global.LIMIT + j;
+                    if (number >= Global.eventList.Count)
+                        break;
+                    if (max_event < Global.eventList[number].endFrame - Global.eventList[number].startFrame)
+                    {
+                        max_event = Global.eventList[number].endFrame - Global.eventList[number].startFrame;
+                    }
+                    int posFrames = ((Global.eventList[number].startFrame - Global.jiange + 1) / 12) * 12;
+                    CvInvoke.cvSetCaptureProperty(captures[j], Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, posFrames);
+                    CvInvoke.cvQueryFrame(captures[j]);
+                    while (posFrames < Global.eventList[number].startFrame - Global.jiange)
+                    {
+                        CvInvoke.cvQueryFrame(captures[j]);
+                        posFrames = (int)CvInvoke.cvGetCaptureProperty(captures[j], Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
+                    }
+                }
+                //逐个写入视频
+                for (int k = 0; k <= max_event; k++)
+                {
+                    if (k % Global.jiange == 0)
+                    {
+                        IntPtr tempRelease = allEventImage;
+                        allEventImage = CvInvoke.cvCreateImage(captureSize, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8U, 3);
+                        CvInvoke.cvCopy(backGroundImage, allEventImage, new IntPtr());
+                        CvInvoke.cvReleaseImage(ref tempRelease);
+                    }
+
+                    for (int j = 0; j < Global.LIMIT; j++)
+                    {
+                        int number = i * Global.LIMIT + j;
+                        if (number >= Global.eventList.Count)
+                            break;
+                        if (k / Global.jiange >= Global.eventList[number].trackList.Count)
+                            continue;
+                        if (captures[j].ToInt32() != 0)
+                        {
+                            IntPtr image = CvInvoke.cvQueryFrame(captures[j]);
+                            if (image.ToInt32() != 0 && k % Global.jiange == 0)
+                            {
+                                Size pre_size = new Size(Global.eventList[number].trackList[k / Global.jiange].Width, Global.eventList[number].trackList[k / Global.jiange].Height);
+                                IntPtr sub_img = CvInvoke.cvCreateImage(pre_size, Emgu.CV.CvEnum.IPL_DEPTH.IPL_DEPTH_8U, 3);
+                                //CvInvoke.cvGetImage(CvInvoke.cvGetSubRect(image, test.refcount, Global.eventList[j].trackList[i]), sub_img);
+                                CvInvoke.cvGetSubRect(image, sub_img, Global.eventList[number].trackList[k / Global.jiange]);
+                                event_str = (number + 1).ToString();
+                                CvInvoke.cvPutText(sub_img, event_str, new Point(10, 15), ref font, EventNodeOperation.sampleColor[1]);
+
+                                CvInvoke.cvSetImageROI(allEventImage, Global.eventList[number].trackList[k / Global.jiange]);
+                                CvInvoke.cvAddWeighted(sub_img, alpha_value, allEventImage, 1 - alpha_value, 0, allEventImage);
+                                CvInvoke.cvResetImageROI(allEventImage);
+                            }
+                        }
+                    }
+
+                    CvInvoke.cvWriteFrame(writer, allEventImage);
+
+                    if (k % Global.jiange == 0)
+                    {
+                        CvInvoke.cvShowImage("AllEvents", allEventImage);
+                        CvInvoke.cvWaitKey(10);
+                    }
+                }
+            }
+
+
+            //释放空间
+            for (int i = 0; i < Global.LIMIT; i++)
+            {
+                IntPtr temp = captures[i];
+                CvInvoke.cvReleaseCapture(ref temp);
+            }
+            captures.Clear();
+            CvInvoke.cvDestroyWindow("AllEvents");
+            CvInvoke.cvReleaseCapture(ref capture);
+            CvInvoke.cvReleaseVideoWriter(ref writer);
+        }
+
+        //批处理播放所有事件*********停止使用
         static public void batchPlayAllEvents(string filePath)
         {
             IntPtr capture = CvInvoke.cvCreateFileCapture(filePath);
