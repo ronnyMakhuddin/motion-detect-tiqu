@@ -471,7 +471,6 @@ namespace 运动物体跟踪CShop
             IntPtr backGroundImage = CvInvoke.cvQueryFrame(capture);
             int fps = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_FPS);
 
-            int limit = 0;
             List<IntPtr> captures = new List<IntPtr>();
             //初始化
             for (int i = 0; i < Global.LIMIT; i++)
