@@ -14,6 +14,7 @@ namespace 运动物体跟踪CShop
         public PlayForm()
         {
             InitializeComponent();
+            
             //wmPlayer.URL = "D:\\My Documents\\vs 2008 project\\Num1.avi";
             //wmPlayer.Ctlcontrols.currentPosition = 20.9;
             //wmPlayer.Ctlcontrols.play();
@@ -23,5 +24,12 @@ namespace 运动物体跟踪CShop
         {
 
         }
+
+        //当窗口尺寸发生改变的时候响应
+        private void SizeChanged_size(object sender, EventArgs e)
+        {
+            wmPlayer.Size = new Size(this.Size.Width-20,this.Size.Height-40);
+        }
+        
     }
 }

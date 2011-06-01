@@ -42,6 +42,7 @@
             this.wmPlayer.Size = new System.Drawing.Size(458, 402);
             this.wmPlayer.TabIndex = 0;
             this.wmPlayer.Enter += new System.EventHandler(this.axWindowsMediaPlayer1_Enter);
+            this.SizeChanged += new System.EventHandler(this.SizeChanged_size);
             // 
             // PlayForm
             // 

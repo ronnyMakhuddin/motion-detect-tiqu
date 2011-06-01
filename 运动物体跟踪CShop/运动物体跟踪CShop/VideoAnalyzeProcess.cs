@@ -318,6 +318,7 @@ namespace 运动物体跟踪CShop
                 int posFrames = ((eventNode.startFrame - Global.jiange + 1) / 12) * 12;
                 CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, posFrames);
                 CvInvoke.cvQueryFrame(capture);
+                posFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
                 while (posFrames < eventNode.startFrame-Global.jiange)
                 {
                     tempImage = CvInvoke.cvQueryFrame(capture);
