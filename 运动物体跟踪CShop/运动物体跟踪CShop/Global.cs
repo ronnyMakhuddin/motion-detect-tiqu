@@ -20,6 +20,7 @@ namespace 运动物体跟踪CShop
         static public int minCarArea = 10000;
         static public int maxCarArea = 600000;
         static public int jiange = 4;
+        static public int key_jiange = 0;
         static public int maxEventNum = 0;
         static public int minEventNum = 10000000;
         static public int LIMIT = 100;

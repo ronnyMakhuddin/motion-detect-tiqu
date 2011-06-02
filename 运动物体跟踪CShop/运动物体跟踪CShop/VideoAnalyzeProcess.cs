@@ -182,7 +182,8 @@ namespace 运动物体跟踪CShop
             }
 
             CvInvoke.cvReleaseCapture(ref capture);
-            
+
+            keyFrameJiange(filePath);
         }
 
         //批处理分析视频
@@ -257,6 +258,7 @@ namespace 运动物体跟踪CShop
 
             CvInvoke.cvReleaseCapture(ref capture);
 
+            keyFrameJiange(filePath);
         }
 
         //批处理
@@ -306,6 +308,25 @@ namespace 运动物体跟踪CShop
         }
 
 
+        //获取视频关键帧之间的间隔
+        static public void keyFrameJiange(string filePath)
+        {
+            IntPtr capture = CvInvoke.cvCreateFileCapture(filePath);
+            if (capture.ToInt32() != 0)
+            {
+                int framePosition = 0;
+                CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, 10);
+                CvInvoke.cvQueryFrame(capture);
+                framePosition = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
+                int index1 = framePosition;
+                CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, index1 + 2);
+                CvInvoke.cvQueryFrame(capture);
+                framePosition = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
+                int index2 = framePosition;
+                Global.key_jiange = index2 - index1;
+            }
+        }
+
         //播放单个事件
         static public void playSingleEvent(int index)
         {
@@ -315,10 +336,16 @@ namespace 运动物体跟踪CShop
             if (capture.ToInt32() != 0)
             {
                 //精确定位
-                int posFrames = ((eventNode.startFrame - Global.jiange + 1) / 12) * 12;
-                CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, posFrames);
+                int posFrames = 0; 
+                CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, eventNode.startFrame - Global.jiange);
                 CvInvoke.cvQueryFrame(capture);
                 posFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
+                if (posFrames > eventNode.startFrame - Global.jiange)
+                {
+                    CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, eventNode.startFrame - Global.jiange - Global.key_jiange);
+                    CvInvoke.cvQueryFrame(capture);
+                    posFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
+                }
                 while (posFrames < eventNode.startFrame-Global.jiange)
                 {
                     tempImage = CvInvoke.cvQueryFrame(capture);
@@ -377,13 +404,20 @@ namespace 运动物体跟踪CShop
                 Global.eventList[i].capture = CvInvoke.cvCreateFileCapture(filePath);
 
                 //精确定位
-                int posFrames = ((Global.eventList[i].startFrame - Global.jiange + 1) / 12) * 12;
-                CvInvoke.cvSetCaptureProperty(Global.eventList[i].capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, posFrames);
-                CvInvoke.cvQueryFrame(Global.eventList[i].capture);
+                int posFrames = 0;
+                CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, Global.eventList[i].startFrame - Global.jiange);
+                CvInvoke.cvQueryFrame(capture);
+                posFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
+                if (posFrames > Global.eventList[i].startFrame - Global.jiange)
+                {
+                    CvInvoke.cvSetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, Global.eventList[i].startFrame - Global.jiange - Global.key_jiange);
+                    CvInvoke.cvQueryFrame(capture);
+                    posFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
+                }
                 while (posFrames < Global.eventList[i].startFrame - Global.jiange)
                 {
-                    CvInvoke.cvQueryFrame(Global.eventList[i].capture);
-                    posFrames = (int)CvInvoke.cvGetCaptureProperty(Global.eventList[i].capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
+                    CvInvoke.cvQueryFrame(capture);
+                    posFrames = (int)CvInvoke.cvGetCaptureProperty(capture, Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
                 }
             }
 
@@ -506,9 +540,17 @@ namespace 运动物体跟踪CShop
                     {
                         max_event = Global.eventList[number].endFrame - Global.eventList[number].startFrame;
                     }
-                    int posFrames = ((Global.eventList[number].startFrame - Global.jiange + 1) / 12) * 12;
-                    CvInvoke.cvSetCaptureProperty(captures[j], Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, posFrames);
+
+                    int posFrames = 0;
+                    CvInvoke.cvSetCaptureProperty(captures[j], Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, Global.eventList[number].startFrame - Global.jiange);
                     CvInvoke.cvQueryFrame(captures[j]);
+                    posFrames = (int)CvInvoke.cvGetCaptureProperty(captures[j], Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
+                    if (posFrames > Global.eventList[number].startFrame - Global.jiange)
+                    {
+                        CvInvoke.cvSetCaptureProperty(captures[j], Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES, Global.eventList[number].startFrame - Global.jiange - Global.key_jiange);
+                        CvInvoke.cvQueryFrame(captures[j]);
+                        posFrames = (int)CvInvoke.cvGetCaptureProperty(captures[j], Emgu.CV.CvEnum.CAP_PROP.CV_CAP_PROP_POS_FRAMES);
+                    }
                     while (posFrames < Global.eventList[number].startFrame - Global.jiange)
                     {
                         CvInvoke.cvQueryFrame(captures[j]);
