@@ -195,7 +195,15 @@ namespace 运动物体跟踪CShop
 
         private void cameralButton_Click(object sender, EventArgs e)
         {
-            VideoAnalyzeProcess.cameralSaveVideo();
+            //VideoAnalyzeProcess.cameralSaveVideo();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "avi文件|*.avi";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Global.filePath = openFileDialog.FileName;
+                Global.fileName = openFileDialog.SafeFileName;
+                filePathLable.Text = "文件路径:" + Global.filePath;
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)
