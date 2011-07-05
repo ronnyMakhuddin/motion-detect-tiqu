@@ -74,6 +74,7 @@
     <Compile Include="PlayForm.Designer.cs">
       <DependentUpon>PlayForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Smoke_Fire_Detect.cs" />
     <Compile Include="VideoMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
