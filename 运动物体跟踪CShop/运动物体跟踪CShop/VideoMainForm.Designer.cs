@@ -347,16 +347,15 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(663, 353);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "     摄像头录像     ";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.tabPage2.Text = "      烟火检测      ";
             // 
             // cameralButton
             // 
-            this.cameralButton.Location = new System.Drawing.Point(183, 139);
+            this.cameralButton.Location = new System.Drawing.Point(58, 45);
             this.cameralButton.Name = "cameralButton";
             this.cameralButton.Size = new System.Drawing.Size(121, 60);
             this.cameralButton.TabIndex = 0;
-            this.cameralButton.Text = "摄像头保存视频";
+            this.cameralButton.Text = "读入视频文件";
             this.cameralButton.UseVisualStyleBackColor = true;
             this.cameralButton.Click += new System.EventHandler(this.cameralButton_Click);
             // 
