@@ -351,7 +351,7 @@
             // 
             // cameralButton
             // 
-            this.cameralButton.Location = new System.Drawing.Point(58, 45);
+            this.cameralButton.Location = new System.Drawing.Point(482, 18);
             this.cameralButton.Name = "cameralButton";
             this.cameralButton.Size = new System.Drawing.Size(121, 60);
             this.cameralButton.TabIndex = 0;
