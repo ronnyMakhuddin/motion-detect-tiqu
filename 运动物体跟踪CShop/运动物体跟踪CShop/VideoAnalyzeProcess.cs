@@ -170,7 +170,7 @@ namespace 运动物体跟踪CShop
                         }
                         update_mhi(ref frame, ref motion, frameNum, ref buf, ref last, ref mhi, captureSize, ref lastTime);
                         CvInvoke.cvShowImage("analyze", frame);
-                        CvInvoke.cvWaitKey(10);
+                        CvInvoke.cvWaitKey(100);
                     }
                     frameNum++;
                 }
