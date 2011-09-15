@@ -54,6 +54,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.cameralButton = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.fireResult = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -341,6 +342,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.LightGray;
+            this.tabPage2.Controls.Add(this.fireResult);
             this.tabPage2.Controls.Add(this.cameralButton);
             this.tabPage2.Location = new System.Drawing.Point(4, 54);
             this.tabPage2.Name = "tabPage2";
@@ -351,7 +353,7 @@
             // 
             // cameralButton
             // 
-            this.cameralButton.Location = new System.Drawing.Point(482, 18);
+            this.cameralButton.Location = new System.Drawing.Point(239, 60);
             this.cameralButton.Name = "cameralButton";
             this.cameralButton.Size = new System.Drawing.Size(121, 60);
             this.cameralButton.TabIndex = 0;
@@ -369,6 +371,15 @@
             this.tabPage4.Text = "     软件信息     ";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // fireResult
+            // 
+            this.fireResult.AutoSize = true;
+            this.fireResult.Location = new System.Drawing.Point(273, 222);
+            this.fireResult.Name = "fireResult";
+            this.fireResult.Size = new System.Drawing.Size(56, 16);
+            this.fireResult.TabIndex = 1;
+            this.fireResult.Text = "无烟火";
+            // 
             // VideoMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -385,6 +396,7 @@
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -417,6 +429,7 @@
         private System.Windows.Forms.Button batchSecectButton;
         public System.Windows.Forms.Label analyzeResultLabel;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label fireResult;
     }
 }
 

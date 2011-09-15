@@ -203,7 +203,7 @@ namespace 运动物体跟踪CShop
                 Global.filePath = openFileDialog.FileName;
                 Global.fileName = openFileDialog.SafeFileName;
                 filePathLable.Text = "文件路径:" + Global.filePath;
-                Smoke_Fire_Detect.detectFire(Global.filePath);
+                Smoke_Fire_Detect.detectFire(this, Global.filePath);
             }
         }
 
@@ -299,6 +299,23 @@ namespace 运动物体跟踪CShop
             else
             {
                 this.analyzeResultLabel.Text = text;
+                this.analyzeResultLabel.Refresh();
+            }
+        }
+
+        //在线程中设置烟火检测结果框的值
+        public void analyzeFireResultLabelSetText(string text)
+        {
+            // InvokeRequired需要比较调用线程ID和创建线程ID
+            // 如果它们不相同则返回true
+            if (this.analyzeResultLabel.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(analyzeResultLabelSetText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.fireResult.Text = text;
                 this.analyzeResultLabel.Refresh();
             }
         }
