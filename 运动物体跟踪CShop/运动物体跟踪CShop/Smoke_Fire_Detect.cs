@@ -13,7 +13,7 @@ namespace 运动物体跟踪CShop
 {
     class Smoke_Fire_Detect
     {
-        static public void detectFire(string filePath)
+        static public void detectFire(VideoMainForm form, string filePath)
         {
             IntPtr capture = CvInvoke.cvCreateFileCapture(filePath);
             if (capture.ToInt32()<=0)
@@ -82,6 +82,11 @@ namespace 运动物体跟踪CShop
                 if ((3 <= num1 && num1 <= 25 && snum1 > 10) || (3 <= num1 && num1 <= 25 && snum2 > 10))
                 {
                     //检测结果为烟火
+                    form.analyzeFireResultLabelSetText("发现烟火");
+                }
+                else
+                {
+                    form.analyzeFireResultLabelSetText("没发现烟火");
                 }
             }
         }
