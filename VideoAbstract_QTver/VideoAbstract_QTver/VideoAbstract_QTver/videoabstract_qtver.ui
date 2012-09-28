@@ -1,0 +1,25 @@
+<UI version="4.0" >
+ <class>VideoAbstract_QTverClass</class>
+ <widget class="QWidget" name="VideoAbstract_QTverClass" >
+  <property name="objectName" >
+   <string notr="true">VideoAbstract_QTverClass</string>
+  </property>
+  <property name="geometry" >
+   <rect>
+	<x>0</x>
+	<y>0</y>
+	<width>600</width>
+	<height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>VideoAbstract_QTver</string>
+  </property>
+ </widget>
+ <layoutDefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <resources>
+   <include location="videoabstract_qtver.qrc"/>
+ </resources>
+ <connections/>
+</UI>
