@@ -12,6 +12,8 @@ public:
 	VideoAbstract_QTver(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~VideoAbstract_QTver();
 
+protected:
+	void resizeEvent(QResizeEvent*event);
 private:
 	Ui::VideoAbstract_QTverClass ui;
 };
