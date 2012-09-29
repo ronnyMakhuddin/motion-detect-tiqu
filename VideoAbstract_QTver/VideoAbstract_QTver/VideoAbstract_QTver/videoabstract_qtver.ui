@@ -19,56 +19,186 @@
   <property name="windowTitle">
    <string>VideoAbstract_QTver</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <property name="styleSheet">
+   <string notr="true">border-color: rgb(255, 19, 125);</string>
+  </property>
+  <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>100</y>
-     <width>75</width>
-     <height>31</height>
+     <x>10</x>
+     <y>270</y>
+     <width>331</width>
+     <height>231</height>
     </rect>
    </property>
-   <property name="text">
-    <string>PushButton</string>
+   <property name="styleSheet">
+    <string notr="true">border-color: rgb(158, 151, 255);</string>
    </property>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>30</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton1</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>30</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton2</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>150</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border-color: rgb(255, 0, 0);</string>
+    </property>
+    <property name="text">
+     <string>PushButton3</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>0</y>
+      <width>291</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>46</green>
+          <blue>182</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>46</green>
+          <blue>182</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>46</green>
+          <blue>182</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>46</green>
+          <blue>182</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>46</green>
+          <blue>182</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>46</green>
+          <blue>182</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="Button">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>46</green>
+          <blue>182</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>46</green>
+          <blue>182</blue>
+         </color>
+        </brush>
+       </colorrole>
+       <colorrole role="Window">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>46</green>
+          <blue>182</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+background-color: rgb(255, 46, 182);</string>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>100</y>
-     <width>75</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>PushButton</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_3">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>330</y>
-     <width>75</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>PushButton</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
      <x>480</x>
-     <y>330</y>
-     <width>75</width>
-     <height>31</height>
+     <y>80</y>
+     <width>171</width>
+     <height>201</height>
     </rect>
    </property>
-   <property name="text">
-    <string>PushButton</string>
+   <property name="styleSheet">
+    <string notr="true">border-color: rgb(255, 103, 131);</string>
+   </property>
+   <property name="title">
+    <string>GroupBox</string>
    </property>
   </widget>
  </widget>
