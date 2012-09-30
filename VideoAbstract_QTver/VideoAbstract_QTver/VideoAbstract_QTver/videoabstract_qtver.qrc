@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="VideoAbstract_QTver">
+    <qresource prefix="/VideoAbstract_QTver">
+        <file>windowIcon.png</file>
     </qresource>
 </RCC>

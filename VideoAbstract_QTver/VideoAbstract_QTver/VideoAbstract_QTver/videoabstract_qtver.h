@@ -2,6 +2,7 @@
 #define VIDEOABSTRACT_QTVER_H
 
 #include <QtGui/QWidget>
+#include <QFileDialog>
 #include "ui_videoabstract_qtver.h"
 
 class VideoAbstract_QTver : public QWidget
@@ -14,6 +15,10 @@ public:
 
 protected:
 	void resizeEvent(QResizeEvent*event);
+
+private slots:
+	void on_open_file_button_clicked();
+
 private:
 	Ui::VideoAbstract_QTverClass ui;
 };
