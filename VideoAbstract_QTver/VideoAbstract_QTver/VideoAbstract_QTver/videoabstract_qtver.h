@@ -6,6 +6,7 @@
 #include <qmessagebox.h>
 #include "ui_videoabstract_qtver.h"
 #include "Globals.h"
+#include "algorithm.h"
 
 
 class VideoAbstract_QTver : public QWidget
