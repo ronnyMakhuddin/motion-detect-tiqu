@@ -7,19 +7,46 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
     //if (!native->isChecked())
        // options |= QFileDialog::DontUseNativeDialog;
     QString selectedFilter;
-    QStringList files = QFileDialog::getOpenFileNames(
+    Globals::files = QFileDialog::getOpenFileNames(
 		this, tr("QFileDialog::getOpenFileNames()"),
 		QDir::currentPath(),
         tr("视频文件 (*.avi)"),
         &selectedFilter,
         options);
-    if (files.count()==1) //打开一个文件
+	
+    if(Globals::files.count()==1) //打开一个文件
 	{
-        //analysis file
-	}else if(files.count()>1)  //打开多个文件
+        QString filePath = tr("文件路径:") + Globals::files[0];
+		ui.progress_info->setText(filePath);
+	}else if(Globals::files.count()>1)  //打开多个文件
 	{
+		QString fileDir;
+		Globals::getFileDirFromQString(Globals::files[0], fileDir);
+		QString text = tr("打开了") + QString::number(Globals::files.count()) + tr("个文件\n") +
+			tr("文件目录为:") + fileDir;
+		ui.progress_info->setText(text); 
 	}else
 	{
+	}
+}
+
+//分析视频按钮
+void VideoAbstract_QTver::on_analysis_button_clicked()
+{
+    if(Globals::files.count()==1) //打开一个文件
+	{
+        QString filePath = tr("文件路径:") + Globals::files[0];
+		ui.progress_info->setText(filePath);
+	}else if(Globals::files.count()>1)  //打开多个文件
+	{
+		QString fileDir;
+		Globals::getFileDirFromQString(Globals::files[0], fileDir);
+		QString text = tr("打开了") + QString::number(Globals::files.count()) + tr("个文件\n") +
+			tr("文件目录为:") + fileDir;
+		ui.progress_info->setText(text); 
+	}else  //弹出对话框，提示请选择文件
+	{
+		QMessageBox::warning(this, tr("错误"), tr("请先选择视频文件！"));
 	}
 }
 

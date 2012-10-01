@@ -91,6 +91,7 @@
     <ClCompile Include="GeneratedFiles\Release\moc_videoabstract_qtver.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Globals.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="videoabstract_qtver.cpp" />
   </ItemGroup>
@@ -122,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_setting.h" />
     <ClInclude Include="GeneratedFiles\ui_videoabstract_qtver.h" />
+    <ClInclude Include="Globals.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="videoabstract_qtver.qrc">
