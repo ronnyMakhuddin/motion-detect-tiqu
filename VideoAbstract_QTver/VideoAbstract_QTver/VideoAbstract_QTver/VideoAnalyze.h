@@ -21,6 +21,7 @@ public:
 	int LIMIT;
 public:
 	void analyzeVideo();  //∑÷Œˆ ”∆µ
+	void update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime);
 	VideoAnalyze(void);
 	VideoAnalyze(QString filePath);
 	~VideoAnalyze(void);

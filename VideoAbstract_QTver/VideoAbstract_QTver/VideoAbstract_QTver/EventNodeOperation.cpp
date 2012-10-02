@@ -99,7 +99,7 @@ void EventNodeOperation::eventFilter(vector<EventNode> &eventList)
 	}
 }
 
-EventNode* EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2)
+EventNode EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2)
 {
 	for (int i = 0; i < eventList.size(); i++)
 	{
