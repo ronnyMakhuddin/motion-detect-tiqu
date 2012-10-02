@@ -2,12 +2,12 @@
 #include <qstring.h>
 #include <vector>
 #include <qmessagebox.h>
-#include <QtGui/QWidget>
-#include <QFileDialog>
+#include <qthread.h>
 #include "EventNode.h"
 #include "EventNodeOperation.h"
-class VideoAnalyze
+class VideoAnalyze:public QThread
 {
+	Q_OBJECT
 public:
 	QString filePath;
 	vector<EventNode> eventList;
@@ -23,7 +23,8 @@ public:
 	void analyzeVideo();  //∑÷Œˆ ”∆µ
 	void update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime);
 	VideoAnalyze(void);
-	VideoAnalyze(QString filePath);
+	virtual void run();
+	VideoAnalyze(QObject* parent);
 	~VideoAnalyze(void);
 };
 

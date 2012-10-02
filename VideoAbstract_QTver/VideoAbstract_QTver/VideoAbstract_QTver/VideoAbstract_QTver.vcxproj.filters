@@ -33,6 +33,11 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{5ed8e31e-64fc-4806-a972-8a8a3b505f58}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -65,6 +70,12 @@
     <ClCompile Include="EventNodeOperation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_VideoAnalyze.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_VideoAnalyze.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="videoabstract_qtver.h">
@@ -79,6 +90,9 @@
     <CustomBuild Include="setting.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="VideoAnalyze.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_videoabstract_qtver.h">
@@ -88,9 +102,6 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="Globals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VideoAnalyze.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FileOperation.h">

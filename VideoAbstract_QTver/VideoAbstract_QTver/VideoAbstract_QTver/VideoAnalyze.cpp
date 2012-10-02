@@ -1,12 +1,15 @@
 #include "VideoAnalyze.h"
 
+void VideoAnalyze::run()
+{
+
+}
+
 void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime)
 {
 	int N = 3;
 	double MHI_DURATION = 0.5;//0.5s为运动跟踪的最大持续时间
-	double timestamp = clock()/100.; // get current time in seconds 时间戳
-    CvSize size = cvSize(img->width,img->height);
-    // get current frame size，得到当前帧的尺寸
+	double timestamp = clock()/100.0; // get current time in seconds 时间戳
     int i, idx1, idx2;
     IplImage* silh;
     IplImage* pyr = cvCreateImage( cvSize((size.width & -2)/2, (size.height & -2)/2), 8, 1 );
@@ -76,21 +79,21 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
 			EventNode node;
 			if (eventList.size() == 0)
 			{
-				EventNodeOperation.insertEventNode(eventList, r, frameNum);
+				EventNodeOperation::insertEventNode(eventList, r, frameNum);
 			}
 			else
 			{
-				node = EventNodeOperation.searchEventList(eventList, r);
+				node = *EventNodeOperation::searchEventList(eventList, r);
 				if(!(&node))
-					node = EventNodeOperation.insertEventNode(eventList, r, frameNum);
+					node = EventNodeOperation::insertEventNode(eventList, r, frameNum);
 			}
-			s = EventNodeOperation.sampleColor[node.startFrame % 5];
+			s = EventNodeOperation::sampleColor[node.startFrame % 5];
 
 			cvRectangle(img, cvPoint(r.x, r.y), cvPoint(r.x + r.width, r.y + r.height), s, 1, CV_AA, 0);
 		}
 	}
 
-	EventNodeOperation.bianliEventList(eventList, frameNum);
+	EventNodeOperation::bianliEventList(eventList, frameNum);
 
 	cvReleaseMemStorage(&stor);
 	cvReleaseImage(&pyr);
@@ -166,9 +169,9 @@ void VideoAnalyze::analyzeVideo()
 	//keyFrameJiange(filePath);
 }
 
-VideoAnalyze::VideoAnalyze(QString filePath)
+VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 {
-	this->filePath = filePath;
+	//this->filePath = filePath;
 	fps = 0;
 	minArea = 1000;
 	maxArea = 60000;
