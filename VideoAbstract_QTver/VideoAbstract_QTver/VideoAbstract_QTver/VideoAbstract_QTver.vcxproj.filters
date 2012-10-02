@@ -23,13 +23,13 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="Generated Files\Debug">
-      <UniqueIdentifier>{4c556751-55b7-4a8c-8f92-41307253e988}</UniqueIdentifier>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{aa642dfb-f3d0-4dbd-8f41-e947403f9ae1}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="Generated Files\Release">
-      <UniqueIdentifier>{aa642dfb-f3d0-4dbd-8f41-e947403f9ae1}</UniqueIdentifier>
+    <Filter Include="Generated Files\Release\Debug">
+      <UniqueIdentifier>{4c556751-55b7-4a8c-8f92-41307253e988}</UniqueIdentifier>
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
@@ -42,7 +42,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_videoabstract_qtver.cpp">
-      <Filter>Generated Files\Debug</Filter>
+      <Filter>Generated Files\Release\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_videoabstract_qtver.cpp">
       <Filter>Generated Files\Release</Filter>
@@ -54,6 +54,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VideoAnalyze.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileOperation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventNodeOperation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -82,6 +91,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VideoAnalyze.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileOperation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventNodeOperation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

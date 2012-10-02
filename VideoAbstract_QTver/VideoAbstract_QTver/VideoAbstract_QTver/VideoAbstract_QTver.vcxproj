@@ -79,6 +79,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EventNode.cpp" />
+    <ClCompile Include="EventNodeOperation.cpp" />
+    <ClCompile Include="FileOperation.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_videoabstract_qtver.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -122,6 +125,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EventNode.h" />
+    <ClInclude Include="EventNodeOperation.h" />
+    <ClInclude Include="FileOperation.h" />
     <ClInclude Include="GeneratedFiles\ui_setting.h" />
     <ClInclude Include="GeneratedFiles\ui_videoabstract_qtver.h" />
     <ClInclude Include="Globals.h" />
