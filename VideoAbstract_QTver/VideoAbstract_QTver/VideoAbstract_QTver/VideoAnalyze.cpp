@@ -4,45 +4,6 @@ void VideoAnalyze::run()
 {
 	
 	this->analyzeVideo();
-	/*
-	capture = cvCaptureFromCAM(0);
-	isContinue = true;
-	if(capture )
-	{
-		int value = 0;
-		frame = cvQueryFrame(capture); 
-		while(frame && isContinue && value <= 100)
-		{
-			value++;
-			if(value == 101)
-				value = 0;
-			frame = cvQueryFrame(capture);  
-			if (frame)  
-			{  
-				if (frame->origin == IPL_ORIGIN_TL)  
-				{  
-					cvCopy(frame,iplImg,0);  
-				}  
-				else  
-				{  
-					cvFlip(frame,iplImg,0);  
-				}  
-				cvCvtColor(iplImg,iplImg,CV_BGR2RGB);
-			}  
-			if(isContinue)
-			{
-				emit sendQImage(*qImg, value);
-				msleep(10);
-			}
-		}
-	}
-	if(capture)
-		cvReleaseCapture(&capture);
-	if(qImg)
-		delete qImg;
-	if(iplImg)
-		cvReleaseImage(&iplImg);
-		*/
 }
 
 void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime)
@@ -142,10 +103,12 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
 void VideoAnalyze::analyzeVideo()
 {
 	int N = 3;
-	capture = cvCaptureFromAVI(filePath.toLatin1().data());
-	IplImage*motion = 0;
-	IplImage**buf;
-	IplImage*mhi;
+	QByteArray ba = filePath.toLocal8Bit();
+	const char *file = ba.data();
+	capture = cvCaptureFromAVI(file);
+	IplImage*motion = 0;   //内存未释放！
+	IplImage**buf = 0;
+	IplImage*mhi = 0;
 	int last = 0;
 	double lastTime = 0;
 	if(capture)
@@ -153,6 +116,7 @@ void VideoAnalyze::analyzeVideo()
 		CvSize captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
 			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
 		fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
+		frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
 
 		qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
 		iplImg = cvCreateImageHeader(captureSize,  8, 3);
@@ -170,18 +134,12 @@ void VideoAnalyze::analyzeVideo()
 			buf[i] = cvCreateImage(captureSize, IPL_DEPTH_8U, 1);
 			cvZero(buf[i]);
 		}
-
-		//cvNamedWindow("analyze");
 		int totalFrames = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
 		int frameNum = 0;
-
-		//form.analyzeProgressBarSetMaxValue(totalFrames.ToString());
-
 		while (true)
 		{
-			//form.analyzeProgressBarSetValue(frameNum.ToString());
 			frame = cvQueryFrame(capture);
-			if (!frame)
+			if (!frame && isContinue)
 			{
 				msleep(100);//这里如果不暂停的话，会因为现实图片被释放而出现内存错误
 				break;
@@ -197,8 +155,6 @@ void VideoAnalyze::analyzeVideo()
 					}
 				}
 				update_mhi(frame, motion, frameNum, buf, last, mhi, captureSize, lastTime);
-				//CvInvoke.cvShowImage("analyze", frame);
-				//CvInvoke.cvWaitKey(100);
 				if (frame)  
 				{  
 					if (frame->origin == IPL_ORIGIN_TL)  
@@ -213,18 +169,24 @@ void VideoAnalyze::analyzeVideo()
 				}  
 				if(isContinue)
 				{
-					emit sendQImage(*qImg, 50);
-					msleep(10);
+					int value = (int)(100.0*(1+frameNum)/frameCount);
+					if(isShowVideo)
+					{
+						emit sendQImage(*qImg, value);
+						msleep(10);
+					}else
+					{
+						emit sendProcessBarValue(value);
+					}
 				}
 			}
 			frameNum++;
 
 		}
-		//cvDestroyAllWindows();
 	}
 	else
 	{
-		//QMessageBox::warning(VideoAbstract_QTver, VideoAbstract_QTver::tr("错误"), VideoAbstract_QTver::tr("视频文件损坏或格式不正确，无法打开！"));
+		emit sendOpenFileFailed();
 	}
 
 	//keyFrameJiange(filePath);
@@ -248,6 +210,13 @@ VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 	maxEventNum = 0;
 	minEventNum = 10000000;
 	LIMIT = 100;
+	isContinue = true;
+	isShowVideo = false;
+
+
+	qImg = 0;
+	iplImg = 0;
+	capture = 0;
 }
 
 VideoAnalyze::VideoAnalyze(void)

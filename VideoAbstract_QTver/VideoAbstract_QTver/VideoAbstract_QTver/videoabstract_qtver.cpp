@@ -40,6 +40,8 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		analyzeThread = new VideoAnalyze(this);
 		analyzeThread->filePath = Globals::files[0];
 		connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
+		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
+		connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
 		analyzeThread->start();
 	}else if(Globals::files.count()>1)  //打开多个文件
 	{
@@ -51,6 +53,19 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 	}else  //弹出对话框，提示请选择文件
 	{
 		QMessageBox::warning(this, tr("错误"), tr("请先选择视频文件！"));
+	}
+}
+
+void VideoAbstract_QTver::on_show_button_clicked()
+{
+	if(analyzeThread->isShowVideo)
+	{
+		analyzeThread->isShowVideo = false;
+		ui.show_button->setText(tr("显示分析过程"));
+	}else
+	{
+		analyzeThread->isShowVideo = true;
+		ui.show_button->setText(tr("关闭分析过程"));
 	}
 }
 
@@ -114,5 +129,15 @@ void VideoAbstract_QTver::showVideo(QImage qImage, int value)
 {
 	QImage newImg = qImage.scaled(ui.video_label->width(), ui.video_label->height());
 	ui.video_label->setPixmap(QPixmap::fromImage(newImg));
+	ui.progress_bar->setValue(value);
+}
+
+void VideoAbstract_QTver::openFileFailed()
+{
+	QMessageBox::warning(this, tr("错误"), tr("视频文件损坏或格式不正确，无法打开！"));
+}
+
+void VideoAbstract_QTver::updateProcessBar(int value)
+{
 	ui.progress_bar->setValue(value);
 }
