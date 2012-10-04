@@ -37,6 +37,10 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 	{
         QString filePath = tr("文件路径:") + Globals::files[0];
 		ui.progress_info->setText(filePath);
+		analyzeThread = new VideoAnalyze(this);
+		analyzeThread->filePath = Globals::files[0];
+		connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
+		analyzeThread->start();
 	}else if(Globals::files.count()>1)  //打开多个文件
 	{
 		QString fileDir;
@@ -54,6 +58,7 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags)
 {
 	ui.setupUi(this);
+	
 	//this->setWindowFlags( Qt::FramelessWindowHint);
 }
 
@@ -81,6 +86,11 @@ void VideoAbstract_QTver::resizeEvent(QResizeEvent*event)
 		ui.line_v->resize(3, size.height());
 	}
 
+	//左上窗口控件布局
+	{
+		ui.video_label->resize(ui.left_widget_up->width(), ui.left_widget_up->height());
+	}
+
 	{
 		//左下窗口中控件布局
 		QSize size = ui.left_widget_down->size();
@@ -98,4 +108,11 @@ void VideoAbstract_QTver::resizeEvent(QResizeEvent*event)
 		ui.search_button->move(buttonWidth+2*x_jiange, buttonHeight+2*y_jiange+y_button);
 		ui.setting_button->move(2*buttonWidth+3*x_jiange, buttonHeight+2*y_jiange+y_button);
 	}
+}
+
+void VideoAbstract_QTver::showVideo(QImage qImage, int value)
+{
+	QImage newImg = qImage.scaled(ui.video_label->width(), ui.video_label->height());
+	ui.video_label->setPixmap(QPixmap::fromImage(newImg));
+	ui.progress_bar->setValue(value);
 }

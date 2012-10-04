@@ -5,6 +5,7 @@
 #include <qthread.h>
 #include "EventNode.h"
 #include "EventNodeOperation.h"
+
 class VideoAnalyze:public QThread
 {
 	Q_OBJECT
@@ -19,12 +20,21 @@ public:
 	int maxEventNum;
 	int minEventNum;
 	int LIMIT;
+private:
+	CvCapture *capture;
+    IplImage *iplImg;
+    IplImage *frame;
+    QImage *qImg;
+	bool isContinue;
 public:
 	void analyzeVideo();  //∑÷Œˆ ”∆µ
 	void update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime);
 	VideoAnalyze(void);
-	virtual void run();
 	VideoAnalyze(QObject* parent);
 	~VideoAnalyze(void);
+protected:
+	void run();
+signals:
+	void sendQImage(QImage, int);
 };
 

@@ -56,7 +56,7 @@ EventNode EventNodeOperation::insertEventNode(vector<EventNode> &eventList, Rect
 	insert.rect = r;
 	insert.endFrame = -1;
 	insert.mark = true;
-	insert.capture = 0;
+	//insert.capture = 0;
 
 	//事件跟踪的表头
 	insert.trackList.push_back(r);
@@ -99,7 +99,7 @@ void EventNodeOperation::eventFilter(vector<EventNode> &eventList)
 	}
 }
 
-EventNode* EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2)
+bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, EventNode&node)
 {
 	for (int i = 0; i < eventList.size(); i++)
 	{
@@ -113,11 +113,12 @@ EventNode* EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rec
 
 			//在跟踪列表插入最后一帧
 			eventList[i].trackList.push_back(r2);
+			node = eventList[i];
 
-			return &eventList[i];
+			return true;
 		}
 	}
-	return NULL;
+	return false;
 }
 
 EventNodeOperation::EventNodeOperation(void)

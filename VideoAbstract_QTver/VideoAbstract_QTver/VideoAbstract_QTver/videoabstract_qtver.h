@@ -6,6 +6,7 @@
 #include <qmessagebox.h>
 #include "ui_videoabstract_qtver.h"
 #include "Globals.h"
+#include "VideoAnalyze.h"
 
 
 class VideoAbstract_QTver : public QWidget
@@ -22,7 +23,10 @@ protected:
 private slots:
 	void on_open_file_button_clicked();
 	void on_analysis_button_clicked();
+	void showVideo(QImage, int);
 
+public:
+	VideoAnalyze * analyzeThread;
 private:
 	Ui::VideoAbstract_QTverClass ui;
 };

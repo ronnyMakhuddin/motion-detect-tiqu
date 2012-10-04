@@ -2,7 +2,47 @@
 
 void VideoAnalyze::run()
 {
-
+	
+	this->analyzeVideo();
+	/*
+	capture = cvCaptureFromCAM(0);
+	isContinue = true;
+	if(capture )
+	{
+		int value = 0;
+		frame = cvQueryFrame(capture); 
+		while(frame && isContinue && value <= 100)
+		{
+			value++;
+			if(value == 101)
+				value = 0;
+			frame = cvQueryFrame(capture);  
+			if (frame)  
+			{  
+				if (frame->origin == IPL_ORIGIN_TL)  
+				{  
+					cvCopy(frame,iplImg,0);  
+				}  
+				else  
+				{  
+					cvFlip(frame,iplImg,0);  
+				}  
+				cvCvtColor(iplImg,iplImg,CV_BGR2RGB);
+			}  
+			if(isContinue)
+			{
+				emit sendQImage(*qImg, value);
+				msleep(10);
+			}
+		}
+	}
+	if(capture)
+		cvReleaseCapture(&capture);
+	if(qImg)
+		delete qImg;
+	if(iplImg)
+		cvReleaseImage(&iplImg);
+		*/
 }
 
 void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime)
@@ -69,7 +109,7 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
     
     // 找到所有轮廓
     cvFindContours( dst, stor, &cont, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
-	for (; cont; cont->h_next)
+	for (; cont; cont = cont->h_next)
 	{
 		CvRect r = ((CvContour*)cont)->rect;
 		if (r.height * r.width > minArea && r.height * r.width < maxArea)
@@ -79,12 +119,12 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
 			EventNode node;
 			if (eventList.size() == 0)
 			{
-				EventNodeOperation::insertEventNode(eventList, r, frameNum);
+				node = EventNodeOperation::insertEventNode(eventList, r, frameNum);
 			}
 			else
 			{
-				node = *EventNodeOperation::searchEventList(eventList, r);
-				if(!(&node))
+				
+				if(!EventNodeOperation::searchEventList(eventList, r, node))
 					node = EventNodeOperation::insertEventNode(eventList, r, frameNum);
 			}
 			s = EventNodeOperation::sampleColor[node.startFrame % 5];
@@ -102,17 +142,21 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
 void VideoAnalyze::analyzeVideo()
 {
 	int N = 3;
-	CvCapture*capture = cvCaptureFromAVI(filePath.toUtf8().data());
+	capture = cvCaptureFromAVI(filePath.toLatin1().data());
 	IplImage*motion = 0;
 	IplImage**buf;
 	IplImage*mhi;
 	int last = 0;
 	double lastTime = 0;
-	if (capture)
+	if(capture)
 	{
 		CvSize captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
 			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
 		fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
+
+		qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
+		iplImg = cvCreateImageHeader(captureSize,  8, 3);
+		iplImg->imageData = (char*)qImg->bits();
 		
 		minArea = 100;
 		maxArea = 1000000;
@@ -122,14 +166,13 @@ void VideoAnalyze::analyzeVideo()
 		buf = new IplImage*[N];
 		for (int i = 0; i < N; i++)
 		{
-			cvReleaseImage(&buf[i]);
+			//cvReleaseImage(&buf[i]);
 			buf[i] = cvCreateImage(captureSize, IPL_DEPTH_8U, 1);
 			cvZero(buf[i]);
 		}
 
 		//cvNamedWindow("analyze");
 		int totalFrames = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
-		IplImage*frame;
 		int frameNum = 0;
 
 		//form.analyzeProgressBarSetMaxValue(totalFrames.ToString());
@@ -137,10 +180,10 @@ void VideoAnalyze::analyzeVideo()
 		while (true)
 		{
 			//form.analyzeProgressBarSetValue(frameNum.ToString());
-
 			frame = cvQueryFrame(capture);
 			if (!frame)
 			{
+				msleep(100);//这里如果不暂停的话，会因为现实图片被释放而出现内存错误
 				break;
 			}
 			if (frameNum % jiange == 0)
@@ -156,17 +199,42 @@ void VideoAnalyze::analyzeVideo()
 				update_mhi(frame, motion, frameNum, buf, last, mhi, captureSize, lastTime);
 				//CvInvoke.cvShowImage("analyze", frame);
 				//CvInvoke.cvWaitKey(100);
+				if (frame)  
+				{  
+					if (frame->origin == IPL_ORIGIN_TL)  
+					{  
+						cvCopy(frame,iplImg,0);  
+					}  
+					else  
+					{  
+						cvFlip(frame,iplImg,0);  
+					}  
+					cvCvtColor(iplImg,iplImg,CV_BGR2RGB);
+				}  
+				if(isContinue)
+				{
+					emit sendQImage(*qImg, 50);
+					msleep(10);
+				}
 			}
 			frameNum++;
+
 		}
-		cvDestroyAllWindows();
+		//cvDestroyAllWindows();
 	}
 	else
 	{
-		//QMessageBox::warning(this, tr("错误"), tr("视频文件损坏或格式不正确，无法打开！"));
+		//QMessageBox::warning(VideoAbstract_QTver, VideoAbstract_QTver::tr("错误"), VideoAbstract_QTver::tr("视频文件损坏或格式不正确，无法打开！"));
 	}
 
 	//keyFrameJiange(filePath);
+
+	if(capture)
+		cvReleaseCapture(&capture);
+	if(qImg)
+		delete qImg;
+	if(iplImg)
+		cvReleaseImage(&iplImg);
 }
 
 VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
