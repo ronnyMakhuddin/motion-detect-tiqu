@@ -8,6 +8,6 @@ public:
 	FileOperation(void);
 	~FileOperation(void);
 public:
-	static void writeToFile(char* filePath, vector<EventNode> eventList);
+	static void writeToFile(char* filePath, int jiange, int fps, int key_jiange, vector<EventNode> eventList);
 };
 

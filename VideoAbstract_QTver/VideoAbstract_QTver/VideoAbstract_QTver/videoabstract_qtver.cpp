@@ -39,6 +39,13 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		ui.progress_info->setText(filePath);
 		analyzeThread = new VideoAnalyze(this);
 		analyzeThread->filePath = Globals::files[0];
+		if(0==ui.show_button->text().compare(tr("显示分析过程")))
+		{
+			analyzeThread->isShowVideo = false;
+		}else
+		{
+			analyzeThread->isShowVideo = true;
+		}
 		connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
 		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
 		connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
@@ -56,16 +63,20 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 	}
 }
 
+//是否显示视频按钮
 void VideoAbstract_QTver::on_show_button_clicked()
 {
-	if(analyzeThread->isShowVideo)
+	if(analyzeThread)
 	{
-		analyzeThread->isShowVideo = false;
-		ui.show_button->setText(tr("显示分析过程"));
-	}else
-	{
-		analyzeThread->isShowVideo = true;
-		ui.show_button->setText(tr("关闭分析过程"));
+		if(analyzeThread->isShowVideo)
+		{
+			analyzeThread->isShowVideo = false;
+			ui.show_button->setText(tr("显示分析过程"));
+		}else
+		{
+			analyzeThread->isShowVideo = true;
+			ui.show_button->setText(tr("关闭分析过程"));
+		}
 	}
 }
 
@@ -73,8 +84,7 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags)
 {
 	ui.setupUi(this);
-	
-	//this->setWindowFlags( Qt::FramelessWindowHint);
+	analyzeThread = 0;
 }
 
 VideoAbstract_QTver::~VideoAbstract_QTver()

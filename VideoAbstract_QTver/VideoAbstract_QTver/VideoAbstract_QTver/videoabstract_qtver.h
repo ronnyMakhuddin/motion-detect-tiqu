@@ -29,7 +29,7 @@ private slots:
 	void updateProcessBar(int);
 
 public:
-	VideoAnalyze * analyzeThread;
+	VideoAnalyze *analyzeThread;
 private:
 	Ui::VideoAbstract_QTverClass ui;
 };

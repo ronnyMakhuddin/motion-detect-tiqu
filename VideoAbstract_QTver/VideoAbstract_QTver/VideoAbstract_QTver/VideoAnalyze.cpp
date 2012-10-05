@@ -2,8 +2,8 @@
 
 void VideoAnalyze::run()
 {
-	
 	this->analyzeVideo();
+	this->saveEventToFile();
 }
 
 void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime)
@@ -135,6 +135,7 @@ void VideoAnalyze::analyzeVideo()
 			cvZero(buf[i]);
 		}
 		int totalFrames = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
+		isSaveToFile = true;
 		int frameNum = 0;
 		while (true)
 		{
@@ -181,7 +182,6 @@ void VideoAnalyze::analyzeVideo()
 				}
 			}
 			frameNum++;
-
 		}
 	}
 	else
@@ -189,14 +189,53 @@ void VideoAnalyze::analyzeVideo()
 		emit sendOpenFileFailed();
 	}
 
-	//keyFrameJiange(filePath);
-
 	if(capture)
+	{
+		//getKeyFrameJiange();   opencv2.4.0能自动精确定位帧，不用此函数
 		cvReleaseCapture(&capture);
+	}
 	if(qImg)
 		delete qImg;
 	if(iplImg)
 		cvReleaseImage(&iplImg);
+}
+
+void VideoAnalyze::saveEventToFile()
+{
+	if(isSaveToFile)
+	{
+		EventNodeOperation::eventFilter(eventList);
+		QString fileDir, fileName;
+		Globals::getFileDirFromQString(filePath, fileDir);
+		Globals::getFileNameFromQString(filePath, fileName);
+		//fileDir = fileDir+"\\analyze";
+		QDir tempDir(fileDir);
+		if(!tempDir.cd("analyze"))
+		{
+			tempDir.mkdir("analyze");
+			tempDir.cd("analyze");
+		}
+		QString newFilePath = fileDir + "analyze\\" + fileName + ".txt";
+		QByteArray ba = newFilePath.toLocal8Bit();
+		char* newFilePath_char = ba.data();
+		FileOperation::writeToFile(newFilePath_char, jiange, fps, key_jiange, eventList);
+	}
+}
+
+void VideoAnalyze::getKeyFrameJiange()
+{
+	//CvInvoke.cvQueryFrame(capture);//2.4版本必须加这句才能进行cvSetCaptureProperty操作
+
+	int framePosition = 0;
+	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, 7);
+	//cvQueryFrame(capture);
+	framePosition = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
+	int index1 = framePosition;
+	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, 5);
+	cvQueryFrame(capture);
+	framePosition = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
+	int index2 = framePosition;
+	key_jiange = index2 - index1;
 }
 
 VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
@@ -212,7 +251,7 @@ VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 	LIMIT = 100;
 	isContinue = true;
 	isShowVideo = false;
-
+	isSaveToFile = false;
 
 	qImg = 0;
 	iplImg = 0;
