@@ -37,6 +37,7 @@ public:
 	void update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime);
 	void getKeyFrameJiange();   //获取关键帧的间隔
 	void saveEventToFile();     //将事件保存至文件
+	void drawAbstracts();       //显示摘要事件列表
 	VideoAnalyze(void);
 	VideoAnalyze(QObject* parent);
 	~VideoAnalyze(void);
@@ -46,5 +47,6 @@ signals:
 	void sendQImage(QImage, int); //显示图像
 	void sendProcessBarValue(int);//更新进度条
 	void sendOpenFileFailed();    //文件打开失败
+	void sendDrawAbstracts(QImage,QString,QString);     //发送画摘要缩略图的信号
 };
 

@@ -4,6 +4,18 @@ void VideoAnalyze::run()
 {
 	this->analyzeVideo();
 	this->saveEventToFile();
+	this->drawAbstracts();
+
+
+	if(capture)
+	{
+		//getKeyFrameJiange();   opencv2.4.0能自动精确定位帧，不用此函数
+		cvReleaseCapture(&capture);
+	}
+	if(qImg)
+		delete qImg;
+	if(iplImg)
+		cvReleaseImage(&iplImg);
 }
 
 void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime)
@@ -189,15 +201,6 @@ void VideoAnalyze::analyzeVideo()
 		emit sendOpenFileFailed();
 	}
 
-	if(capture)
-	{
-		//getKeyFrameJiange();   opencv2.4.0能自动精确定位帧，不用此函数
-		cvReleaseCapture(&capture);
-	}
-	if(qImg)
-		delete qImg;
-	if(iplImg)
-		cvReleaseImage(&iplImg);
 }
 
 void VideoAnalyze::saveEventToFile()
@@ -236,6 +239,44 @@ void VideoAnalyze::getKeyFrameJiange()
 	framePosition = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
 	int index2 = framePosition;
 	key_jiange = index2 - index1;
+}
+
+void VideoAnalyze::drawAbstracts()
+{
+	if(isSaveToFile)
+	{
+		IplImage* frame;
+		for(int i = 0; i < eventList.size(); i++)
+		{
+			EventNode node = eventList[i];
+			Rect rect = node.trackList[i];
+			cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node.startFrame);
+			//int framePosition = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
+			frame = cvQueryFrame(capture);
+			cvRectangle(frame, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y+rect.height), cvScalar(255, 0, 0));
+			if(frame)  
+			{  
+				if (frame->origin == IPL_ORIGIN_TL)  
+				{  
+					cvCopy(frame,iplImg,0);  
+				}  
+				else  
+				{  
+					cvFlip(frame,iplImg,0);  
+				}  
+				cvCvtColor(iplImg,iplImg,CV_BGR2RGB);
+			}
+			QString startTime = tr("开始时间:") + Globals::getTimeFromFrameNum(node.startFrame, fps);
+			QString endTime = tr("结束时间:") + Globals::getTimeFromFrameNum(node.endFrame, fps);
+			emit sendDrawAbstracts(*qImg, startTime, endTime);
+			msleep(100);
+		}
+	}
+
+
+
+	//发送信号画摘要事件缩略图
+		//emit sendDrawAbstracts();
 }
 
 VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)

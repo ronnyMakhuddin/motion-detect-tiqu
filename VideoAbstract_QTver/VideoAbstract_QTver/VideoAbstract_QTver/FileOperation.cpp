@@ -34,3 +34,43 @@ void FileOperation::writeToFile(char* filePath, int jiange, int fps, int key_jia
 	//fflush(fs);
 	fclose(fs);
 }
+
+void FileOperation::readFromFile(QString filePath, VideoAnalyze*&thread)
+{
+	int N = 3;
+	//QTextCodec *code = QTextCodec::codecForName("GBK");
+	QFile file(filePath);
+	file.open(QFile::ReadOnly);
+	QTextStream stream(&file);
+
+	QString lineString;
+	QStringList data;
+
+	lineString = stream.readLine();
+	data = lineString.split(" ");
+	int total = data[0].toInt();
+	thread->jiange = data[1].toInt();
+	thread->fps = data[2].toInt();
+	thread->key_jiange = data[3].toInt();
+	thread->eventList.clear();
+
+	for (int i = 0; i < total; i++)
+	{
+		EventNode node;
+		QString line = stream.readLine();
+		QStringList data = line.split(' ');
+		node.startFrame = data[0].toInt();
+		node.endFrame = data[1].toInt();
+		int trackNum = data[2].toInt();
+		for (int j = 0; j < trackNum; j++)
+		{
+			int x = data[j * 4 + N].toInt();
+			int y = data[j * 4 + N + 1].toInt();
+			int width = data[j * 4 + N + 2].toInt();
+			int height = data[j * 4 + N + 3].toInt();
+			Rect r(x, y, width, height);
+			node.trackList.push_back(r);
+		}
+		thread->eventList.push_back(node);
+	}
+}

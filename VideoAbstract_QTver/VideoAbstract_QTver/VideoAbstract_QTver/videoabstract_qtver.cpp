@@ -49,6 +49,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
 		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
 		connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
+		connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString)), this, SLOT(drawAbstracts(QImage,QString,QString)));
 		analyzeThread->start();
 	}else if(Globals::files.count()>1)  //打开多个文件
 	{
@@ -85,6 +86,8 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 {
 	ui.setupUi(this);
 	analyzeThread = 0;
+	vLayout = new QVBoxLayout();
+	ui.scrollAreaWidgetContents->setLayout(vLayout);
 }
 
 VideoAbstract_QTver::~VideoAbstract_QTver()
@@ -140,6 +143,16 @@ void VideoAbstract_QTver::showVideo(QImage qImage, int value)
 	QImage newImg = qImage.scaled(ui.video_label->width(), ui.video_label->height());
 	ui.video_label->setPixmap(QPixmap::fromImage(newImg));
 	ui.progress_bar->setValue(value);
+}
+
+void VideoAbstract_QTver::drawAbstracts(QImage qImg, QString start, QString end)
+{
+	QImage newImage = qImg.copy();
+	SingleAbstractLayout*layout = new SingleAbstractLayout();
+	layout->pictureLabel->setPixmap(QPixmap::fromImage(newImage));
+	layout->textLabel1->setText(start);
+	layout->textLabel2->setText(end);
+	vLayout->addLayout(layout);
 }
 
 void VideoAbstract_QTver::openFileFailed()

@@ -4,9 +4,11 @@
 #include <QtGui/QWidget>
 #include <QFileDialog>
 #include <qmessagebox.h>
+#include <QVBoxLayout>
 #include "ui_videoabstract_qtver.h"
 #include "Globals.h"
 #include "VideoAnalyze.h"
+#include "singleabstractlayout.h"
 
 
 class VideoAbstract_QTver : public QWidget
@@ -27,11 +29,13 @@ private slots:
 	void showVideo(QImage, int);
 	void openFileFailed();
 	void updateProcessBar(int);
+	void drawAbstracts(QImage,QString,QString);
 
 public:
 	VideoAnalyze *analyzeThread;
 private:
 	Ui::VideoAbstract_QTverClass ui;
+	QVBoxLayout*vLayout;
 };
 
 #endif // VIDEOABSTRACT_QTVER_H
