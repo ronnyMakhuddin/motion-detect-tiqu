@@ -50,7 +50,21 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
 		connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
 		connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString)), this, SLOT(drawAbstracts(QImage,QString,QString)));
-		analyzeThread->start();
+
+		//判断分析文件是否存在
+		QString fileDir, fileName;
+		Globals::getFileDirFromQString(analyzeThread->filePath, fileDir);
+		Globals::getFileNameFromQString(analyzeThread->filePath, fileName);
+		fileDir = fileDir + tr("analyze\\");
+		QString analyzeFilePath = fileDir + fileName + tr(".txt");
+		QFile file(analyzeFilePath);
+		if(file.exists())
+		{
+			analyzeThread->start();
+		}else
+		{
+			analyzeThread->start();
+		}
 	}else if(Globals::files.count()>1)  //打开多个文件
 	{
 		QString fileDir;

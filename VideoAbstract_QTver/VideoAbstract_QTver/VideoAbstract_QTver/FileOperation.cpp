@@ -34,7 +34,7 @@ void FileOperation::writeToFile(char* filePath, int jiange, int fps, int key_jia
 	//fflush(fs);
 	fclose(fs);
 }
-
+/*
 void FileOperation::readFromFile(QString filePath, VideoAnalyze*&thread)
 {
 	int N = 3;
@@ -73,4 +73,4 @@ void FileOperation::readFromFile(QString filePath, VideoAnalyze*&thread)
 		}
 		thread->eventList.push_back(node);
 	}
-}
+}*/

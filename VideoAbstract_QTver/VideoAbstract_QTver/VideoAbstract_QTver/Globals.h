@@ -1,5 +1,6 @@
 #pragma once
 #include <QFileDialog>
+#include "VideoAnalyze.h"
 class Globals
 {
 public:
@@ -10,5 +11,7 @@ public:
 	static QString getTimeFromFrameNum(int frameNum, int fps);              //从帧号获得时间hh:mm:ss
 	Globals(void);
 	~Globals(void);
+public:
+	//VideoAnalyze *analyzeThread;
 };
 
