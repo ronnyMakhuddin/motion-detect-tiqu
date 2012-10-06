@@ -34,8 +34,8 @@ void FileOperation::writeToFile(char* filePath, int jiange, int fps, int key_jia
 	//fflush(fs);
 	fclose(fs);
 }
-/*
-void FileOperation::readFromFile(QString filePath, VideoAnalyze*&thread)
+
+void FileOperation::readFromFile(QString filePath, int& jiange, int& fps, int& key_jiange, vector<EventNode>& eventList)
 {
 	int N = 3;
 	//QTextCodec *code = QTextCodec::codecForName("GBK");
@@ -49,10 +49,10 @@ void FileOperation::readFromFile(QString filePath, VideoAnalyze*&thread)
 	lineString = stream.readLine();
 	data = lineString.split(" ");
 	int total = data[0].toInt();
-	thread->jiange = data[1].toInt();
-	thread->fps = data[2].toInt();
-	thread->key_jiange = data[3].toInt();
-	thread->eventList.clear();
+	jiange = data[1].toInt();
+	fps = data[2].toInt();
+	key_jiange = data[3].toInt();
+	eventList.clear();
 
 	for (int i = 0; i < total; i++)
 	{
@@ -71,6 +71,6 @@ void FileOperation::readFromFile(QString filePath, VideoAnalyze*&thread)
 			Rect r(x, y, width, height);
 			node.trackList.push_back(r);
 		}
-		thread->eventList.push_back(node);
+		eventList.push_back(node);
 	}
-}*/
+}

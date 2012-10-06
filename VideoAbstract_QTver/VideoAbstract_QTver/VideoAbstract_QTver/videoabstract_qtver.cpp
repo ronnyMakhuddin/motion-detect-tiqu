@@ -33,6 +33,15 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
 //分析视频按钮
 void VideoAbstract_QTver::on_analysis_button_clicked()
 {
+	//清楚摘要事件列表控件
+	QLayoutItem* child;
+	while ((child = vLayout->takeAt(0)) != 0) 
+	{
+		child->widget()->deleteLater();
+		delete child;
+	}
+	vLayout->update();
+
     if(Globals::files.count()==1) //打开一个文件
 	{
         QString filePath = tr("文件路径:") + Globals::files[0];
@@ -58,8 +67,10 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		fileDir = fileDir + tr("analyze\\");
 		QString analyzeFilePath = fileDir + fileName + tr(".txt");
 		QFile file(analyzeFilePath);
-		if(file.exists())
-		{
+		if(file.exists() && !QMessageBox::information(this, tr("请选择"), tr("存在分析文件，是否读入？"), tr("读入"), tr("不读入")))
+		{//存在就从文件读取摘要信息
+			analyzeThread->isReadFromFile = true;
+			FileOperation::readFromFile(analyzeFilePath, analyzeThread->jiange, analyzeThread->fps, analyzeThread->key_jiange, analyzeThread->eventList);
 			analyzeThread->start();
 		}else
 		{

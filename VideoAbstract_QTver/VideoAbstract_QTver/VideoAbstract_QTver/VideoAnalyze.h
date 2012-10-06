@@ -1,7 +1,6 @@
 #pragma once
 #include <qstring.h>
 #include <vector>
-#include <qmessagebox.h>
 #include <qthread.h>
 #include <qdir.h>
 #include "EventNode.h"
@@ -27,6 +26,7 @@ public:
 	bool isContinue;    //是否继续分析
 	bool isShowVideo;   //是否显示视频
 	bool isSaveToFile;  //是否保存摘要去文件
+	bool isReadFromFile; //是否从文件读取摘要信息
 private:
 	CvCapture *capture;
     IplImage *iplImg;

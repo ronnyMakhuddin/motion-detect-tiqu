@@ -2,9 +2,17 @@
 
 void VideoAnalyze::run()
 {
-	this->analyzeVideo();
-	this->saveEventToFile();
-	this->drawAbstracts();
+	if(!isReadFromFile)
+	{
+		isSaveToFile = false;
+		this->analyzeVideo();
+		this->saveEventToFile();
+		this->drawAbstracts();
+	}else
+	{
+		isSaveToFile = true;
+		this->drawAbstracts();
+	}
 
 
 	if(capture)
@@ -243,6 +251,20 @@ void VideoAnalyze::getKeyFrameJiange()
 
 void VideoAnalyze::drawAbstracts()
 {
+	if(!capture)
+	{
+		QByteArray ba = filePath.toLocal8Bit();
+		const char *file = ba.data();
+		capture = cvCaptureFromAVI(file);
+		CvSize captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
+		(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
+		fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
+		frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
+
+		qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
+		iplImg = cvCreateImageHeader(captureSize,  8, 3);
+		iplImg->imageData = (char*)qImg->bits();
+	}
 	if(isSaveToFile)
 	{
 		IplImage* frame;
@@ -293,6 +315,7 @@ VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 	isContinue = true;
 	isShowVideo = false;
 	isSaveToFile = false;
+	isReadFromFile = false;
 
 	qImg = 0;
 	iplImg = 0;
