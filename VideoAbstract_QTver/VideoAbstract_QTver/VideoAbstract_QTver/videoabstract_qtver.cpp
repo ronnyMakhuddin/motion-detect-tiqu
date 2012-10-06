@@ -161,6 +161,12 @@ void VideoAbstract_QTver::resizeEvent(QResizeEvent*event)
 		ui.search_button->move(buttonWidth+2*x_jiange, buttonHeight+2*y_jiange+y_button);
 		ui.setting_button->move(2*buttonWidth+3*x_jiange, buttonHeight+2*y_jiange+y_button);
 	}
+
+	//ÓÒ±ß´°¿Ú²¼¾Ö
+	{
+		QSize size = ui.right_widget->size();
+		ui.scrollArea->resize(size.width(), size.height()-ui.label_2->height());
+	}
 }
 
 void VideoAbstract_QTver::showVideo(QImage qImage, int value)

@@ -162,6 +162,7 @@ void VideoAnalyze::analyzeVideo()
 			frame = cvQueryFrame(capture);
 			if (!frame && isContinue)
 			{
+				emit sendProcessBarValue(100);
 				msleep(100);//这里如果不暂停的话，会因为现实图片被释放而出现内存错误
 				break;
 			}
