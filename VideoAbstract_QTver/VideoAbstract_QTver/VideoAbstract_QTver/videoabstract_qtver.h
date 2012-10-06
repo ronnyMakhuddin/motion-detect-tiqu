@@ -16,6 +16,7 @@ class VideoAbstract_QTver : public QWidget
 	Q_OBJECT
 
 public:
+	void batchAnalysis();   //处理多个视频
 	VideoAbstract_QTver(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~VideoAbstract_QTver();
 
@@ -30,6 +31,7 @@ private slots:
 	void openFileFailed();
 	void updateProcessBar(int);
 	void drawAbstracts(QImage,QString,QString);
+	void updateProcessInfo(QString);
 
 public:
 	VideoAnalyze *analyzeThread;

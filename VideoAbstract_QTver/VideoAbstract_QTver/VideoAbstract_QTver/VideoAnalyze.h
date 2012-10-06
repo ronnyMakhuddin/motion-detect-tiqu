@@ -13,6 +13,7 @@ class VideoAnalyze:public QThread
 	Q_OBJECT
 public:
 	QString filePath;
+	QStringList filePathList;
 	vector<EventNode> eventList;
 	int fps;
 	int minArea;
@@ -27,13 +28,16 @@ public:
 	bool isShowVideo;   //是否显示视频
 	bool isSaveToFile;  //是否保存摘要去文件
 	bool isReadFromFile; //是否从文件读取摘要信息
+	bool isBatch;       //是否是批量视频处理
+	bool isIgnoreExistAnalyze;  //是否忽略已经分析过的视频
 private:
 	CvCapture *capture;
     IplImage *iplImg;
     IplImage *frame;
     QImage *qImg;
 public:
-	void analyzeVideo();  //分析视频
+	void analyzeVideo();  //单个视频分析
+	void batchAnalysis(); //批量视频分析
 	void update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime);
 	void getKeyFrameJiange();   //获取关键帧的间隔
 	void saveEventToFile();     //将事件保存至文件
@@ -48,5 +52,6 @@ signals:
 	void sendProcessBarValue(int);//更新进度条
 	void sendOpenFileFailed();    //文件打开失败
 	void sendDrawAbstracts(QImage,QString,QString);     //发送画摘要缩略图的信号
+	void sendProcessInfo(QString);                      //发送视频处理信息
 };
 

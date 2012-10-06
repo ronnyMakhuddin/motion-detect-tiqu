@@ -2,28 +2,36 @@
 
 void VideoAnalyze::run()
 {
-	if(!isReadFromFile)
+	if(isBatch)
 	{
-		isSaveToFile = false;
-		this->analyzeVideo();
-		this->saveEventToFile();
-		this->drawAbstracts();
+		this->batchAnalysis();
 	}else
 	{
-		isSaveToFile = true;
-		this->drawAbstracts();
+		if(!isReadFromFile)
+		{
+			isSaveToFile = false;
+			this->analyzeVideo();
+			this->saveEventToFile();
+			this->drawAbstracts();
+		}else
+		{
+			isSaveToFile = true;
+			this->drawAbstracts();
+		}
+
+
+		if(capture)
+		{
+			//getKeyFrameJiange();   opencv2.4.0能自动精确定位帧，不用此函数
+			cvReleaseCapture(&capture);
+		}
+		if(qImg)
+			delete qImg;
+		if(iplImg)
+			cvReleaseImage(&iplImg);
 	}
 
 
-	if(capture)
-	{
-		//getKeyFrameJiange();   opencv2.4.0能自动精确定位帧，不用此函数
-		cvReleaseCapture(&capture);
-	}
-	if(qImg)
-		delete qImg;
-	if(iplImg)
-		cvReleaseImage(&iplImg);
 }
 
 void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime)
@@ -118,6 +126,48 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
 
 	cvReleaseMemStorage(&stor);
 	cvReleaseImage(&pyr);
+}
+
+void VideoAnalyze::batchAnalysis()
+{
+	for(int i = 0; i < filePathList.size(); i++)
+	{
+		filePath = filePathList[i];
+		//更新正在分析的视频信息
+		QString info = tr("正在分析第") + QString::number(i+1, 10) + tr("个文件，共") + QString::number(Globals::files.size(), 10) + tr("个文件。");
+		emit sendProcessInfo(info);
+
+		//判断分析文件是否存在
+		QString fileDir, fileName;
+		Globals::getFileDirFromQString(filePath, fileDir);
+		Globals::getFileNameFromQString(filePath, fileName);
+		fileDir = fileDir + tr("analyze\\");
+		QString analyzeFilePath = fileDir + fileName + tr(".txt");
+		QFile file(analyzeFilePath);
+		if(file.exists() && this->isIgnoreExistAnalyze)
+			continue;
+
+		if(!isReadFromFile)
+		{
+			isSaveToFile = false;
+			this->analyzeVideo();
+			this->saveEventToFile();
+			//this->drawAbstracts();
+		}else
+		{
+			isSaveToFile = true;
+			//this->drawAbstracts();
+		}
+
+		if(capture)
+		{
+			cvReleaseCapture(&capture);
+		}
+		if(qImg)
+			delete qImg;
+		if(iplImg)
+			cvReleaseImage(&iplImg);
+	}
 }
 
 void VideoAnalyze::analyzeVideo()
@@ -317,6 +367,8 @@ VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 	isShowVideo = false;
 	isSaveToFile = false;
 	isReadFromFile = false;
+	isBatch = false;
+	isIgnoreExistAnalyze = false;
 
 	qImg = 0;
 	iplImg = 0;

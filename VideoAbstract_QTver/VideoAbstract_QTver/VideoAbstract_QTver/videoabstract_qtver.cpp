@@ -78,11 +78,28 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		}
 	}else if(Globals::files.count()>1)  //打开多个文件
 	{
-		QString fileDir;
-		Globals::getFileDirFromQString(Globals::files[0], fileDir);
-		QString text = tr("打开了") + QString::number(Globals::files.count()) + tr("个文件\n") +
-			tr("文件目录为:") + fileDir;
-		ui.progress_info->setText(text); 
+		analyzeThread = new VideoAnalyze(this);
+		analyzeThread->filePathList = Globals::files;
+		if(0==ui.show_button->text().compare(tr("显示分析过程")))
+		{
+			analyzeThread->isShowVideo = false;
+		}else
+		{
+			analyzeThread->isShowVideo = true;
+		}
+
+		analyzeThread->isBatch = true;
+		analyzeThread->isIgnoreExistAnalyze = QMessageBox::information(this, tr("请选择"), tr("已经分析过的视频是否略过？"), tr("不略过"), tr("略过"));
+
+		connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
+		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
+		connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
+		connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString)), this, SLOT(drawAbstracts(QImage,QString,QString)));
+		connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
+
+		analyzeThread->start();
+
+		//batchAnalysis();
 	}else  //弹出对话框，提示请选择文件
 	{
 		QMessageBox::warning(this, tr("错误"), tr("请先选择视频文件！"));
@@ -186,6 +203,11 @@ void VideoAbstract_QTver::drawAbstracts(QImage qImg, QString start, QString end)
 	vLayout->addLayout(layout);
 }
 
+void VideoAbstract_QTver::updateProcessInfo(QString info)
+{
+	ui.progress_info->setText(info);
+}
+
 void VideoAbstract_QTver::openFileFailed()
 {
 	QMessageBox::warning(this, tr("错误"), tr("视频文件损坏或格式不正确，无法打开！"));
@@ -194,4 +216,55 @@ void VideoAbstract_QTver::openFileFailed()
 void VideoAbstract_QTver::updateProcessBar(int value)
 {
 	ui.progress_bar->setValue(value);
+}
+
+void VideoAbstract_QTver::batchAnalysis()
+{
+	bool isIgnore = false;
+	isIgnore = QMessageBox::information(this, tr("请选择"), tr("已经分析过的视频是否略过？"), tr("不略过"), tr("略过"));
+	for(int i = 0; i < Globals::files.size(); i++)
+	{
+		QString info = tr("正在分析第") + QString(i+1) + tr("个文件，共") + QString(Globals::files.size()) + tr("个文件。");
+		ui.progress_info->setText(info);
+		if(analyzeThread)
+		{
+			delete analyzeThread;
+			analyzeThread = 0;
+		}
+		analyzeThread = new VideoAnalyze(this);
+		analyzeThread->filePath = Globals::files[i];
+		if(0==ui.show_button->text().compare(tr("显示分析过程")))
+		{
+			analyzeThread->isShowVideo = false;
+		}else
+		{
+			analyzeThread->isShowVideo = true;
+		}
+		connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
+		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
+		connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
+		connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString)), this, SLOT(drawAbstracts(QImage,QString,QString)));
+
+		//判断分析文件是否存在
+		QString fileDir, fileName;
+		Globals::getFileDirFromQString(analyzeThread->filePath, fileDir);
+		Globals::getFileNameFromQString(analyzeThread->filePath, fileName);
+		fileDir = fileDir + tr("analyze\\");
+		QString analyzeFilePath = fileDir + fileName + tr(".txt");
+		QFile file(analyzeFilePath);
+		if(file.exists() && isIgnore)
+		{//存在就从文件读取摘要信息
+			analyzeThread->isReadFromFile = true;
+			FileOperation::readFromFile(analyzeFilePath, analyzeThread->jiange, analyzeThread->fps, analyzeThread->key_jiange, analyzeThread->eventList);
+			analyzeThread->start();
+		}else
+		{
+			analyzeThread->start();
+		}
+		while(!analyzeThread->isFinished())
+		{
+			;
+		}
+		
+	}
 }
