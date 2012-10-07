@@ -183,7 +183,7 @@ void VideoAnalyze::analyzeVideo()
 	double lastTime = 0;
 	if(capture)
 	{
-		CvSize captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
+		captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
 			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
 		fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
 		frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
@@ -267,6 +267,13 @@ void VideoAnalyze::createAllEventVideo()
 	if(!capture || !isSaveToFile)
 		return;
 
+	QString videoPath, videoName;
+	Globals::getFileDirFromQString(filePath, videoPath);
+	Globals::getFileNameFromQString(filePath, videoName);
+	videoPath = videoPath + tr("analyze\\") + videoName;
+	QByteArray ba = videoPath.toLatin1();
+	char* path = ba.data();
+	videoWriter = cvCreateVideoWriter(path, CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
 	int part = eventList.size() / LIMIT;
 	if(eventList.size()%LIMIT!=0)
 		part++;
@@ -284,12 +291,35 @@ void VideoAnalyze::createAllEventVideo()
 			l_index = i*LIMIT;
 			r_index = eventList.size();
 		}
-		//对每一段视频进行合成保存
+		//对每一段视频进行合成保存    记得要处理帧间隔
+		/*
+		bool* mark = new bool[r_index-l_index];
 		for(int j = l_index; j < r_index; j++)
+			mark[j] = true;
+		*/
+		int frameCount = 0;   //记录帧偏移量
+		int endCount = 0;     //记录有几个节点已经完成
+		IplImage* frame;
+		while(endCount < r_index-l_index)
 		{
-
+			for(int j = l_index; j < r_index; j++)
+			{
+				int frameNum = eventList[j].startFrame+frameCount;
+				if(frameNum > eventList[j].endFrame)
+				{
+					endCount++;
+					continue;
+				}
+				Rect rect = eventList[j].trackList[frameCount];
+				cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
+				frame = cvQueryFrame(capture);
+				//截取矩形图像合成
+			}
+			frameCount+=jiange;
 		}
 	}
+
+	cvReleaseVideoWriter(&videoWriter);
 }
 
 void VideoAnalyze::saveEventToFile()
@@ -399,10 +429,12 @@ VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 	isReadFromFile = false;
 	isBatch = false;
 	isIgnoreExistAnalyze = false;
+	captureSize = cvSize(0,0);
 
 	qImg = 0;
 	iplImg = 0;
 	capture = 0;
+	videoWriter = 0;
 }
 
 VideoAnalyze::VideoAnalyze(void)

@@ -30,8 +30,10 @@ public:
 	bool isReadFromFile; //是否从文件读取摘要信息
 	bool isBatch;       //是否是批量视频处理
 	bool isIgnoreExistAnalyze;  //是否忽略已经分析过的视频
+	CvSize captureSize;    //视频分辨率大小
 private:
 	CvCapture *capture;
+	CvVideoWriter* videoWriter;
     IplImage *iplImg;
     IplImage *frame;
     QImage *qImg;
