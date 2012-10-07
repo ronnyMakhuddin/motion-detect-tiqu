@@ -23,7 +23,7 @@ public:
 	int key_jiange;
 	int maxEventNum;
 	int minEventNum;
-	int LIMIT;
+	int LIMIT;          //同一时间最大事件数量
 	bool isContinue;    //是否继续分析
 	bool isShowVideo;   //是否显示视频
 	bool isSaveToFile;  //是否保存摘要去文件
@@ -42,6 +42,7 @@ public:
 	void getKeyFrameJiange();   //获取关键帧的间隔
 	void saveEventToFile();     //将事件保存至文件
 	void drawAbstracts();       //显示摘要事件列表
+	void createAllEventVideo();  //创建所有摘要事件的视频
 	VideoAnalyze(void);
 	VideoAnalyze(QObject* parent);
 	~VideoAnalyze(void);

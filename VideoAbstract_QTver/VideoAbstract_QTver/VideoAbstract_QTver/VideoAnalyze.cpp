@@ -210,7 +210,7 @@ void VideoAnalyze::analyzeVideo()
 		while (true)
 		{
 			frame = cvQueryFrame(capture);
-			if (!frame && isContinue)
+			if (!frame || !isContinue)
 			{
 				emit sendProcessBarValue(100);
 				msleep(100);//这里如果不暂停的话，会因为现实图片被释放而出现内存错误
@@ -260,6 +260,36 @@ void VideoAnalyze::analyzeVideo()
 		emit sendOpenFileFailed();
 	}
 
+}
+
+void VideoAnalyze::createAllEventVideo()
+{
+	if(!capture || !isSaveToFile)
+		return;
+
+	int part = eventList.size() / LIMIT;
+	if(eventList.size()%LIMIT!=0)
+		part++;
+	//将视频分成part端，分别对没段进行合成保存
+	for(int i = 0; i < part; i++)
+	{
+		//计算每一段的下标
+		int l_index, r_index;
+		if(i != part-1)
+		{
+			l_index = i*LIMIT;
+			r_index = (i+1)*LIMIT;
+		}else
+		{
+			l_index = i*LIMIT;
+			r_index = eventList.size();
+		}
+		//对每一段视频进行合成保存
+		for(int j = l_index; j < r_index; j++)
+		{
+
+		}
+	}
 }
 
 void VideoAnalyze::saveEventToFile()

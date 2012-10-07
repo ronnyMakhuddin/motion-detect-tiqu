@@ -123,6 +123,12 @@ void VideoAbstract_QTver::on_show_button_clicked()
 	}
 }
 
+//½áÊø·ÖÎö°´Å¥
+void VideoAbstract_QTver::on_end_button_clicked()
+{
+	analyzeThread->isContinue = false;
+}
+
 VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags)
 {
