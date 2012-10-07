@@ -317,8 +317,8 @@ void VideoAnalyze::createAllEventVideo()
 			cvCopy(background, allEventImage);
 			for(int j = l_index; j < r_index; j++)
 			{
-				int frameNum = eventList[j].startFrame+frameCount;
-				if(frameNum > eventList[j].endFrame)
+				int frameNum = eventList[j].startFrame+frameCount*jiange;
+				if(frameCount >= eventList[j].trackList.size())
 				{
 					endCount++;
 					continue;
@@ -339,7 +339,7 @@ void VideoAnalyze::createAllEventVideo()
 			{
 				cvWriteFrame(videoWriter, allEventImage);
 			}
-			frameCount+=jiange;
+			frameCount++;
 		}
 	}
 
@@ -446,7 +446,7 @@ VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 	fps = 0;
 	minArea = 1000;
 	maxArea = 60000;
-	jiange = 4;
+	jiange = 2;
 	key_jiange = 0;
 	maxEventNum = 0;
 	minEventNum = 10000000;
