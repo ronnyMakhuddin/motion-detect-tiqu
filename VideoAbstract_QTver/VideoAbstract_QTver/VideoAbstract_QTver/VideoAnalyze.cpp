@@ -13,6 +13,7 @@ void VideoAnalyze::run()
 			this->analyzeVideo();
 			this->saveEventToFile();
 			this->drawAbstracts();
+			this->createAllEventVideo();
 		}else
 		{
 			isSaveToFile = true;
@@ -277,6 +278,17 @@ void VideoAnalyze::createAllEventVideo()
 	int part = eventList.size() / LIMIT;
 	if(eventList.size()%LIMIT!=0)
 		part++;
+	//将第一帧作为背景图像
+	double alpha_value = 0.7;
+	char eventNumber[128];
+	CvFont font;
+    cvInitFont(&font, CV_FONT_HERSHEY_SIMPLEX, 0.5, 0.5, 0.5, 1, CV_AA);
+	IplImage* frame;
+	IplImage* background = cvCreateImage(captureSize, 8, 3);
+	IplImage* allEventImage = cvCreateImage(captureSize, 8, 3);
+	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, 0);
+	frame = cvQueryFrame(capture);
+	cvCopy(frame, background);
 	//将视频分成part端，分别对没段进行合成保存
 	for(int i = 0; i < part; i++)
 	{
@@ -299,9 +311,10 @@ void VideoAnalyze::createAllEventVideo()
 		*/
 		int frameCount = 0;   //记录帧偏移量
 		int endCount = 0;     //记录有几个节点已经完成
-		IplImage* frame;
+		
 		while(endCount < r_index-l_index)
 		{
+			cvCopy(background, allEventImage);
 			for(int j = l_index; j < r_index; j++)
 			{
 				int frameNum = eventList[j].startFrame+frameCount;
@@ -310,16 +323,31 @@ void VideoAnalyze::createAllEventVideo()
 					endCount++;
 					continue;
 				}
-				Rect rect = eventList[j].trackList[frameCount];
+				CvRect rect = eventList[j].trackList[frameCount];
 				cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
 				frame = cvQueryFrame(capture);
 				//截取矩形图像合成
+				cvSetImageROI(frame, rect);
+				sprintf(eventNumber, "%d", j);
+				cvPutText(frame, eventNumber, cvPoint(10, 15), &font, EventNodeOperation::sampleColor[1]);
+				cvSetImageROI(allEventImage, rect);
+				cvAddWeighted(frame, alpha_value, allEventImage, 1 - alpha_value, 0, allEventImage);
+				cvResetImageROI(allEventImage);  //去掉这一句会怎样？
+				cvResetImageROI(frame);
+			}
+			for(int j = 0; j < jiange; j++)  //重复写入jiange帧
+			{
+				cvWriteFrame(videoWriter, allEventImage);
 			}
 			frameCount+=jiange;
 		}
 	}
 
+	//记得释放空间
 	cvReleaseVideoWriter(&videoWriter);
+	cvReleaseImage(&background);
+	cvReleaseImage(&allEventImage);
+	//cvReleaseFont
 }
 
 void VideoAnalyze::saveEventToFile()
