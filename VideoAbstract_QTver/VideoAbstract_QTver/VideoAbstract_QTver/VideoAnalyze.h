@@ -36,6 +36,7 @@ private:
 	CvVideoWriter* videoWriter;
     IplImage *iplImg;
     IplImage *frame;
+	IplImage *baseFrame;
     QImage *qImg;
 public:
 	void analyzeVideo();  //单个视频分析

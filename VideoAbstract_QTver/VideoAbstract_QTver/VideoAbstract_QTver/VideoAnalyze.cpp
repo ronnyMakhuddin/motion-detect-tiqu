@@ -192,6 +192,7 @@ void VideoAnalyze::analyzeVideo()
 		qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
 		iplImg = cvCreateImageHeader(captureSize,  8, 3);
 		iplImg->imageData = (char*)qImg->bits();
+		baseFrame = cvCreateImage(captureSize,  8, 3);
 		
 		minArea = 100;
 		maxArea = 1000000;
@@ -217,6 +218,9 @@ void VideoAnalyze::analyzeVideo()
 				msleep(100);//这里如果不暂停的话，会因为现实图片被释放而出现内存错误
 				break;
 			}
+			//获取第五帧为baseFrame
+			if(frameNum == 5)
+				cvCopy(frame, baseFrame);
 			if (frameNum % jiange == 0)
 			{
 				if (frame)
@@ -283,12 +287,7 @@ void VideoAnalyze::createAllEventVideo()
 	char eventNumber[128];
 	CvFont font;
     cvInitFont(&font, CV_FONT_HERSHEY_SIMPLEX, 0.5, 0.5, 0.5, 1, CV_AA);
-	IplImage* frame;
-	IplImage* background = cvCreateImage(captureSize, 8, 3);
 	IplImage* allEventImage = cvCreateImage(captureSize, 8, 3);
-	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, 0);
-	frame = cvQueryFrame(capture);
-	cvCopy(frame, background);
 	//将视频分成part端，分别对没段进行合成保存
 	for(int i = 0; i < part; i++)
 	{
@@ -314,7 +313,7 @@ void VideoAnalyze::createAllEventVideo()
 		
 		while(endCount < r_index-l_index)
 		{
-			cvCopy(background, allEventImage);
+			cvCopy(baseFrame, allEventImage);
 			for(int j = l_index; j < r_index; j++)
 			{
 				int frameNum = eventList[j].startFrame+frameCount*jiange;
@@ -345,7 +344,6 @@ void VideoAnalyze::createAllEventVideo()
 
 	//记得释放空间
 	cvReleaseVideoWriter(&videoWriter);
-	cvReleaseImage(&background);
 	cvReleaseImage(&allEventImage);
 	//cvReleaseFont
 }
@@ -461,6 +459,7 @@ VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 
 	qImg = 0;
 	iplImg = 0;
+	baseFrame = 0;
 	capture = 0;
 	videoWriter = 0;
 }
