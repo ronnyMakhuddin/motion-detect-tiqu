@@ -35,12 +35,12 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 {
 	//清楚摘要事件列表控件
 	QLayoutItem* child;
-	while ((child = vLayout->takeAt(0)) != 0) 
+	while ((child = gLayout->takeAt(0)) != 0) 
 	{
 		child->widget()->deleteLater();
 		delete child;
 	}
-	vLayout->update();
+	gLayout->update();
 
     if(Globals::files.count()==1) //打开一个文件
 	{
@@ -135,8 +135,10 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 {
 	ui.setupUi(this);
 	analyzeThread = 0;
-	vLayout = new QVBoxLayout();
-	ui.scrollAreaWidgetContents->setLayout(vLayout);
+	gLayout = new QGridLayout();
+	ui.scrollAreaWidgetContents->setLayout(gLayout);
+
+	testInt = 0;
 }
 
 VideoAbstract_QTver::~VideoAbstract_QTver()
@@ -200,14 +202,22 @@ void VideoAbstract_QTver::showVideo(QImage qImage, int value)
 	ui.progress_bar->setValue(value);
 }
 
-void VideoAbstract_QTver::drawAbstracts(QImage qImg, QString start, QString end)
+void VideoAbstract_QTver::drawAbstracts(QImage newImage, QString start, QString end)
 {
-	QImage newImage = qImg.copy();
+	//QImage newImage = qImg.copy();
 	SingleAbstractLayout*layout = new SingleAbstractLayout();
 	layout->pictureLabel->setPixmap(QPixmap::fromImage(newImage));
 	layout->textLabel1->setText(start);
 	layout->textLabel2->setText(end);
-	vLayout->addLayout(layout);
+	if(testInt == 0)
+		gLayout->addLayout(layout,0,0);
+	else if(testInt == 1)
+		gLayout->addLayout(layout,1,0);
+	else if(testInt == 2)
+		gLayout->addLayout(layout,2,0);
+	//gLayout->addLayout(layout);
+	testInt++;
+	gLayout->count();
 }
 
 void VideoAbstract_QTver::updateProcessInfo(QString info)

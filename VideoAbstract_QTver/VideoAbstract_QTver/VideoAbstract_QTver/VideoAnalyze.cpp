@@ -18,8 +18,8 @@ void VideoAnalyze::run()
 		{
 			isSaveToFile = true;
 			this->getBaseFrame();
-			//this->drawAbstracts();
-			this->createAllEventVideo();
+			this->drawAbstracts();
+			//this->createAllEventVideo();
 		}
 
 		if(capture)

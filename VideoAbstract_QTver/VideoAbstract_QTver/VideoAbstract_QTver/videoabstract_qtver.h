@@ -38,7 +38,9 @@ public:
 	VideoAnalyze *analyzeThread;
 private:
 	Ui::VideoAbstract_QTverClass ui;
-	QVBoxLayout*vLayout;
+	QGridLayout*gLayout;
+
+	int testInt;
 };
 
 #endif // VIDEOABSTRACT_QTVER_H
