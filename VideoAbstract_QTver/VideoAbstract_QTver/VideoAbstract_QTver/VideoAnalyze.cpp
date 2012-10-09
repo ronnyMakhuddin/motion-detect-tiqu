@@ -17,9 +17,10 @@ void VideoAnalyze::run()
 		}else
 		{
 			isSaveToFile = true;
-			this->drawAbstracts();
+			this->getBaseFrame();
+			//this->drawAbstracts();
+			this->createAllEventVideo();
 		}
-
 
 		if(capture)
 		{
@@ -269,14 +270,14 @@ void VideoAnalyze::analyzeVideo()
 
 void VideoAnalyze::createAllEventVideo()
 {
-	if(!capture || !isSaveToFile)
-		return;
+	//if(!capture || !isSaveToFile)
+		//return;
 
 	QString videoPath, videoName;
 	Globals::getFileDirFromQString(filePath, videoPath);
 	Globals::getFileNameFromQString(filePath, videoName);
 	videoPath = videoPath + tr("analyze\\") + videoName;
-	QByteArray ba = videoPath.toLatin1();
+	QByteArray ba = videoPath.toLocal8Bit();
 	char* path = ba.data();
 	videoWriter = cvCreateVideoWriter(path, CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
 	int part = eventList.size() / LIMIT;
@@ -291,6 +292,9 @@ void VideoAnalyze::createAllEventVideo()
 	//将视频分成part端，分别对没段进行合成保存
 	for(int i = 0; i < part; i++)
 	{
+		//QTime time;
+		//time.start();
+
 		//计算每一段的下标
 		int l_index, r_index;
 		if(i != part-1)
@@ -317,9 +321,13 @@ void VideoAnalyze::createAllEventVideo()
 			for(int j = l_index; j < r_index; j++)
 			{
 				int frameNum = eventList[j].startFrame+frameCount*jiange;
-				if(frameCount >= eventList[j].trackList.size())
+				if(frameCount == eventList[j].trackList.size())  //注意这里一定是“==”，如果是“>=”的话会使endCount重复多加几次，损失很多帧
 				{
 					endCount++;
+					emit sendProcessBarValue(endCount);
+					continue;
+				}else if(frameCount > eventList[j].trackList.size())
+				{
 					continue;
 				}
 				CvRect rect = eventList[j].trackList[frameCount];
@@ -340,6 +348,10 @@ void VideoAnalyze::createAllEventVideo()
 			}
 			frameCount++;
 		}
+		//int time_diff = time.elapsed();
+		//QString tr_time_diff = QString::number(int(time_diff/1000), 10);
+		//tr_time_diff = tr("100个事件合成时间为:") + tr_time_diff;
+		//emit sendProcessInfo(tr_time_diff);
 	}
 
 	//记得释放空间
@@ -436,6 +448,32 @@ void VideoAnalyze::drawAbstracts()
 
 	//发送信号画摘要事件缩略图
 		//emit sendDrawAbstracts();
+}
+
+void VideoAnalyze::getBaseFrame()
+{
+	QByteArray ba = filePath.toLocal8Bit();
+	const char *file = ba.data();
+	capture = cvCaptureFromAVI(file);
+	CvCapture*tempCapture = cvCaptureFromAVI(file);
+	captureSize = cvSize((int)cvGetCaptureProperty(tempCapture, CV_CAP_PROP_FRAME_WIDTH),
+			(int)cvGetCaptureProperty(tempCapture, CV_CAP_PROP_FRAME_HEIGHT));
+	baseFrame = cvCreateImage(captureSize, 8, 3);
+	IplImage* tempFrame = 0;
+	int frameNum = 0;
+	if(tempCapture)
+	{
+		while((tempFrame=cvQueryFrame(tempCapture)))
+		{
+			if(frameNum == 5)
+			{
+				cvCopy(tempFrame, baseFrame);
+				break;
+			}
+			frameNum++;
+		}
+	}
+	cvReleaseCapture(&tempCapture);
 }
 
 VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)

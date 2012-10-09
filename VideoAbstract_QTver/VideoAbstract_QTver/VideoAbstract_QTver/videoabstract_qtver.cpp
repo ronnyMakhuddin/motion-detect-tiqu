@@ -59,6 +59,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
 		connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
 		connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString)), this, SLOT(drawAbstracts(QImage,QString,QString)));
+		connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
 
 		//判断分析文件是否存在
 		QString fileDir, fileName;

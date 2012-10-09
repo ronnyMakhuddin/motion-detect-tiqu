@@ -3,6 +3,7 @@
 #include <vector>
 #include <qthread.h>
 #include <qdir.h>
+#include <qtime>
 #include "EventNode.h"
 #include "EventNodeOperation.h"
 #include "Globals.h"
@@ -46,6 +47,7 @@ public:
 	void saveEventToFile();     //将事件保存至文件
 	void drawAbstracts();       //显示摘要事件列表
 	void createAllEventVideo();  //创建所有摘要事件的视频
+	void getBaseFrame();         //获得视频的关键帧
 	VideoAnalyze(void);
 	VideoAnalyze(QObject* parent);
 	~VideoAnalyze(void);
