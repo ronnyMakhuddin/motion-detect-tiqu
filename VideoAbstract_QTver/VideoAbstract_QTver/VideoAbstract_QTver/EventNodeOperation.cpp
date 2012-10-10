@@ -92,7 +92,7 @@ void EventNodeOperation::eventFilter(vector<EventNode> &eventList)
 	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
 	{
 		
-		if( (*iter).endFrame - (*iter).startFrame < 39 )
+		if( (*iter).endFrame - (*iter).startFrame < 60 )
 			iter = eventList.erase(iter);
 		else
 			iter++ ;

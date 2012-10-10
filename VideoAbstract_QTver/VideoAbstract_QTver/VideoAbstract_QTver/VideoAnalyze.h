@@ -57,7 +57,7 @@ signals:
 	void sendQImage(QImage, int); //显示图像
 	void sendProcessBarValue(int);//更新进度条
 	void sendOpenFileFailed();    //文件打开失败
-	void sendDrawAbstracts(QImage,QString,QString);     //发送画摘要缩略图的信号
+	void sendDrawAbstracts(QImage,QString,QString,int);     //发送画摘要缩略图的信号
 	void sendProcessInfo(QString);                      //发送视频处理信息
 };
 

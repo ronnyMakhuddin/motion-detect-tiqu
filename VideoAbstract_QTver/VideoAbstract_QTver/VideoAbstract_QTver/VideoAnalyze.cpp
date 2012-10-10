@@ -409,20 +409,32 @@ void VideoAnalyze::drawAbstracts()
 		(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
 		fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
 		frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
-
+		
 		qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
 		iplImg = cvCreateImageHeader(captureSize,  8, 3);
 		iplImg->imageData = (char*)qImg->bits();
 	}
+
+		qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
+		iplImg = cvCreateImageHeader(captureSize,  8, 3);
+		iplImg->imageData = (char*)qImg->bits();
+	for(int i = 0; i < 19; i++)
+	{
+		
+		frame = cvQueryFrame(capture);
+		i++;
+		i--;
+	}
+	int framePosition;
 	if(isSaveToFile)
 	{
-		IplImage* frame;
 		for(int i = 0; i < eventList.size(); i++)
+			//for(int i = 0; i < 30; i++)
 		{
 			EventNode node = eventList[i];
-			Rect rect = node.trackList[i];
-			cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node.startFrame);
-			//int framePosition = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
+			Rect rect = node.trackList[node.trackList.size()/2];
+			cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node.startFrame+node.trackList.size()/2*jiange);
+			//framePosition = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
 			frame = cvQueryFrame(capture);
 			cvRectangle(frame, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y+rect.height), cvScalar(255, 0, 0));
 			if(frame)  
@@ -439,7 +451,7 @@ void VideoAnalyze::drawAbstracts()
 			}
 			QString startTime = tr("开始时间:") + Globals::getTimeFromFrameNum(node.startFrame, fps);
 			QString endTime = tr("结束时间:") + Globals::getTimeFromFrameNum(node.endFrame, fps);
-			emit sendDrawAbstracts(*qImg, startTime, endTime);
+			emit sendDrawAbstracts(*qImg, startTime, endTime, i);
 			msleep(100);
 		}
 	}

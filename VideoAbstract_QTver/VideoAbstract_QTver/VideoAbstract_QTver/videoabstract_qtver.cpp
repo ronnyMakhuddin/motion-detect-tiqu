@@ -33,7 +33,8 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
 //分析视频按钮
 void VideoAbstract_QTver::on_analysis_button_clicked()
 {
-	//清楚摘要事件列表控件
+	//清除摘要事件列表控件
+	/*
 	QLayoutItem* child;
 	while ((child = gLayout->takeAt(0)) != 0) 
 	{
@@ -41,7 +42,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		delete child;
 	}
 	gLayout->update();
-
+	*/
     if(Globals::files.count()==1) //打开一个文件
 	{
         QString filePath = tr("文件路径:") + Globals::files[0];
@@ -58,7 +59,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
 		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
 		connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
-		connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString)), this, SLOT(drawAbstracts(QImage,QString,QString)));
+		connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString,int)), this, SLOT(drawAbstracts(QImage,QString,QString,int)));
 		connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
 
 		//判断分析文件是否存在
@@ -95,7 +96,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
 		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
 		connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
-		connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString)), this, SLOT(drawAbstracts(QImage,QString,QString)));
+		connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString,int)), this, SLOT(drawAbstracts(QImage,QString,QString,int)));
 		connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
 
 		analyzeThread->start();
@@ -128,6 +129,13 @@ void VideoAbstract_QTver::on_show_button_clicked()
 void VideoAbstract_QTver::on_end_button_clicked()
 {
 	analyzeThread->isContinue = false;
+}
+
+//设置按钮
+void VideoAbstract_QTver::on_setting_button_clicked()
+{
+	settingUI = new setting_widget(0);
+	settingUI->show();
 }
 
 VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
@@ -202,22 +210,22 @@ void VideoAbstract_QTver::showVideo(QImage qImage, int value)
 	ui.progress_bar->setValue(value);
 }
 
-void VideoAbstract_QTver::drawAbstracts(QImage newImage, QString start, QString end)
+void VideoAbstract_QTver::drawAbstracts(QImage newImage, QString start, QString end, int count)
 {
 	//QImage newImage = qImg.copy();
 	SingleAbstractLayout*layout = new SingleAbstractLayout();
 	layout->pictureLabel->setPixmap(QPixmap::fromImage(newImage));
 	layout->textLabel1->setText(start);
 	layout->textLabel2->setText(end);
-	if(testInt == 0)
-		gLayout->addLayout(layout,0,0);
-	else if(testInt == 1)
-		gLayout->addLayout(layout,1,0);
-	else if(testInt == 2)
-		gLayout->addLayout(layout,2,0);
-	//gLayout->addLayout(layout);
+	int row = 0, col = 0;
+	if(count % 2 == 1)
+		col = 1;
+	row = count / 2;
+	gLayout->addLayout(layout,row,col);
+	
+	int c = gLayout->count();
+	c++;
 	testInt++;
-	gLayout->count();
 }
 
 void VideoAbstract_QTver::updateProcessInfo(QString info)

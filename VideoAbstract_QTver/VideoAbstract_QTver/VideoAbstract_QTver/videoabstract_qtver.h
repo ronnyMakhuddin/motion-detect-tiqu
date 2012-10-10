@@ -9,6 +9,7 @@
 #include "Globals.h"
 #include "VideoAnalyze.h"
 #include "singleabstractlayout.h"
+#include "setting_widget.h"
 
 
 class VideoAbstract_QTver : public QWidget
@@ -28,16 +29,18 @@ private slots:
 	void on_analysis_button_clicked();
 	void on_show_button_clicked();
 	void on_end_button_clicked();
+	void on_setting_button_clicked();
 	void showVideo(QImage, int);
 	void openFileFailed();
 	void updateProcessBar(int);
-	void drawAbstracts(QImage,QString,QString);
+	void drawAbstracts(QImage,QString,QString,int);
 	void updateProcessInfo(QString);
 
 public:
 	VideoAnalyze *analyzeThread;
 private:
 	Ui::VideoAbstract_QTverClass ui;
+	setting_widget*settingUI;
 	QGridLayout*gLayout;
 
 	int testInt;

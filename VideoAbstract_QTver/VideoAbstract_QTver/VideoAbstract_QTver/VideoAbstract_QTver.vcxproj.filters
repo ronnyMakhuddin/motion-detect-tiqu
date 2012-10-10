@@ -85,6 +85,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_singleabstractlayout.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="setting_widget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_setting_widget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_setting_widget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="videoabstract_qtver.h">
@@ -103,6 +112,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="singleabstractlayout.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="setting_widget.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
