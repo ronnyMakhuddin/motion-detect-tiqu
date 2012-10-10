@@ -40,14 +40,17 @@ private:
 	IplImage *baseFrame;
     QImage *qImg;
 public:
-	void analyzeVideo();  //单个视频分析
-	void batchAnalysis(); //批量视频分析
+	void analyzeVideo();   //视频分析
+	void singleAnalysis(); //单个视频分析
+	void batchAnalysis();  //批量视频分析
 	void update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime);
 	void getKeyFrameJiange();   //获取关键帧的间隔
 	void saveEventToFile();     //将事件保存至文件
 	void drawAbstracts();       //显示摘要事件列表
 	void createAllEventVideo();  //创建所有摘要事件的视频
 	void getBaseFrame();         //获得视频的关键帧
+	bool init();                 //初始化一些关键变量
+	void release();            //初始化一些Image
 	VideoAnalyze(void);
 	VideoAnalyze(QObject* parent);
 	~VideoAnalyze(void);

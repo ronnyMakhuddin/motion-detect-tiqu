@@ -7,6 +7,8 @@ void VideoAnalyze::run()
 		this->batchAnalysis();
 	}else
 	{
+		this->singleAnalysis();
+		/*
 		if(!isReadFromFile)
 		{
 			isSaveToFile = false;
@@ -31,6 +33,7 @@ void VideoAnalyze::run()
 			delete qImg;
 		if(iplImg)
 			cvReleaseImage(&iplImg);
+			*/
 	}
 
 
@@ -130,6 +133,27 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
 	cvReleaseImage(&pyr);
 }
 
+void VideoAnalyze::singleAnalysis()
+{
+	if(!capture)
+		init();
+	if(!isReadFromFile)
+	{
+		isSaveToFile = false;
+		this->analyzeVideo();
+		this->saveEventToFile();
+		this->drawAbstracts();
+		this->createAllEventVideo();
+	}else
+	{
+		isSaveToFile = true;
+		//this->getBaseFrame();
+		this->drawAbstracts();
+		//this->createAllEventVideo();
+	}
+	release();
+}
+
 void VideoAnalyze::batchAnalysis()
 {
 	for(int i = 0; i < filePathList.size(); i++)
@@ -175,9 +199,6 @@ void VideoAnalyze::batchAnalysis()
 void VideoAnalyze::analyzeVideo()
 {
 	int N = 3;
-	QByteArray ba = filePath.toLocal8Bit();
-	const char *file = ba.data();
-	capture = cvCaptureFromAVI(file);
 	IplImage*motion = 0;   //内存未释放！
 	IplImage**buf = 0;
 	IplImage*mhi = 0;
@@ -190,11 +211,6 @@ void VideoAnalyze::analyzeVideo()
 		fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
 		frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
 
-		qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
-		iplImg = cvCreateImageHeader(captureSize,  8, 3);
-		iplImg->imageData = (char*)qImg->bits();
-		baseFrame = cvCreateImage(captureSize,  8, 3);
-		
 		minArea = 100;
 		maxArea = 1000000;
 
@@ -270,9 +286,6 @@ void VideoAnalyze::analyzeVideo()
 
 void VideoAnalyze::createAllEventVideo()
 {
-	//if(!capture || !isSaveToFile)
-		//return;
-
 	QString videoPath, videoName;
 	Globals::getFileDirFromQString(filePath, videoPath);
 	Globals::getFileNameFromQString(filePath, videoName);
@@ -400,30 +413,10 @@ void VideoAnalyze::getKeyFrameJiange()
 
 void VideoAnalyze::drawAbstracts()
 {
-	if(!capture)
-	{
-		QByteArray ba = filePath.toLocal8Bit();
-		const char *file = ba.data();
-		capture = cvCaptureFromAVI(file);
-		CvSize captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
-		(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
-		fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
-		frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
-		
-		qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
-		iplImg = cvCreateImageHeader(captureSize,  8, 3);
-		iplImg->imageData = (char*)qImg->bits();
-	}
-
-		qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
-		iplImg = cvCreateImageHeader(captureSize,  8, 3);
-		iplImg->imageData = (char*)qImg->bits();
 	for(int i = 0; i < 19; i++)
 	{
 		
 		frame = cvQueryFrame(capture);
-		i++;
-		i--;
 	}
 	int framePosition;
 	if(isSaveToFile)
@@ -455,9 +448,6 @@ void VideoAnalyze::drawAbstracts()
 			msleep(100);
 		}
 	}
-
-
-
 	//发送信号画摘要事件缩略图
 		//emit sendDrawAbstracts();
 }
@@ -466,7 +456,6 @@ void VideoAnalyze::getBaseFrame()
 {
 	QByteArray ba = filePath.toLocal8Bit();
 	const char *file = ba.data();
-	capture = cvCaptureFromAVI(file);
 	CvCapture*tempCapture = cvCaptureFromAVI(file);
 	captureSize = cvSize((int)cvGetCaptureProperty(tempCapture, CV_CAP_PROP_FRAME_WIDTH),
 			(int)cvGetCaptureProperty(tempCapture, CV_CAP_PROP_FRAME_HEIGHT));
@@ -488,9 +477,48 @@ void VideoAnalyze::getBaseFrame()
 	cvReleaseCapture(&tempCapture);
 }
 
+bool VideoAnalyze::init()
+{
+	QByteArray ba = filePath.toLocal8Bit();
+	const char *file = ba.data();
+	capture = cvCaptureFromAVI(file);
+	if(!capture)
+		return false;
+	captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
+		(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
+	qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
+	iplImg = cvCreateImageHeader(captureSize,  8, 3);
+	iplImg->imageData = (char*)qImg->bits();
+	getBaseFrame();
+	return true;
+}
+
+void VideoAnalyze::release()
+{
+	if(capture)
+	{
+		cvReleaseCapture(&capture);
+		capture = 0;
+	}
+	if(qImg)
+	{
+		delete qImg;
+		qImg = 0;
+	}
+	if(iplImg)   //这里可能会出错，因为QImage和IplImage是绑定的，所以设置断点测试
+	{
+		cvReleaseImage(&iplImg);
+		iplImg = 0;
+	}
+	if(baseFrame)
+	{
+		cvReleaseImage(&baseFrame);
+		baseFrame = 0;
+	}
+}
+
 VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 {
-	//this->filePath = filePath;
 	fps = 0;
 	minArea = 1000;
 	maxArea = 60000;
