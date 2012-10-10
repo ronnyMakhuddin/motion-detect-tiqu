@@ -324,7 +324,7 @@ void VideoAnalyze::createAllEventVideo()
 				if(frameCount == eventList[j].trackList.size())  //注意这里一定是“==”，如果是“>=”的话会使endCount重复多加几次，损失很多帧
 				{
 					endCount++;
-					emit sendProcessBarValue(endCount);
+					//emit sendProcessBarValue(endCount);
 					continue;
 				}else if(frameCount > eventList[j].trackList.size())
 				{
