@@ -173,6 +173,7 @@ void VideoAnalyze::realTimeAnalysis()
 	analyzeRealTimeVideo();
 	filePath = tr("D:\\vs2010Projects\\VideoAbstract_QTver\\VideoAbstract_QTver\\videowrite.avi");
 	this->saveEventToFile();
+	this->createAllEventVideo();
 	release();
 }
 
@@ -186,11 +187,6 @@ void VideoAnalyze::analyzeRealTimeVideo()
 	double lastTime = 0;
 	if(capture)
 	{
-		captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
-			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
-		//fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
-		frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
-
 		//定义一个写视频对象
 		CvVideoWriter*camWriter= cvCreateVideoWriter("videowrite.avi", CV_FOURCC('X', 'V', 'I', 'D'), 15, captureSize, 1);
 
@@ -548,7 +544,6 @@ bool VideoAnalyze::initRealTime()
 	captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
 			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
 	fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
-	frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
 	qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
 	iplImg = cvCreateImageHeader(captureSize,  8, 3);
 	iplImg->imageData = (char*)qImg->bits();
