@@ -30,6 +30,7 @@ public:
 	bool isSaveToFile;  //是否保存摘要去文件
 	bool isReadFromFile; //是否从文件读取摘要信息
 	bool isBatch;       //是否是批量视频处理
+	bool isRealTime;    //是否实时分析
 	bool isIgnoreExistAnalyze;  //是否忽略已经分析过的视频
 	CvSize captureSize;    //视频分辨率大小
 private:
@@ -41,8 +42,10 @@ private:
     QImage *qImg;
 public:
 	void analyzeVideo();   //视频分析
+	void analyzeRealTimeVideo(); //分析实时视频
 	void singleAnalysis(); //单个视频分析
 	void batchAnalysis();  //批量视频分析
+	void realTimeAnalysis();  //实时视频分析
 	void update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime);
 	void getKeyFrameJiange();   //获取关键帧的间隔
 	void saveEventToFile();     //将事件保存至文件
@@ -51,6 +54,7 @@ public:
 	void getBaseFrame();         //获得视频的关键帧
 	bool init();                 //初始化一些关键变量
 	void release();            //初始化一些Image
+	bool initRealTime();         //初始化实时视频
 	VideoAnalyze(void);
 	VideoAnalyze(QObject* parent);
 	~VideoAnalyze(void);

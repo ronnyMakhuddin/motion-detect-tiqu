@@ -15,6 +15,13 @@ SingleAbstractLayout::SingleAbstractLayout()
 	this->addWidget(textLabel2);
 }
 
+void SingleAbstractLayout::destroyMySelf()
+{
+	pictureLabel->deleteLater();
+	textLabel1->deleteLater();
+	textLabel2->deleteLater();
+}
+
 SingleAbstractLayout::~SingleAbstractLayout()
 {
 

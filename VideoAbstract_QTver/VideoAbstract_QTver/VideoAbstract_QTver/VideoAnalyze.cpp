@@ -2,41 +2,17 @@
 
 void VideoAnalyze::run()
 {
-	if(isBatch)
+	if(isRealTime)
+	{
+		realTimeAnalysis();
+	}else if(isBatch)
 	{
 		this->batchAnalysis();
 	}else
 	{
 		this->singleAnalysis();
-		/*
-		if(!isReadFromFile)
-		{
-			isSaveToFile = false;
-			this->analyzeVideo();
-			this->saveEventToFile();
-			this->drawAbstracts();
-			this->createAllEventVideo();
-		}else
-		{
-			isSaveToFile = true;
-			this->getBaseFrame();
-			this->drawAbstracts();
-			//this->createAllEventVideo();
-		}
-
-		if(capture)
-		{
-			//getKeyFrameJiange();   opencv2.4.0能自动精确定位帧，不用此函数
-			cvReleaseCapture(&capture);
-		}
-		if(qImg)
-			delete qImg;
-		if(iplImg)
-			cvReleaseImage(&iplImg);
-			*/
 	}
-
-
+	
 }
 
 void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime)
@@ -173,26 +149,119 @@ void VideoAnalyze::batchAnalysis()
 		if(file.exists() && this->isIgnoreExistAnalyze)
 			continue;
 
+		if(!capture)
+			init();
 		if(!isReadFromFile)
 		{
 			isSaveToFile = false;
 			this->analyzeVideo();
 			this->saveEventToFile();
-			//this->drawAbstracts();
+			this->createAllEventVideo();
 		}else
 		{
 			isSaveToFile = true;
-			//this->drawAbstracts();
 		}
 
-		if(capture)
+		release();
+	}
+}
+
+void VideoAnalyze::realTimeAnalysis()
+{
+	//初始化摄像头视频
+	initRealTime();
+	analyzeRealTimeVideo();
+	filePath = tr("D:\\vs2010Projects\\VideoAbstract_QTver\\VideoAbstract_QTver\\videowrite.avi");
+	this->saveEventToFile();
+	release();
+}
+
+void VideoAnalyze::analyzeRealTimeVideo()
+{
+	int N = 3;
+	IplImage*motion = 0;   //内存未释放！
+	IplImage**buf = 0;
+	IplImage*mhi = 0;
+	int last = 0;
+	double lastTime = 0;
+	if(capture)
+	{
+		captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
+			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
+		//fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
+		frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
+
+		//定义一个写视频对象
+		CvVideoWriter*camWriter= cvCreateVideoWriter("videowrite.avi", CV_FOURCC('X', 'V', 'I', 'D'), 15, captureSize, 1);
+
+		minArea = 100;
+		maxArea = 1000000;
+
+		mhi = cvCreateImage(captureSize, IPL_DEPTH_32F, 1);
+		cvZero(mhi);
+		buf = new IplImage*[N];
+		for (int i = 0; i < N; i++)
 		{
-			cvReleaseCapture(&capture);
+			//cvReleaseImage(&buf[i]);
+			buf[i] = cvCreateImage(captureSize, IPL_DEPTH_8U, 1);
+			cvZero(buf[i]);
 		}
-		if(qImg)
-			delete qImg;
-		if(iplImg)
-			cvReleaseImage(&iplImg);
+		isSaveToFile = true;
+		int frameNum = 0;
+		while (true)
+		{
+			frame = cvQueryFrame(capture);
+			if (!frame || !isContinue)
+			{
+				emit sendProcessBarValue(100);
+				msleep(100);//这里如果不暂停的话，会因为现实图片被释放而出现内存错误
+				break;
+			}
+			cvWriteFrame(camWriter, frame);
+			if (frameNum % jiange == 0)
+			{
+				if (frame)
+				{
+					if (!motion)
+					{
+						motion = cvCreateImage(captureSize, IPL_DEPTH_8U, 1);
+						cvZero(motion);
+					}
+				}
+				update_mhi(frame, motion, frameNum, buf, last, mhi, captureSize, lastTime);
+				if (frame)  
+				{  
+					if (frame->origin == IPL_ORIGIN_TL)  
+					{  
+						cvCopy(frame,iplImg,0);  
+					}  
+					else  
+					{  
+						cvFlip(frame,iplImg,0);  
+					}  
+					cvCvtColor(iplImg,iplImg,CV_BGR2RGB);
+				}  
+				if(isContinue)
+				{
+					int value = 50;
+					if(isShowVideo)
+					{
+						emit sendQImage(*qImg, value);
+						msleep(10);
+					}else
+					{
+						emit sendProcessBarValue(value);
+					}
+				}
+			}
+			frameNum++;
+		}
+
+		cvReleaseVideoWriter(&camWriter);
+	}
+	else
+	{
+		emit sendOpenFileFailed();
 	}
 }
 
@@ -206,11 +275,6 @@ void VideoAnalyze::analyzeVideo()
 	double lastTime = 0;
 	if(capture)
 	{
-		captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
-			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
-		fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
-		frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
-
 		minArea = 100;
 		maxArea = 1000000;
 
@@ -281,7 +345,6 @@ void VideoAnalyze::analyzeVideo()
 	{
 		emit sendOpenFileFailed();
 	}
-
 }
 
 void VideoAnalyze::createAllEventVideo()
@@ -477,6 +540,31 @@ void VideoAnalyze::getBaseFrame()
 	cvReleaseCapture(&tempCapture);
 }
 
+bool VideoAnalyze::initRealTime()
+{
+	capture = cvCaptureFromCAM(-1);
+	if(!capture)
+		return false;
+	captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
+			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
+	fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
+	frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
+	qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
+	iplImg = cvCreateImageHeader(captureSize,  8, 3);
+	iplImg->imageData = (char*)qImg->bits();
+	//获取基础帧
+	baseFrame = cvCreateImage(captureSize, 8, 3);
+	for(int i = 0; i <= 5 && (frame=cvQueryFrame(capture)); i++)
+	{
+		if(i == 5)
+		{
+			cvCopy(frame, baseFrame);
+			break;
+		}
+	}
+	return true;
+}
+
 bool VideoAnalyze::init()
 {
 	QByteArray ba = filePath.toLocal8Bit();
@@ -485,7 +573,9 @@ bool VideoAnalyze::init()
 	if(!capture)
 		return false;
 	captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
-		(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
+			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
+	fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
+	frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
 	qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
 	iplImg = cvCreateImageHeader(captureSize,  8, 3);
 	iplImg->imageData = (char*)qImg->bits();
@@ -532,6 +622,7 @@ VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 	isSaveToFile = false;
 	isReadFromFile = false;
 	isBatch = false;
+	isRealTime = false;
 	isIgnoreExistAnalyze = false;
 	captureSize = cvSize(0,0);
 

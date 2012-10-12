@@ -10,6 +10,7 @@ class SingleAbstractLayout : public QVBoxLayout
 	Q_OBJECT
 
 public:
+	void destroyMySelf();
 	SingleAbstractLayout();
 	~SingleAbstractLayout();
 

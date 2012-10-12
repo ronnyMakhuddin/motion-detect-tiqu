@@ -34,7 +34,7 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
 void VideoAbstract_QTver::on_analysis_button_clicked()
 {
 	//清除摘要事件列表控件
-	/*
+	
 	QLayoutItem* child;
 	while ((child = gLayout->takeAt(0)) != 0) 
 	{
@@ -42,7 +42,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		delete child;
 	}
 	gLayout->update();
-	*/
+	
     if(Globals::files.count()==1) //打开一个文件
 	{
         QString filePath = tr("文件路径:") + Globals::files[0];
@@ -129,6 +129,40 @@ void VideoAbstract_QTver::on_show_button_clicked()
 void VideoAbstract_QTver::on_end_button_clicked()
 {
 	analyzeThread->isContinue = false;
+}
+
+//摘要检索按钮
+void VideoAbstract_QTver::on_search_button_clicked()
+{
+	/*
+	QLayoutItem* child;
+	while ((child = gLayout->takeAt(0)) != 0) 
+	{
+		((SingleAbstractLayout*)child)->destroyMySelf();
+		gLayout->removeItem(child);
+		
+		//child->widget()->deleteLater();
+		//delete child;
+	}
+	gLayout->update();
+	*/
+
+	analyzeThread = new VideoAnalyze(this);
+	analyzeThread->isRealTime = true;
+	if(0==ui.show_button->text().compare(tr("显示分析过程")))
+	{
+		analyzeThread->isShowVideo = false;
+	}else
+	{
+		analyzeThread->isShowVideo = true;
+	}
+	connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
+	connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
+	connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
+	connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString,int)), this, SLOT(drawAbstracts(QImage,QString,QString,int)));
+	connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
+
+	analyzeThread->start();
 }
 
 //设置按钮
