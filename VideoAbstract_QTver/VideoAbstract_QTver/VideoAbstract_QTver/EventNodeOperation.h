@@ -12,7 +12,7 @@ public:
 	static EventNode insertEventNode(vector<EventNode> &eventList, Rect r, int frameNum); //插入一个新事件
 	static void deleteEventList(vector<EventNode> &eventList);  //删除整个事件链表
 	static void bianliEventList(vector<EventNode> &eventList, int endFrame);  //遍历链表,更新跟踪标记
-	static void eventFilter(vector<EventNode> &eventList);     //过滤列表中过短事件
+	static void eventFilter(vector<EventNode> &eventList, int fps);     //过滤列表中过短事件
 	static bool searchEventList(vector<EventNode> &eventList, Rect r2, EventNode&node); //搜索链表,检查有没有相同事件
 	EventNodeOperation(void);
 	~EventNodeOperation(void);

@@ -87,12 +87,12 @@ void EventNodeOperation::bianliEventList(vector<EventNode> &eventList, int endFr
 	}
 }
 
-void EventNodeOperation::eventFilter(vector<EventNode> &eventList)
+void EventNodeOperation::eventFilter(vector<EventNode> &eventList, int fps)
 {
 	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
 	{
 		
-		if( (*iter).endFrame - (*iter).startFrame < 60 )
+		if( (*iter).endFrame - (*iter).startFrame < fps*2 )  //2秒存在就记为事件
 			iter = eventList.erase(iter);
 		else
 			iter++ ;

@@ -171,8 +171,10 @@ void VideoAnalyze::realTimeAnalysis()
 	//初始化摄像头视频
 	initRealTime();
 	analyzeRealTimeVideo();
-	filePath = tr("D:\\vs2010Projects\\VideoAbstract_QTver\\VideoAbstract_QTver\\videowrite.avi");
+	filePath = tr("D:\\vs2010Projects\\VideoAbstract_QTver\\VideoAbstract_QTver\\videowrite.avi"); //必须在写入文本文件之前保存
 	this->saveEventToFile();
+	release();
+	init();
 	this->createAllEventVideo();
 	release();
 }
@@ -188,10 +190,7 @@ void VideoAnalyze::analyzeRealTimeVideo()
 	if(capture)
 	{
 		//定义一个写视频对象
-		CvVideoWriter*camWriter= cvCreateVideoWriter("videowrite.avi", CV_FOURCC('X', 'V', 'I', 'D'), 15, captureSize, 1);
-
-		minArea = 100;
-		maxArea = 1000000;
+		CvVideoWriter*camWriter= cvCreateVideoWriter("videowrite.avi", CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
 
 		mhi = cvCreateImage(captureSize, IPL_DEPTH_32F, 1);
 		cvZero(mhi);
@@ -271,9 +270,6 @@ void VideoAnalyze::analyzeVideo()
 	double lastTime = 0;
 	if(capture)
 	{
-		minArea = 100;
-		maxArea = 1000000;
-
 		mhi = cvCreateImage(captureSize, IPL_DEPTH_32F, 1);
 		cvZero(mhi);
 		buf = new IplImage*[N];
@@ -436,7 +432,7 @@ void VideoAnalyze::saveEventToFile()
 {
 	if(isSaveToFile)
 	{
-		EventNodeOperation::eventFilter(eventList);
+		EventNodeOperation::eventFilter(eventList, fps);
 		QString fileDir, fileName;
 		Globals::getFileDirFromQString(filePath, fileDir);
 		Globals::getFileNameFromQString(filePath, fileName);
@@ -543,7 +539,7 @@ bool VideoAnalyze::initRealTime()
 		return false;
 	captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
 			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
-	fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
+	fps = 15;   //设置实时拍摄帧率为15
 	qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
 	iplImg = cvCreateImageHeader(captureSize,  8, 3);
 	iplImg->imageData = (char*)qImg->bits();
@@ -557,6 +553,8 @@ bool VideoAnalyze::initRealTime()
 			break;
 		}
 	}
+	minArea = 1000;
+	maxArea = 1000000;
 	return true;
 }
 
@@ -575,6 +573,8 @@ bool VideoAnalyze::init()
 	iplImg = cvCreateImageHeader(captureSize,  8, 3);
 	iplImg->imageData = (char*)qImg->bits();
 	getBaseFrame();
+	minArea = 1000;
+	maxArea = 1000000;
 	return true;
 }
 
