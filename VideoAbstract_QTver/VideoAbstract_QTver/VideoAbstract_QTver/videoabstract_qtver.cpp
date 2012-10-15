@@ -38,6 +38,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 	QLayoutItem* child;
 	while ((child = gLayout->takeAt(0)) != 0) 
 	{
+		((SingleAbstractLayout*)child)->destroyMySelf();
 		child->widget()->deleteLater();
 		delete child;
 	}
