@@ -18,6 +18,7 @@ public:
 	QLabel* pictureLabel;
 	QLabel* textLabel1;
 	QLabel* textLabel2;
+private:
 };
 
 #endif // SINGLEABSTRACTLAYOUT_H

@@ -10,6 +10,8 @@
 #include "VideoAnalyze.h"
 #include "singleabstractlayout.h"
 #include "setting_widget.h"
+#include "mylabel.h"
+#include "abstractform.h"
 
 
 class VideoAbstract_QTver : public QWidget
@@ -27,7 +29,6 @@ protected:
 private slots:
 	void on_open_file_button_clicked();
 	void on_analysis_button_clicked();
-	void on_end_button_clicked();
 	void on_setting_button_clicked();
 	void on_search_button_clicked();
 	void on_show_video_check_box_clicked();
@@ -46,6 +47,7 @@ private:
 	QGridLayout*gLayout;
 
 	int testInt;
+	//MyLabel* myLabel;
 };
 
 #endif // VIDEOABSTRACT_QTVER_H

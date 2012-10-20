@@ -126,6 +126,12 @@ void VideoAnalyze::singleAnalysis()
 	{
 		isSaveToFile = true;
 		//this->getBaseFrame();
+		QString fileDir, fileName;
+		Globals::getFileDirFromQString(filePath, fileDir);
+		Globals::getFileNameFromQString(filePath, fileName);
+		fileDir = fileDir + tr("analyze\\");
+		QString analyzeFilePath = fileDir + fileName + tr(".txt");
+		FileOperation::readFromFile(analyzeFilePath, jiange, fps, key_jiange, eventList);
 		this->drawAbstracts();
 		//this->createAllEventVideo();
 	}

@@ -68,7 +68,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 			if(file.exists() && !QMessageBox::information(this, tr("请选择"), tr("存在分析文件，是否读入？"), tr("读入"), tr("不读入")))
 			{//存在就从文件读取摘要信息
 				analyzeThread->isReadFromFile = true;
-				FileOperation::readFromFile(analyzeFilePath, analyzeThread->jiange, analyzeThread->fps, analyzeThread->key_jiange, analyzeThread->eventList);
+				//FileOperation::readFromFile(analyzeFilePath, analyzeThread->jiange, analyzeThread->fps, analyzeThread->key_jiange, analyzeThread->eventList);
 				analyzeThread->start();
 			}else
 			{
@@ -118,12 +118,6 @@ void VideoAbstract_QTver::on_show_video_check_box_clicked()
 	}
 }
 
-//结束分析按钮
-void VideoAbstract_QTver::on_end_button_clicked()
-{
-	analyzeThread->isContinue = false;
-}
-
 //摘要检索按钮
 void VideoAbstract_QTver::on_search_button_clicked()
 {
@@ -140,7 +134,7 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	gLayout->update();
 	*/
 
-	analyzeThread = new VideoAnalyze(this);
+	//analyzeThread = new VideoAnalyze(this);
 	analyzeThread->isRealTime = true;
 	if(ui.show_video_check_box->isChecked())
 	{
@@ -169,6 +163,8 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	ui.scrollAreaWidgetContents->setLayout(gLayout);
 
 	testInt = 0;
+	// 测试label点击事件代码
+	//myLabel = new MyLabel(this);
 
 	analyzeThread = new VideoAnalyze(this);
 	connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
@@ -243,20 +239,15 @@ void VideoAbstract_QTver::showVideo(QImage qImage, int value)
 
 void VideoAbstract_QTver::drawAbstracts(QImage newImage, QString start, QString end, int count)
 {
-	//QImage newImage = qImg.copy();
-	SingleAbstractLayout*layout = new SingleAbstractLayout();
-	layout->pictureLabel->setPixmap(QPixmap::fromImage(newImage));
-	layout->textLabel1->setText(start);
-	layout->textLabel2->setText(end);
 	int row = 0, col = 0;
 	if(count % 2 == 1)
 		col = 1;
 	row = count / 2;
-	gLayout->addLayout(layout,row,col);
-	
-	int c = gLayout->count();
-	c++;
-	testInt++;
+	AbstractForm*form = new AbstractForm();
+	form->ui.image_label->setPixmap(QPixmap::fromImage(newImage));
+	form->ui.start_time_label->setText(start);
+	form->ui.end_time_label->setText(end);
+	gLayout->addWidget(form, row, col);
 }
 
 void VideoAbstract_QTver::updateProcessInfo(QString info)
