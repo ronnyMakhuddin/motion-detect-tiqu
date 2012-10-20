@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>600</height>
+    <width>1020</width>
+    <height>680</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -32,7 +32,7 @@
      <x>0</x>
      <y>300</y>
      <width>400</width>
-     <height>300</height>
+     <height>380</height>
     </rect>
    </property>
    <property name="font">
@@ -47,10 +47,10 @@
    <widget class="QPushButton" name="open_file_button">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>150</y>
-      <width>90</width>
-      <height>30</height>
+      <x>70</x>
+      <y>190</y>
+      <width>101</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="text">
@@ -60,10 +60,10 @@
    <widget class="QPushButton" name="setting_button">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>230</y>
-      <width>90</width>
-      <height>30</height>
+      <x>230</x>
+      <y>290</y>
+      <width>101</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="text">
@@ -73,10 +73,10 @@
    <widget class="QPushButton" name="analysis_button">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>150</y>
-      <width>90</width>
-      <height>30</height>
+      <x>230</x>
+      <y>190</y>
+      <width>101</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -89,9 +89,9 @@
    <widget class="QProgressBar" name="progress_bar">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>10</y>
-      <width>311</width>
+      <x>10</x>
+      <y>60</y>
+      <width>381</width>
       <height>30</height>
      </rect>
     </property>
@@ -111,20 +111,20 @@
    <widget class="QLabel" name="progress_label">
     <property name="geometry">
      <rect>
-      <x>5</x>
-      <y>13</y>
-      <width>70</width>
+      <x>260</x>
+      <y>10</y>
+      <width>100</width>
       <height>30</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>宋体</family>
-      <pointsize>11</pointsize>
+      <pointsize>9</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>分析进度:</string>
+     <string>耗时:555分22秒</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignJustify|Qt::AlignVCenter</set>
@@ -133,8 +133,8 @@
    <widget class="QPushButton" name="end_button">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>150</y>
+      <x>230</x>
+      <y>260</y>
       <width>90</width>
       <height>30</height>
      </rect>
@@ -146,10 +146,10 @@
    <widget class="QPushButton" name="search_button">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>230</y>
-      <width>90</width>
-      <height>30</height>
+      <x>70</x>
+      <y>290</y>
+      <width>101</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="text">
@@ -160,7 +160,7 @@
     <property name="geometry">
      <rect>
       <x>5</x>
-      <y>50</y>
+      <y>110</y>
       <width>390</width>
       <height>65</height>
      </rect>
@@ -182,17 +182,30 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'SimSun';&quot;&gt;正在分析第n个视频文件：xxx.avi，摘要数量：100，剩余n个视频文件。正在分析第n个视频文件：xxx.avi，摘要数量：100，剩余n个视频文件。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="show_button">
+   <widget class="QCheckBox" name="show_video_check_box">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>230</y>
-      <width>90</width>
+      <x>20</x>
+      <y>10</y>
+      <width>91</width>
       <height>30</height>
      </rect>
     </property>
     <property name="text">
-     <string>显示分析过程</string>
+     <string>显示分析视频</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="event_count_label">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>10</y>
+      <width>91</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>事件数量:9999</string>
     </property>
    </widget>
   </widget>
@@ -224,8 +237,8 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>400</x>
      <y>0</y>
-     <width>500</width>
-     <height>600</height>
+     <width>620</width>
+     <height>680</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -239,8 +252,8 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>0</x>
       <y>30</y>
-      <width>500</width>
-      <height>570</height>
+      <width>620</width>
+      <height>650</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -260,8 +273,8 @@ p, li { white-space: pre-wrap; }
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>481</width>
-       <height>568</height>
+       <width>601</width>
+       <height>648</height>
       </rect>
      </property>
     </widget>

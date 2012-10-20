@@ -2,6 +2,7 @@
 
 void VideoAnalyze::run()
 {
+	isContinue = true;
 	if(isRealTime)
 	{
 		realTimeAnalysis();
@@ -12,7 +13,8 @@ void VideoAnalyze::run()
 	{
 		this->singleAnalysis();
 	}
-	
+	isContinue = false;
+	sendChangeAnalyzeButtonText(tr("开始分析"));
 }
 
 void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime)
@@ -25,7 +27,7 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
     IplImage* pyr = cvCreateImage( cvSize((size.width & -2)/2, (size.height & -2)/2), 8, 1 );
     CvMemStorage *stor;
     CvSeq *cont;
- 
+
     //先进行数据的初始化
     if( !mhi || mhi->width != size.width || mhi->height != size.height )
     {
@@ -555,6 +557,7 @@ bool VideoAnalyze::initRealTime()
 	}
 	minArea = 1000;
 	maxArea = 1000000;
+	eventList.clear();
 	return true;
 }
 
@@ -575,6 +578,7 @@ bool VideoAnalyze::init()
 	getBaseFrame();
 	minArea = 1000;
 	maxArea = 1000000;
+	eventList.clear();
 	return true;
 }
 
@@ -612,7 +616,7 @@ VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 	maxEventNum = 0;
 	minEventNum = 10000000;
 	LIMIT = 100;
-	isContinue = true;
+	isContinue = false;
 	isShowVideo = false;
 	isSaveToFile = false;
 	isReadFromFile = false;

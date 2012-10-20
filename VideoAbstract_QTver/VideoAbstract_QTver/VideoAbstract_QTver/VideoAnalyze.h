@@ -66,5 +66,6 @@ signals:
 	void sendOpenFileFailed();    //文件打开失败
 	void sendDrawAbstracts(QImage,QString,QString,int);     //发送画摘要缩略图的信号
 	void sendProcessInfo(QString);                      //发送视频处理信息
+	void sendChangeAnalyzeButtonText(QString);
 };
 

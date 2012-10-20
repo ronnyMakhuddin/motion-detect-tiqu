@@ -33,95 +33,87 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
 //分析视频按钮
 void VideoAbstract_QTver::on_analysis_button_clicked()
 {
-	//清除摘要事件列表控件
+	if(!analyzeThread->isContinue)
+	{
+		//清除摘要事件列表控件
+		QLayoutItem* child;
+		while ((child = gLayout->takeAt(0)) != 0) 
+		{
+			((SingleAbstractLayout*)child)->destroyMySelf();
+			child->widget()->deleteLater();
+			delete child;
+		}
+		gLayout->update();
 	
-	QLayoutItem* child;
-	while ((child = gLayout->takeAt(0)) != 0) 
-	{
-		((SingleAbstractLayout*)child)->destroyMySelf();
-		child->widget()->deleteLater();
-		delete child;
-	}
-	gLayout->update();
-	
-    if(Globals::files.count()==1) //打开一个文件
-	{
-        QString filePath = tr("文件路径:") + Globals::files[0];
-		ui.progress_info->setText(filePath);
-		analyzeThread = new VideoAnalyze(this);
-		analyzeThread->filePath = Globals::files[0];
-		if(0==ui.show_button->text().compare(tr("显示分析过程")))
+		if(Globals::files.count()==1) //打开一个文件
 		{
-			analyzeThread->isShowVideo = false;
-		}else
-		{
-			analyzeThread->isShowVideo = true;
-		}
-		connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
-		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
-		connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
-		connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString,int)), this, SLOT(drawAbstracts(QImage,QString,QString,int)));
-		connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
+			QString filePath = tr("文件路径:") + Globals::files[0];
+			ui.progress_info->setText(filePath);
+			analyzeThread->filePath = Globals::files[0];
+			if(ui.show_video_check_box->isChecked())
+			{
+				analyzeThread->isShowVideo = true;
+			}else
+			{
+				analyzeThread->isShowVideo = false;
+			}
 
-		//判断分析文件是否存在
-		QString fileDir, fileName;
-		Globals::getFileDirFromQString(analyzeThread->filePath, fileDir);
-		Globals::getFileNameFromQString(analyzeThread->filePath, fileName);
-		fileDir = fileDir + tr("analyze\\");
-		QString analyzeFilePath = fileDir + fileName + tr(".txt");
-		QFile file(analyzeFilePath);
-		if(file.exists() && !QMessageBox::information(this, tr("请选择"), tr("存在分析文件，是否读入？"), tr("读入"), tr("不读入")))
-		{//存在就从文件读取摘要信息
-			analyzeThread->isReadFromFile = true;
-			FileOperation::readFromFile(analyzeFilePath, analyzeThread->jiange, analyzeThread->fps, analyzeThread->key_jiange, analyzeThread->eventList);
+			//判断分析文件是否存在
+			QString fileDir, fileName;
+			Globals::getFileDirFromQString(analyzeThread->filePath, fileDir);
+			Globals::getFileNameFromQString(analyzeThread->filePath, fileName);
+			fileDir = fileDir + tr("analyze\\");
+			QString analyzeFilePath = fileDir + fileName + tr(".txt");
+			QFile file(analyzeFilePath);
+			if(file.exists() && !QMessageBox::information(this, tr("请选择"), tr("存在分析文件，是否读入？"), tr("读入"), tr("不读入")))
+			{//存在就从文件读取摘要信息
+				analyzeThread->isReadFromFile = true;
+				FileOperation::readFromFile(analyzeFilePath, analyzeThread->jiange, analyzeThread->fps, analyzeThread->key_jiange, analyzeThread->eventList);
+				analyzeThread->start();
+			}else
+			{
+				analyzeThread->start();
+			}
+			ui.analysis_button->setText(tr("结束分析"));
+		}else if(Globals::files.count()>1)  //打开多个文件
+		{
+			analyzeThread->filePathList = Globals::files;
+			if(ui.show_video_check_box->isChecked())
+			{
+				analyzeThread->isShowVideo = true;
+			}else
+			{
+				analyzeThread->isShowVideo = false;
+			}
+
+			analyzeThread->isBatch = true;
+			analyzeThread->isIgnoreExistAnalyze = QMessageBox::information(this, tr("请选择"), tr("已经分析过的视频是否略过？"), tr("不略过"), tr("略过"));
+
 			analyzeThread->start();
-		}else
+			ui.analysis_button->setText(tr("结束分析"));
+			//batchAnalysis();
+		}else  //弹出对话框，提示请选择文件
 		{
-			analyzeThread->start();
+			QMessageBox::warning(this, tr("错误"), tr("请先选择视频文件！"));
 		}
-	}else if(Globals::files.count()>1)  //打开多个文件
+	}else
 	{
-		analyzeThread = new VideoAnalyze(this);
-		analyzeThread->filePathList = Globals::files;
-		if(0==ui.show_button->text().compare(tr("显示分析过程")))
-		{
-			analyzeThread->isShowVideo = false;
-		}else
-		{
-			analyzeThread->isShowVideo = true;
-		}
-
-		analyzeThread->isBatch = true;
-		analyzeThread->isIgnoreExistAnalyze = QMessageBox::information(this, tr("请选择"), tr("已经分析过的视频是否略过？"), tr("不略过"), tr("略过"));
-
-		connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
-		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
-		connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
-		connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString,int)), this, SLOT(drawAbstracts(QImage,QString,QString,int)));
-		connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
-
-		analyzeThread->start();
-
-		//batchAnalysis();
-	}else  //弹出对话框，提示请选择文件
-	{
-		QMessageBox::warning(this, tr("错误"), tr("请先选择视频文件！"));
+		analyzeThread->isContinue = false;
+		ui.analysis_button->setText(tr("开始分析"));
 	}
 }
 
-//是否显示视频按钮
-void VideoAbstract_QTver::on_show_button_clicked()
+//是否显示视频复选框
+void VideoAbstract_QTver::on_show_video_check_box_clicked()
 {
 	if(analyzeThread)
 	{
-		if(analyzeThread->isShowVideo)
-		{
-			analyzeThread->isShowVideo = false;
-			ui.show_button->setText(tr("显示分析过程"));
-		}else
+		if(ui.show_video_check_box->isChecked())
 		{
 			analyzeThread->isShowVideo = true;
-			ui.show_button->setText(tr("关闭分析过程"));
+		}else
+		{
+			analyzeThread->isShowVideo = false;
 		}
 	}
 }
@@ -150,18 +142,13 @@ void VideoAbstract_QTver::on_search_button_clicked()
 
 	analyzeThread = new VideoAnalyze(this);
 	analyzeThread->isRealTime = true;
-	if(0==ui.show_button->text().compare(tr("显示分析过程")))
-	{
-		analyzeThread->isShowVideo = false;
-	}else
+	if(ui.show_video_check_box->isChecked())
 	{
 		analyzeThread->isShowVideo = true;
+	}else
+	{
+		analyzeThread->isShowVideo = false;
 	}
-	connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
-	connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
-	connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
-	connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString,int)), this, SLOT(drawAbstracts(QImage,QString,QString,int)));
-	connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
 
 	analyzeThread->start();
 }
@@ -182,6 +169,14 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	ui.scrollAreaWidgetContents->setLayout(gLayout);
 
 	testInt = 0;
+
+	analyzeThread = new VideoAnalyze(this);
+	connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
+	connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
+	connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
+	connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString,int)), this, SLOT(drawAbstracts(QImage,QString,QString,int)));
+	connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
+	connect(analyzeThread, SIGNAL(sendChangeAnalyzeButtonText(QString)), this, SLOT(changeAnalyzeButton(QString)));
 }
 
 VideoAbstract_QTver::~VideoAbstract_QTver()
@@ -190,7 +185,7 @@ VideoAbstract_QTver::~VideoAbstract_QTver()
 }
 
 void VideoAbstract_QTver::resizeEvent(QResizeEvent*event)
-{
+{/*
 	{
 		//3个widget窗口的布局
 		QSize size = this->size();
@@ -236,6 +231,7 @@ void VideoAbstract_QTver::resizeEvent(QResizeEvent*event)
 		QSize size = ui.right_widget->size();
 		ui.scrollArea->resize(size.width(), size.height()-ui.label_2->height());
 	}
+*/
 }
 
 void VideoAbstract_QTver::showVideo(QImage qImage, int value)
@@ -278,6 +274,11 @@ void VideoAbstract_QTver::updateProcessBar(int value)
 	ui.progress_bar->setValue(value);
 }
 
+void VideoAbstract_QTver::changeAnalyzeButton(QString text)
+{
+	ui.analysis_button->setText(text);
+}
+
 void VideoAbstract_QTver::batchAnalysis()
 {
 	bool isIgnore = false;
@@ -293,12 +294,12 @@ void VideoAbstract_QTver::batchAnalysis()
 		}
 		analyzeThread = new VideoAnalyze(this);
 		analyzeThread->filePath = Globals::files[i];
-		if(0==ui.show_button->text().compare(tr("显示分析过程")))
-		{
-			analyzeThread->isShowVideo = false;
-		}else
+		if(ui.show_video_check_box->isChecked())
 		{
 			analyzeThread->isShowVideo = true;
+		}else
+		{
+			analyzeThread->isShowVideo = false;
 		}
 		connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
 		connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
