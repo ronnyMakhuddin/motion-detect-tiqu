@@ -12,6 +12,7 @@
 #include "setting_widget.h"
 #include "mylabel.h"
 #include "abstractform.h"
+#include "abstractplayer.h"
 
 
 class VideoAbstract_QTver : public QWidget

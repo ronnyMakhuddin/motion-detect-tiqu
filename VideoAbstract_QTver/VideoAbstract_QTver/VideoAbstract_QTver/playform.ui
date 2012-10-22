@@ -39,7 +39,7 @@
     <string>TextLabel</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="play_button">
    <property name="geometry">
     <rect>
      <x>160</x>

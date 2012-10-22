@@ -134,7 +134,8 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	gLayout->update();
 	*/
 
-	//analyzeThread = new VideoAnalyze(this);
+	/*
+	//时事摘要分析测试代码
 	analyzeThread->isRealTime = true;
 	if(ui.show_video_check_box->isChecked())
 	{
@@ -143,8 +144,13 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	{
 		analyzeThread->isShowVideo = false;
 	}
-
 	analyzeThread->start();
+	*/
+
+	AbstractPlayer* player = new AbstractPlayer();
+	//player->filePath = ;
+	player->init(tr("D:\\vs2010Projects\\VideoAbstract_QTver\\VideoAbstract_QTver\\testb.avi"));
+	player->show();
 }
 
 //设置按钮
