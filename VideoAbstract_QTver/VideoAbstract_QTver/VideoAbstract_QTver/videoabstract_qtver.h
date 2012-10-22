@@ -46,6 +46,7 @@ private:
 	Ui::VideoAbstract_QTverClass ui;
 	setting_widget*settingUI;
 	QGridLayout*gLayout;
+	AbstractPlayer* player;
 
 	int testInt;
 	//MyLabel* myLabel;

@@ -250,6 +250,7 @@ void VideoAnalyze::analyzeRealTimeVideo()
 					if(isShowVideo)
 					{
 						emit sendQImage(*qImg, value);
+						emit sendQImage2(*qImg);
 						msleep(10);
 					}else
 					{

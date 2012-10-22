@@ -146,11 +146,6 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	}
 	analyzeThread->start();
 	*/
-
-	AbstractPlayer* player = new AbstractPlayer();
-	//player->filePath = ;
-	player->init(tr("D:\\vs2010Projects\\VideoAbstract_QTver\\VideoAbstract_QTver\\testb.avi"));
-	player->show();
 }
 
 //ÉèÖÃ°´Å¥
@@ -173,12 +168,15 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	//myLabel = new MyLabel(this);
 
 	analyzeThread = new VideoAnalyze(this);
+	player = new AbstractPlayer();
+	player->show();
 	connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
 	connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
 	connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
 	connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString,int)), this, SLOT(drawAbstracts(QImage,QString,QString,int)));
 	connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
 	connect(analyzeThread, SIGNAL(sendChangeAnalyzeButtonText(QString)), this, SLOT(changeAnalyzeButton(QString)));
+	connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
 }
 
 VideoAbstract_QTver::~VideoAbstract_QTver()

@@ -27,6 +27,7 @@ public:
 	void init(QString filePath);
 private slots:
 	void on_play_button_clicked();
+	void showImage(QImage image);
 };
 
 #endif // ABSTRACTPLAYER_H

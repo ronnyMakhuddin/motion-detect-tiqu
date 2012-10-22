@@ -47,3 +47,9 @@ void AbstractPlayer::on_play_button_clicked()
 		}  
 	}
 }
+
+void AbstractPlayer::showImage(QImage image)
+{
+	QImage newImg = image.scaled(ui.image_label->width(), ui.image_label->height());
+	ui.image_label->setPixmap(QPixmap::fromImage(newImg));
+}

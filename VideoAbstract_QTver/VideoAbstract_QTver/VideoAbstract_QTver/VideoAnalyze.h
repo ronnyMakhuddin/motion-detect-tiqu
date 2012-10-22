@@ -67,5 +67,6 @@ signals:
 	void sendDrawAbstracts(QImage,QString,QString,int);     //发送画摘要缩略图的信号
 	void sendProcessInfo(QString);                      //发送视频处理信息
 	void sendChangeAnalyzeButtonText(QString);
+	void sendQImage2(QImage);
 };
 
