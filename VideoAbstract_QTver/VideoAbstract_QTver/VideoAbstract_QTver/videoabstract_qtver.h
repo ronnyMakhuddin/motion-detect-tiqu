@@ -21,6 +21,7 @@ class VideoAbstract_QTver : public QWidget
 
 public:
 	void batchAnalysis();   //处理多个视频
+	void startTimeCount();  //开始计时
 	VideoAbstract_QTver(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~VideoAbstract_QTver();
 
@@ -39,6 +40,9 @@ private slots:
 	void drawAbstracts(QImage,QString,QString,int);
 	void updateProcessInfo(QString);
 	void changeAnalyzeButton(QString);
+	void updateRunTime();        //更新分析时间
+	void endTimeCount();         //结束计时
+	void updateEventCount(int);     //更新事件数量
 
 public:
 	VideoAnalyze *analyzeThread;
@@ -49,6 +53,9 @@ private:
 	AbstractPlayer* player;
 
 	int testInt;
+
+	QTimer*timer;
+	int runSeconds;
 	//MyLabel* myLabel;
 };
 

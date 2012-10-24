@@ -11,7 +11,7 @@ class AbstractForm : public QDialog
 public:
 	AbstractForm();
 	~AbstractForm();
-
+	void destroyMySelf();
 public:
 	Ui::AbstrctForm ui;
 };

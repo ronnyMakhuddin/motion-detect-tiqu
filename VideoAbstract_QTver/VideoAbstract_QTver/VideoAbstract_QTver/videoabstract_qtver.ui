@@ -124,7 +124,7 @@
      </font>
     </property>
     <property name="text">
-     <string>耗时:555分22秒</string>
+     <string>耗时:0时0分0秒</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignJustify|Qt::AlignVCenter</set>
@@ -192,7 +192,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="text">
-     <string>事件数量:9999</string>
+     <string>事件数量:0</string>
     </property>
    </widget>
   </widget>

@@ -33,13 +33,14 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
 //分析视频按钮
 void VideoAbstract_QTver::on_analysis_button_clicked()
 {
+	startTimeCount();
 	if(!analyzeThread->isContinue)
 	{
 		//清除摘要事件列表控件
 		QLayoutItem* child;
 		while ((child = gLayout->takeAt(0)) != 0) 
 		{
-			((SingleAbstractLayout*)child)->destroyMySelf();
+			//((AbstractForm*)child)->destroyMySelf();
 			child->widget()->deleteLater();
 			delete child;
 		}
@@ -72,6 +73,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 				analyzeThread->start();
 			}else
 			{
+				analyzeThread->isReadFromFile = false;
 				analyzeThread->start();
 			}
 			ui.analysis_button->setText(tr("结束分析"));
@@ -162,21 +164,29 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	analyzeThread = 0;
 	gLayout = new QGridLayout();
 	ui.scrollAreaWidgetContents->setLayout(gLayout);
+	timer = new QTimer(0);
 
 	testInt = 0;
 	// 测试label点击事件代码
 	//myLabel = new MyLabel(this);
 
 	analyzeThread = new VideoAnalyze(this);
+	/*
 	player = new AbstractPlayer();
 	player->show();
+	connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
+	*/
+	
 	connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
 	connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
 	connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
 	connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString,int)), this, SLOT(drawAbstracts(QImage,QString,QString,int)));
 	connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
 	connect(analyzeThread, SIGNAL(sendChangeAnalyzeButtonText(QString)), this, SLOT(changeAnalyzeButton(QString)));
-	connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
+	connect(analyzeThread, SIGNAL(sendRunTime(QString)), this, SLOT(updateRunTime(QString)));
+	connect(analyzeThread, SIGNAL(sendEndTimeCount()), this, SLOT(endTimeCount()));
+	connect(analyzeThread, SIGNAL(sendEventCount(int)), this, SLOT(updateEventCount(int)));
+	
 }
 
 VideoAbstract_QTver::~VideoAbstract_QTver()
@@ -259,6 +269,16 @@ void VideoAbstract_QTver::updateProcessInfo(QString info)
 	ui.progress_info->setText(info);
 }
 
+void VideoAbstract_QTver::updateRunTime()
+{
+	this->runSeconds++;
+	int h = runSeconds / 3600;
+	int m = (runSeconds % 3600) / 60;
+	int s = (runSeconds % 60);
+	QString time = tr("耗时:") + QString::number(h, 10) + tr("时") + QString::number(m, 10) + tr("分") + QString::number(s, 10) + tr("秒");
+	ui.progress_label->setText(time);
+}
+
 void VideoAbstract_QTver::openFileFailed()
 {
 	QMessageBox::warning(this, tr("错误"), tr("视频文件损坏或格式不正确，无法打开！"));
@@ -272,6 +292,12 @@ void VideoAbstract_QTver::updateProcessBar(int value)
 void VideoAbstract_QTver::changeAnalyzeButton(QString text)
 {
 	ui.analysis_button->setText(text);
+}
+
+void VideoAbstract_QTver::updateEventCount(int num)
+{
+	QString str = tr("事件数量:") + QString::number(num, 10);
+	ui.event_count_label->setText(str);
 }
 
 void VideoAbstract_QTver::batchAnalysis()
@@ -322,5 +348,22 @@ void VideoAbstract_QTver::batchAnalysis()
 			;
 		}
 		
+	}
+}
+
+void VideoAbstract_QTver::startTimeCount()
+{
+	runSeconds = 0;
+	//timer = new QTimer(0);  
+	timer->setInterval(1000);  
+	connect(timer,SIGNAL(timeout()),this,SLOT(updateRunTime()));  
+	timer->start();
+}
+
+void VideoAbstract_QTver::endTimeCount()
+{
+	if(timer)
+	{
+		timer->stop();
 	}
 }

@@ -11,3 +11,11 @@ AbstractForm::~AbstractForm()
 {
 
 }
+
+void AbstractForm::destroyMySelf()
+{
+	ui.image_label->deleteLater();
+	ui.end_time_label->deleteLater();
+	ui.start_time_label->deleteLater();
+	ui.pushButton->deleteLater();
+}

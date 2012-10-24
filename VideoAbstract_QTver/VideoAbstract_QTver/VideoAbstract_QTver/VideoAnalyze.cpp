@@ -2,6 +2,7 @@
 
 void VideoAnalyze::run()
 {
+
 	isContinue = true;
 	if(isRealTime)
 	{
@@ -14,7 +15,9 @@ void VideoAnalyze::run()
 		this->singleAnalysis();
 	}
 	isContinue = false;
-	sendChangeAnalyzeButtonText(tr("开始分析"));
+	emit sendChangeAnalyzeButtonText(tr("开始分析"));
+	emit sendEndTimeCount();
+	emit sendEventCount(eventList.size());
 }
 
 void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime)
@@ -645,5 +648,9 @@ VideoAnalyze::VideoAnalyze(void)
 
 
 VideoAnalyze::~VideoAnalyze(void)
+{
+}
+
+void VideoAnalyze::updateOneSecond()
 {
 }

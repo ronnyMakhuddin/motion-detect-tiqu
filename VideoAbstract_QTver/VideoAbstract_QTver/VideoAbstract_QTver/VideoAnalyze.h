@@ -4,6 +4,7 @@
 #include <qthread.h>
 #include <qdir.h>
 #include <qtime>
+#include <QTimer>
 #include "EventNode.h"
 #include "EventNodeOperation.h"
 #include "Globals.h"
@@ -33,6 +34,8 @@ public:
 	bool isRealTime;    //是否实时分析
 	bool isIgnoreExistAnalyze;  //是否忽略已经分析过的视频
 	CvSize captureSize;    //视频分辨率大小
+
+	int runSeconds;     //运行时间
 private:
 	CvCapture *capture;
 	CvVideoWriter* videoWriter;
@@ -40,6 +43,7 @@ private:
     IplImage *frame;
 	IplImage *baseFrame;
     QImage *qImg;
+	QTimer *timer;
 public:
 	void analyzeVideo();   //视频分析
 	void analyzeRealTimeVideo(); //分析实时视频
@@ -68,5 +72,10 @@ signals:
 	void sendProcessInfo(QString);                      //发送视频处理信息
 	void sendChangeAnalyzeButtonText(QString);
 	void sendQImage2(QImage);
+	void sendRunTime(QString);   //发送运行时间
+	void sendEndTimeCount();     //发送结束计时新号
+	void sendEventCount(int num); //发送事件数量
+private slots:
+	void updateOneSecond();       //更新时间
 };
 
