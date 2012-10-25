@@ -9,11 +9,14 @@ class AbstractForm : public QDialog
 	Q_OBJECT
 
 public:
-	AbstractForm();
+	AbstractForm(int);
 	~AbstractForm();
 	void destroyMySelf();
 public:
 	Ui::AbstrctForm ui;
+	int index;
+private slots:
+	void on_play_button_clicked();
 };
 
 #endif // ABSTRACTFORM_H

@@ -121,9 +121,18 @@ void VideoAnalyze::singleAnalysis()
 	if(!isReadFromFile)
 	{
 		isSaveToFile = false;
+		QString fileDir, fileName, info;
+		Globals::getFileDirFromQString(filePath, fileDir);
+		Globals::getFileNameFromQString(filePath, fileName);
+		info = tr("正在分析视频:") + fileName;
+		emit sendProcessInfo(info);
 		this->analyzeVideo();
 		this->saveEventToFile();
+		info = tr("正在生成全摘要列表");
+		emit sendProcessInfo(info);
 		this->drawAbstracts();
+		info = tr("正在生成全摘要视频");
+		emit sendProcessInfo(info);
 		this->createAllEventVideo();
 	}else
 	{
@@ -369,6 +378,9 @@ void VideoAnalyze::createAllEventVideo()
 	CvFont font;
     cvInitFont(&font, CV_FONT_HERSHEY_SIMPLEX, 0.5, 0.5, 0.5, 1, CV_AA);
 	IplImage* allEventImage = cvCreateImage(captureSize, 8, 3);
+
+	emit sendProcessInfo(tr("调试1"));
+
 	//将视频分成part端，分别对没段进行合成保存
 	for(int i = 0; i < part; i++)
 	{
@@ -426,6 +438,7 @@ void VideoAnalyze::createAllEventVideo()
 			{
 				cvWriteFrame(videoWriter, allEventImage);
 			}
+			emit sendProcessInfo(tr("调试")+QString::number(frameCount, 10));
 			frameCount++;
 		}
 		//int time_diff = time.elapsed();
@@ -433,7 +446,6 @@ void VideoAnalyze::createAllEventVideo()
 		//tr_time_diff = tr("100个事件合成时间为:") + tr_time_diff;
 		//emit sendProcessInfo(tr_time_diff);
 	}
-
 	//记得释放空间
 	cvReleaseVideoWriter(&videoWriter);
 	cvReleaseImage(&allEventImage);

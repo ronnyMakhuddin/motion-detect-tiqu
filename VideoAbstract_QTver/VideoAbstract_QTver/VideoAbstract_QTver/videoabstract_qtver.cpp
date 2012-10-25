@@ -257,7 +257,7 @@ void VideoAbstract_QTver::drawAbstracts(QImage newImage, QString start, QString 
 	if(count % 2 == 1)
 		col = 1;
 	row = count / 2;
-	AbstractForm*form = new AbstractForm();
+	AbstractForm*form = new AbstractForm(count);
 	form->ui.image_label->setPixmap(QPixmap::fromImage(newImage));
 	form->ui.start_time_label->setText(start);
 	form->ui.end_time_label->setText(end);
