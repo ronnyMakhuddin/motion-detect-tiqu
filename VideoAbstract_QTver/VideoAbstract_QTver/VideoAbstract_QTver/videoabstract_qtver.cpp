@@ -302,6 +302,8 @@ void VideoAbstract_QTver::updateEventCount(int num)
 void VideoAbstract_QTver::playAbstract(int index)
 {
 	player->show();
+	player->thread->init(analyzeThread->filePath, analyzeThread->eventList[index], analyzeThread->jiange);
+	player->thread->start();
 	//connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
 	//disconnect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
 }

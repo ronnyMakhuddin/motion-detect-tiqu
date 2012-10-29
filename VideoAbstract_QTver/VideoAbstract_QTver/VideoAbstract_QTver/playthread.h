@@ -5,15 +5,18 @@
 #include <cv.h>
 #include <highgui.h>
 #include <qimage.h>
+#include "EventNode.h"
 
 class PlayThread : public QThread
 {
 	Q_OBJECT
 
 public:
-	bool init(QString,int,int,int);
+	bool init(QString,EventNode,int);
 	PlayThread(QObject *parent);
 	~PlayThread();
+signals:
+	void sendPlayImage(QImage);
 protected:
 	void run();
 private:
@@ -28,9 +31,8 @@ public:
 	CvSize captureSize;
 	int fps;
 	int jiange;
-	int startFrame;
-	int endFrame;
 	int frameCount;
+	EventNode node;
 };
 
 #endif // PLAYTHREAD_H

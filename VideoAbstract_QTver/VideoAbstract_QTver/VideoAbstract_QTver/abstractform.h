@@ -2,6 +2,7 @@
 #define ABSTRACTFORM_H
 
 #include <QDialog>
+#include "playthread.h"
 #include "ui_abstract.h"
 
 class AbstractForm : public QDialog

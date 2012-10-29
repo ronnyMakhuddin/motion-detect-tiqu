@@ -4,6 +4,8 @@ AbstractPlayer::AbstractPlayer()
 	: QDialog()
 {
 	ui.setupUi(this);
+	thread = new PlayThread(this);
+	connect(thread, SIGNAL(sendPlayImage(QImage)), this,SLOT(showImage(QImage)));
 }
 
 AbstractPlayer::~AbstractPlayer()
@@ -13,7 +15,7 @@ AbstractPlayer::~AbstractPlayer()
 
 void AbstractPlayer::init(QString filePath)
 {
-	thread = new PlayThread(0);
+	thread = new PlayThread(this);
 	this->filePath = filePath;
 	QByteArray ba = filePath.toLocal8Bit();
 	const char *file = ba.data();
@@ -31,22 +33,7 @@ void AbstractPlayer::init(QString filePath)
 
 void AbstractPlayer::on_play_button_clicked()
 {
-	while((frame = cvQueryFrame(capture)))
-	{
-		if (frame)  
-		{  
-			if (frame->origin == IPL_ORIGIN_TL)  
-			{  
-				cvCopy(frame,iplImg,0);  
-			}  
-			else  
-			{  
-				cvFlip(frame,iplImg,0);  
-			}  
-			cvCvtColor(iplImg,iplImg,CV_BGR2RGB);
-			ui.image_label->setPixmap(QPixmap::fromImage(*qImg));
-		}  
-	}
+	thread->start();
 }
 
 void AbstractPlayer::showImage(QImage image)
