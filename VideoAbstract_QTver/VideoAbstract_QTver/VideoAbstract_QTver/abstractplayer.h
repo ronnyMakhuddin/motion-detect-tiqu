@@ -5,6 +5,7 @@
 #include <cv.h>
 #include <highgui.h>
 #include "ui_playform.h"
+#include "playthread.h"
 
 class AbstractPlayer : public QDialog
 {
@@ -23,6 +24,8 @@ public:
     QImage *qImg;
 	CvSize captureSize;
 	int fps;
+
+	PlayThread*thread;
 public:
 	void init(QString filePath);
 private slots:

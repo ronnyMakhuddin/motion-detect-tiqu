@@ -145,7 +145,7 @@ void VideoAnalyze::singleAnalysis()
 		QString analyzeFilePath = fileDir + fileName + tr(".txt");
 		FileOperation::readFromFile(analyzeFilePath, jiange, fps, key_jiange, eventList);
 		this->drawAbstracts();
-		//this->createAllEventVideo();
+		//this->createAllEventVideo();//测试代码
 	}
 	release();
 }
@@ -362,6 +362,20 @@ void VideoAnalyze::analyzeVideo()
 
 void VideoAnalyze::createAllEventVideo()
 {
+	/*
+	            for(int i = 0; i < 19; i++)
+				{
+					frame = cvQueryFrame(capture);
+					emit sendProcessInfo(tr("调试")+QString::number(frame->height, 10));
+					msleep(200);
+				}
+				emit sendProcessInfo(tr("调试")+QString::number(1000, 10));
+				msleep(200);
+				cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, 0);
+				frame = cvQueryFrame(capture);
+				emit sendProcessInfo(tr("调试")+QString::number(frame->height, 10));
+				msleep(20000);
+				*/
 	QString videoPath, videoName;
 	Globals::getFileDirFromQString(filePath, videoPath);
 	Globals::getFileNameFromQString(filePath, videoName);
@@ -378,8 +392,6 @@ void VideoAnalyze::createAllEventVideo()
 	CvFont font;
     cvInitFont(&font, CV_FONT_HERSHEY_SIMPLEX, 0.5, 0.5, 0.5, 1, CV_AA);
 	IplImage* allEventImage = cvCreateImage(captureSize, 8, 3);
-
-	emit sendProcessInfo(tr("调试1"));
 
 	//将视频分成part端，分别对没段进行合成保存
 	for(int i = 0; i < part; i++)
@@ -406,12 +418,14 @@ void VideoAnalyze::createAllEventVideo()
 		*/
 		int frameCount = 0;   //记录帧偏移量
 		int endCount = 0;     //记录有几个节点已经完成
-		
+
 		while(endCount < r_index-l_index)
 		{
 			cvCopy(baseFrame, allEventImage);
+
 			for(int j = l_index; j < r_index; j++)
 			{
+				//emit sendProcessInfo(tr("调试")+QString::number(2, 10));
 				int frameNum = eventList[j].startFrame+frameCount*jiange;
 				if(frameCount == eventList[j].trackList.size())  //注意这里一定是“==”，如果是“>=”的话会使endCount重复多加几次，损失很多帧
 				{
@@ -423,8 +437,12 @@ void VideoAnalyze::createAllEventVideo()
 					continue;
 				}
 				CvRect rect = eventList[j].trackList[frameCount];
+				//emit sendProcessInfo(tr("调试")+QString::number(frameNum, 200));
+				//msleep(200);
 				cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
 				frame = cvQueryFrame(capture);
+				//emit sendProcessInfo(tr("调试")+QString::number(frame->height, 10));
+				//msleep(200);
 				//截取矩形图像合成
 				cvSetImageROI(frame, rect);
 				sprintf(eventNumber, "%d", j);
@@ -438,7 +456,7 @@ void VideoAnalyze::createAllEventVideo()
 			{
 				cvWriteFrame(videoWriter, allEventImage);
 			}
-			emit sendProcessInfo(tr("调试")+QString::number(frameCount, 10));
+			
 			frameCount++;
 		}
 		//int time_diff = time.elapsed();
@@ -494,7 +512,6 @@ void VideoAnalyze::drawAbstracts()
 {
 	for(int i = 0; i < 19; i++)
 	{
-		
 		frame = cvQueryFrame(capture);
 	}
 	int framePosition;
@@ -524,7 +541,7 @@ void VideoAnalyze::drawAbstracts()
 			QString startTime = tr("开始时间:") + Globals::getTimeFromFrameNum(node.startFrame, fps);
 			QString endTime = tr("结束时间:") + Globals::getTimeFromFrameNum(node.endFrame, fps);
 			emit sendDrawAbstracts(*qImg, startTime, endTime, i);
-			msleep(100);
+			msleep(10);
 		}
 	}
 	//发送信号画摘要事件缩略图

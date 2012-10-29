@@ -17,6 +17,8 @@ public:
 	int index;
 private slots:
 	void on_play_button_clicked();
+signals:
+	void sendAbstractPlay(int);
 };
 
 #endif // ABSTRACTFORM_H

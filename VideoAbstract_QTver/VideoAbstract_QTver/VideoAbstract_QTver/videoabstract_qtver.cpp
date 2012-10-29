@@ -163,6 +163,8 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	ui.setupUi(this);
 	analyzeThread = 0;
 	gLayout = new QGridLayout();
+	gLayout->setSpacing(1);
+	gLayout->setMargin(1);
 	ui.scrollAreaWidgetContents->setLayout(gLayout);
 	timer = new QTimer(0);
 
@@ -171,12 +173,6 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	//myLabel = new MyLabel(this);
 
 	analyzeThread = new VideoAnalyze(this);
-	/*
-	player = new AbstractPlayer();
-	player->show();
-	connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
-	*/
-	
 	connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), this, SLOT(showVideo(QImage,int)));
 	connect(analyzeThread, SIGNAL(sendOpenFileFailed()), this, SLOT(openFileFailed()));
 	connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
@@ -187,6 +183,8 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	connect(analyzeThread, SIGNAL(sendEndTimeCount()), this, SLOT(endTimeCount()));
 	connect(analyzeThread, SIGNAL(sendEventCount(int)), this, SLOT(updateEventCount(int)));
 	
+
+	player = new AbstractPlayer();   //播放器
 }
 
 VideoAbstract_QTver::~VideoAbstract_QTver()
@@ -258,6 +256,7 @@ void VideoAbstract_QTver::drawAbstracts(QImage newImage, QString start, QString 
 		col = 1;
 	row = count / 2;
 	AbstractForm*form = new AbstractForm(count);
+	connect(form, SIGNAL(sendAbstractPlay(int)), this, SLOT(playAbstract(int)));
 	form->ui.image_label->setPixmap(QPixmap::fromImage(newImage));
 	form->ui.start_time_label->setText(start);
 	form->ui.end_time_label->setText(end);
@@ -298,6 +297,13 @@ void VideoAbstract_QTver::updateEventCount(int num)
 {
 	QString str = tr("事件数量:") + QString::number(num, 10);
 	ui.event_count_label->setText(str);
+}
+
+void VideoAbstract_QTver::playAbstract(int index)
+{
+	player->show();
+	//connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
+	//disconnect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
 }
 
 void VideoAbstract_QTver::batchAnalysis()

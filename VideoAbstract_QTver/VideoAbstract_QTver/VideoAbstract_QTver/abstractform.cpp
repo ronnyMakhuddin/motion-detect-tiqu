@@ -23,5 +23,5 @@ void AbstractForm::destroyMySelf()
 
 void AbstractForm::on_play_button_clicked()
 {
-	
+	sendAbstractPlay(index);
 }

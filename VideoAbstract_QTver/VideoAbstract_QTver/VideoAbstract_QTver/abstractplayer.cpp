@@ -13,6 +13,7 @@ AbstractPlayer::~AbstractPlayer()
 
 void AbstractPlayer::init(QString filePath)
 {
+	thread = new PlayThread(0);
 	this->filePath = filePath;
 	QByteArray ba = filePath.toLocal8Bit();
 	const char *file = ba.data();

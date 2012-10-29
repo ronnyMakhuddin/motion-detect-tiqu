@@ -43,6 +43,7 @@ private slots:
 	void updateRunTime();        //更新分析时间
 	void endTimeCount();         //结束计时
 	void updateEventCount(int);     //更新事件数量
+	void playAbstract(int);       //播放选中的摘要事件
 
 public:
 	VideoAnalyze *analyzeThread;
