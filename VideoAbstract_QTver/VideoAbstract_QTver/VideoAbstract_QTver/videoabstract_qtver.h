@@ -8,7 +8,6 @@
 #include "ui_videoabstract_qtver.h"
 #include "Globals.h"
 #include "VideoAnalyze.h"
-#include "singleabstractlayout.h"
 #include "setting_widget.h"
 #include "mylabel.h"
 #include "abstractform.h"

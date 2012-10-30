@@ -148,6 +148,10 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	}
 	analyzeThread->start();
 	*/
+
+	//ª≠Õº≤‚ ‘
+	drawform*form = new drawform(0);
+	form->show();
 }
 
 //…Ë÷√∞¥≈•

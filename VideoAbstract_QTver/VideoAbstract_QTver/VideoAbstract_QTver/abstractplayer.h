@@ -6,6 +6,7 @@
 #include <highgui.h>
 #include "ui_playform.h"
 #include "playthread.h"
+#include "drawform.h"
 
 class AbstractPlayer : public QDialog
 {
