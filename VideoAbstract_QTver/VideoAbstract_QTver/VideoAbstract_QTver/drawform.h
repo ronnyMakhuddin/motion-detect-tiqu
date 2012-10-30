@@ -3,21 +3,35 @@
 
 #include <QDialog>
 #include <QMouseEvent>
+#include <QPainter>
 #include "ui_drawform.h"
 
-class drawform : public QDialog
+class DrawForm : public QDialog
 {
 	Q_OBJECT
 
 public:
-	drawform(QWidget *parent = 0);
-	~drawform();
+	DrawForm(QWidget *parent = 0);
+	~DrawForm();
 
 private:
 	Ui::drawform ui;
+	int state;
 private slots:
-	void label_mouse_press(QMouseEvent* ev);
 	void mousePressEvent(QMouseEvent* ev);
+	void mouseMoveEvent(QMouseEvent*ev);
+	void mouseReleaseEvent(QMouseEvent*ev);
+	void paintEvent(QPaintEvent*);
+public:
+
+	QPoint startP;
+	QPoint endP;
+	QImage img;
+
+	static int FREE;
+	static int PRESSED;
+	static int DRAGED;
+	static int RELEASEED;
 };
 
 #endif // DRAWFORM_H

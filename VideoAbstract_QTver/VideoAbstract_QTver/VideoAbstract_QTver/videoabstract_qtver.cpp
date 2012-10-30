@@ -150,7 +150,7 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	*/
 
 	//»­Í¼²âÊÔ
-	drawform*form = new drawform(0);
+	DrawForm*form = new DrawForm(0);
 	form->show();
 }
 
