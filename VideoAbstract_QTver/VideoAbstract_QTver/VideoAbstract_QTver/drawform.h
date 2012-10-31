@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QMouseEvent>
 #include <QPainter>
+#include <cv.h>
+#include <highgui.h>
 #include "ui_drawform.h"
 
 class DrawForm : public QDialog
@@ -11,6 +13,7 @@ class DrawForm : public QDialog
 	Q_OBJECT
 
 public:
+	void setBaseFrame(IplImage*);
 	DrawForm(QWidget *parent = 0);
 	~DrawForm();
 
@@ -32,6 +35,9 @@ public:
 	static int PRESSED;
 	static int DRAGED;
 	static int RELEASEED;
+
+	IplImage*baseFrame;
+	QImage *qImg;
 };
 
 #endif // DRAWFORM_H

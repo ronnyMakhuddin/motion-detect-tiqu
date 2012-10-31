@@ -44,6 +44,8 @@ private slots:
 	void updateEventCount(int);     //更新事件数量
 	void playAbstract(int);       //播放选中的摘要事件
 
+	void get_enter_checkbox_state(bool);
+
 public:
 	VideoAnalyze *analyzeThread;
 private:
@@ -51,6 +53,7 @@ private:
 	setting_widget*settingUI;
 	QGridLayout*gLayout;
 	AbstractPlayer* player;
+	DrawForm* drawForm;
 
 	int testInt;
 

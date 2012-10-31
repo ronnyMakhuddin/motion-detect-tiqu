@@ -148,16 +148,11 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	}
 	analyzeThread->start();
 	*/
-
-	//画图测试
-	DrawForm*form = new DrawForm(0);
-	form->show();
 }
 
 //设置按钮
 void VideoAbstract_QTver::on_setting_button_clicked()
 {
-	settingUI = new setting_widget(0);
 	settingUI->show();
 }
 
@@ -187,8 +182,12 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	connect(analyzeThread, SIGNAL(sendEndTimeCount()), this, SLOT(endTimeCount()));
 	connect(analyzeThread, SIGNAL(sendEventCount(int)), this, SLOT(updateEventCount(int)));
 	
-
 	player = new AbstractPlayer();   //播放器
+
+	drawForm = new DrawForm(this);       //画线界面
+
+	settingUI = new setting_widget(0);   //设置界面
+	connect(settingUI, SIGNAL(send_enter_checkbox_state(bool)), this, SLOT(get_enter_checkbox_state(bool)));
 }
 
 VideoAbstract_QTver::~VideoAbstract_QTver()
@@ -310,6 +309,22 @@ void VideoAbstract_QTver::playAbstract(int index)
 	player->thread->start();
 	//connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
 	//disconnect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
+}
+
+void VideoAbstract_QTver::get_enter_checkbox_state(bool isCheck)
+{
+	if(isCheck)
+	{
+		if(analyzeThread->filePath.size()<=1)
+		{
+			QMessageBox::warning(this, tr("错误"), tr("请先选择视频文件！"));
+			return;
+		}
+		drawForm->setBaseFrame(analyzeThread->getFrameByNumber(5));
+		drawForm->show();
+	}else
+	{
+	}
 }
 
 void VideoAbstract_QTver::batchAnalysis()

@@ -411,7 +411,7 @@
      <string>绊线</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_4">
+   <widget class="QCheckBox" name="enter_checkbox">
     <property name="geometry">
      <rect>
       <x>170</x>

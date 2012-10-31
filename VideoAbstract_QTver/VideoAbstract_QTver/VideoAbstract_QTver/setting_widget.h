@@ -13,6 +13,10 @@ public:
 
 private:
 	Ui::setting_ui ui;
+private slots:
+    void on_enter_checkbox_clicked();
+signals:
+	void send_enter_checkbox_state(bool);
 };
 
 #endif // SETTING_WIDGET_H

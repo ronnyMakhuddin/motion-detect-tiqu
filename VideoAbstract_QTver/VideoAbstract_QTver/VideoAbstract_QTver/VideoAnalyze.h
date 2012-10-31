@@ -59,6 +59,7 @@ public:
 	bool init();                 //初始化一些关键变量
 	void release();            //初始化一些Image
 	bool initRealTime();         //初始化实时视频
+	IplImage* getFrameByNumber(int);  //通过位置获取帧
 	VideoAnalyze(void);
 	VideoAnalyze(QObject* parent);
 	~VideoAnalyze(void);

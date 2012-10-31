@@ -10,6 +10,8 @@ DrawForm::DrawForm(QWidget *parent)
 {
 	ui.setupUi(this);
 	state = 0;
+	baseFrame = 0;
+	qImg = 0;
 	ui.label->setText("aaa");
 	connect(ui.label, SIGNAL(mousePressEvent(QMouseEvent*)), this, SLOT(label_mouse_press(QMouseEvent*)));
 }
@@ -57,4 +59,20 @@ void DrawForm::mouseReleaseEvent(QMouseEvent*ev)
 
 void DrawForm::paintEvent(QPaintEvent*)
 {
+}
+
+void DrawForm::setBaseFrame(IplImage* frame)
+{
+	if(baseFrame)
+	{
+		cvReleaseImage(&baseFrame);
+		baseFrame = 0;
+	}
+	//baseFrame = cvCreateImage(cvSize(frame->width, frame->height), frame->depth, frame->nChannels);
+	//baseFrame = frame;
+	qImg = new QImage(QSize(frame->width,frame->height), QImage::Format_RGB888);
+	baseFrame = cvCreateImageHeader(cvSize(frame->width, frame->height),  8, 3);
+	baseFrame->imageData = (char*)qImg->bits();
+	cvCopy(frame, baseFrame);
+	ui.label->setPixmap(QPixmap::fromImage(*qImg));
 }

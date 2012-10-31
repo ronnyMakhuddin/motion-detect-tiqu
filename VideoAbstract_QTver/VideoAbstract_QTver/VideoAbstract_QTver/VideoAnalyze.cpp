@@ -509,11 +509,11 @@ void VideoAnalyze::getKeyFrameJiange()
 }
 
 void VideoAnalyze::drawAbstracts()
-{
+{/*
 	for(int i = 0; i < 19; i++)
 	{
 		frame = cvQueryFrame(capture);
-	}
+	}*/
 	int framePosition;
 	if(isSaveToFile)
 	{
@@ -571,6 +571,26 @@ void VideoAnalyze::getBaseFrame()
 		}
 	}
 	cvReleaseCapture(&tempCapture);
+}
+
+IplImage* VideoAnalyze::getFrameByNumber(int pos)
+{
+	QByteArray ba = filePath.toLocal8Bit();
+	const char *file = ba.data();
+	CvCapture*tempCapture = cvCaptureFromAVI(file);
+	captureSize = cvSize((int)cvGetCaptureProperty(tempCapture, CV_CAP_PROP_FRAME_WIDTH),
+			(int)cvGetCaptureProperty(tempCapture, CV_CAP_PROP_FRAME_HEIGHT));
+	IplImage* tempFrame = 0;
+	int frameNum = 0;
+	frame = cvQueryFrame(tempCapture);
+	if(tempCapture)
+	{
+		cvSetCaptureProperty(tempCapture, CV_CAP_PROP_POS_FRAMES, pos);
+		//frame = cvQueryFrame(tempCapture);
+		frameNum = (int)cvGetCaptureProperty(tempCapture, CV_CAP_PROP_POS_FRAMES);
+	}
+	cvReleaseCapture(&tempCapture);
+	return tempFrame;
 }
 
 bool VideoAnalyze::initRealTime()
