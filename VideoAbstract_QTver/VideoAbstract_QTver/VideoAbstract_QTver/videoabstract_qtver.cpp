@@ -320,7 +320,7 @@ void VideoAbstract_QTver::get_enter_checkbox_state(bool isCheck)
 			QMessageBox::warning(this, tr("错误"), tr("请先选择视频文件！"));
 			return;
 		}
-		drawForm->setBaseFrame(analyzeThread->getFrameByNumber(5));
+		drawForm->setBaseFrame(analyzeThread->getFrameByNumber(18));
 		drawForm->show();
 	}else
 	{

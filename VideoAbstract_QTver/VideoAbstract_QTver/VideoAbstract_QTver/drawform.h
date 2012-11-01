@@ -37,6 +37,7 @@ public:
 	static int RELEASEED;
 
 	IplImage*baseFrame;
+	IplImage*showFrame;
 	QImage *qImg;
 };
 

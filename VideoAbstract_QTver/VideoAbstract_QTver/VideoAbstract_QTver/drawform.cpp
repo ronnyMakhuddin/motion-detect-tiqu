@@ -11,6 +11,7 @@ DrawForm::DrawForm(QWidget *parent)
 	ui.setupUi(this);
 	state = 0;
 	baseFrame = 0;
+	showFrame = 0;
 	qImg = 0;
 	ui.label->setText("aaa");
 	connect(ui.label, SIGNAL(mousePressEvent(QMouseEvent*)), this, SLOT(label_mouse_press(QMouseEvent*)));
@@ -48,7 +49,10 @@ void DrawForm::mouseMoveEvent(QMouseEvent*ev)
 		//ui.label->setPixmap(QPixmap::fromImage(img));
 		QString text = tr("startP:") + QString::number(startP.x()) + tr(",") + QString::number(startP.y());
 		text = text + tr("   ") +tr("endP:") + QString::number(endP.x()) + tr(",") + QString::number(endP.y());
-		ui.label->setText(text);
+		//ui.label->setText(text);
+		cvCopy(baseFrame, showFrame);
+		cvLine(showFrame, cvPoint(startP.x(),startP.y()), cvPoint(endP.x(),endP.y()), cvScalar(255,0,0));
+		ui.label->setPixmap(QPixmap::fromImage(*qImg));
 	}
 }
 
@@ -68,11 +72,16 @@ void DrawForm::setBaseFrame(IplImage* frame)
 		cvReleaseImage(&baseFrame);
 		baseFrame = 0;
 	}
-	//baseFrame = cvCreateImage(cvSize(frame->width, frame->height), frame->depth, frame->nChannels);
-	//baseFrame = frame;
-	qImg = new QImage(QSize(frame->width,frame->height), QImage::Format_RGB888);
-	baseFrame = cvCreateImageHeader(cvSize(frame->width, frame->height),  8, 3);
-	baseFrame->imageData = (char*)qImg->bits();
+	if(showFrame)
+	{
+		cvReleaseImage(&showFrame);
+		showFrame = 0;
+	}
+	baseFrame = cvCreateImage(cvSize(frame->width, frame->height), frame->depth, frame->nChannels);
 	cvCopy(frame, baseFrame);
+	qImg = new QImage(QSize(frame->width,frame->height), QImage::Format_RGB888);
+	showFrame = cvCreateImageHeader(cvSize(frame->width, frame->height),  8, 3);
+	showFrame->imageData = (char*)qImg->bits();
+	cvCopy(baseFrame, showFrame);
 	ui.label->setPixmap(QPixmap::fromImage(*qImg));
 }

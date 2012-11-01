@@ -580,14 +580,13 @@ IplImage* VideoAnalyze::getFrameByNumber(int pos)
 	CvCapture*tempCapture = cvCaptureFromAVI(file);
 	captureSize = cvSize((int)cvGetCaptureProperty(tempCapture, CV_CAP_PROP_FRAME_WIDTH),
 			(int)cvGetCaptureProperty(tempCapture, CV_CAP_PROP_FRAME_HEIGHT));
-	IplImage* tempFrame = 0;
+	IplImage* tempFrame = cvCreateImage(captureSize, 8, 3);
 	int frameNum = 0;
-	frame = cvQueryFrame(tempCapture);
 	if(tempCapture)
 	{
 		cvSetCaptureProperty(tempCapture, CV_CAP_PROP_POS_FRAMES, pos);
-		//frame = cvQueryFrame(tempCapture);
-		frameNum = (int)cvGetCaptureProperty(tempCapture, CV_CAP_PROP_POS_FRAMES);
+		frame = cvQueryFrame(tempCapture);
+		cvCopy(frame, tempFrame);
 	}
 	cvReleaseCapture(&tempCapture);
 	return tempFrame;
