@@ -25,6 +25,8 @@ private slots:
 	void mouseMoveEvent(QMouseEvent*ev);
 	void mouseReleaseEvent(QMouseEvent*ev);
 	void paintEvent(QPaintEvent*);
+private:
+	void resizeEvent(QResizeEvent*);
 public:
 
 	QPoint startP;

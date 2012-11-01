@@ -22,6 +22,11 @@ DrawForm::~DrawForm()
 
 }
 
+void DrawForm::resizeEvent(QResizeEvent*ev)
+{
+
+}
+
 void DrawForm::mousePressEvent(QMouseEvent* ev)
 {
 	//判断是不是在label范围内
@@ -67,6 +72,7 @@ void DrawForm::paintEvent(QPaintEvent*)
 
 void DrawForm::setBaseFrame(IplImage* frame)
 {
+	
 	if(baseFrame)
 	{
 		cvReleaseImage(&baseFrame);
