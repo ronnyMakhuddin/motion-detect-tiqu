@@ -84,7 +84,16 @@ void DrawForm::setBaseFrame(IplImage* frame)
 		showFrame = 0;
 	}
 	baseFrame = cvCreateImage(cvSize(frame->width, frame->height), frame->depth, frame->nChannels);
-	cvCopy(frame, baseFrame);
+	ui.label->resize(frame->width, frame->height);
+	if (frame->origin == IPL_ORIGIN_TL)  
+	{  
+		cvCopy(frame,baseFrame,0);  
+	}  
+	else  
+	{  
+		cvFlip(frame,baseFrame,0);  
+	}  
+	cvCvtColor(baseFrame,baseFrame,CV_BGR2RGB);
 	qImg = new QImage(QSize(frame->width,frame->height), QImage::Format_RGB888);
 	showFrame = cvCreateImageHeader(cvSize(frame->width, frame->height),  8, 3);
 	showFrame->imageData = (char*)qImg->bits();

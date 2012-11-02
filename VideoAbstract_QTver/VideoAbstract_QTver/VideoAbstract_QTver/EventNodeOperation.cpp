@@ -92,7 +92,7 @@ void EventNodeOperation::eventFilter(vector<EventNode> &eventList, int fps)
 	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
 	{
 		
-		if( (*iter).endFrame - (*iter).startFrame < fps*2 )  //2秒存在就记为事件
+		if( ((*iter).endFrame - (*iter).startFrame < fps*2) || ((*iter).startFrame < 17))  //2秒存在就记为事件,另外这里要开始帧大于17是因为如果小于17的话opencv无法定位，所以过滤掉
 			iter = eventList.erase(iter);
 		else
 			iter++ ;
