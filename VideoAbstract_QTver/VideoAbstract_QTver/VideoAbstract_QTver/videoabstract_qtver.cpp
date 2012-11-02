@@ -307,6 +307,8 @@ void VideoAbstract_QTver::playAbstract(int index)
 	player->show();
 	player->thread->init(analyzeThread->filePath, analyzeThread->eventList[index], analyzeThread->jiange);
 	player->thread->start();
+	player->thread->isPlaying = true;
+	player->ui.play_button->setText(tr("ÔÝÍ£"));
 	//connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
 	//disconnect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
 }

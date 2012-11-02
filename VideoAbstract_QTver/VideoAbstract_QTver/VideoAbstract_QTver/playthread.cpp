@@ -3,7 +3,8 @@
 PlayThread::PlayThread(QObject *parent=0)
 	: QThread(parent)
 {
-
+	isPlaying = false;
+	pos = 0;
 }
 
 PlayThread::~PlayThread()
@@ -13,12 +14,13 @@ PlayThread::~PlayThread()
 
 void PlayThread::run()
 {
+	
 	int trackIndex = 0;
 	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node.startFrame);
-	for(int i = node.startFrame; i < node.endFrame; i++)
+	for(pos = node.startFrame; pos < node.endFrame; pos++)
 	{
 		frame = cvQueryFrame(capture);
-		trackIndex = (i-node.startFrame) / jiange;
+		trackIndex = (pos-node.startFrame) / jiange;
 		Rect r = node.trackList[trackIndex];
 		cvRectangle(frame, cvPoint(r.x, r.y), cvPoint(r.x+r.width, r.y+r.height), cvScalar(255, 0, 0));
 		if (frame->origin == IPL_ORIGIN_TL)  
@@ -28,11 +30,54 @@ void PlayThread::run()
 		else  
 		{  
 			cvFlip(frame,iplImg,0);  
-		}  
+		}
 		cvCvtColor(iplImg,iplImg,CV_BGR2RGB);
 		emit sendPlayImage(*qImg);
+		emit sendSliderValue(pos);
 		msleep(20);
 	}
+	
+	/*
+	//下面分状态来进行
+	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node.startFrame);
+	pos = node.startFrame;
+	int trackIndex = 0;
+	while(true)
+	{
+		if(isPlaying)
+		{
+			frame = cvQueryFrame(capture);
+			if(pos >= node.endFrame)
+			{
+				cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node.startFrame);
+				frame = cvQueryFrame(capture);
+				pos = node.startFrame;
+			}
+			trackIndex = (pos-node.startFrame) / jiange;
+			Rect r = node.trackList[trackIndex];
+			cvRectangle(frame, cvPoint(r.x, r.y), cvPoint(r.x+r.width, r.y+r.height), cvScalar(255, 0, 0));
+			if (frame->origin == IPL_ORIGIN_TL)  
+			{  
+				cvCopy(frame,iplImg,0);  
+			}  
+			else  
+			{  
+				cvFlip(frame,iplImg,0);  
+			}  
+			cvCvtColor(iplImg,iplImg,CV_BGR2RGB);
+			emit sendPlayImage(*qImg);
+			emit sendSliderValue(pos);
+			msleep(20);
+			pos++;
+			if(pos == node.endFrame)
+			{
+				isPlaying = false;
+			}
+		}else
+		{
+
+		}
+	}*/
 }
 
 bool PlayThread::init(QString filePath, EventNode node, int jiange)
@@ -52,5 +97,6 @@ bool PlayThread::init(QString filePath, EventNode node, int jiange)
 	qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
 	iplImg = cvCreateImageHeader(captureSize,  8, 3);
 	iplImg->imageData = (char*)qImg->bits();
+	emit sendSliderRange(node.startFrame, node.endFrame-1);
 	return true;
 }

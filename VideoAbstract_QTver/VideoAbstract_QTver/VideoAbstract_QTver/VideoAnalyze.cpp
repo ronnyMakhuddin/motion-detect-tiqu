@@ -362,20 +362,6 @@ void VideoAnalyze::analyzeVideo()
 
 void VideoAnalyze::createAllEventVideo()
 {
-	/*
-	            for(int i = 0; i < 19; i++)
-				{
-					frame = cvQueryFrame(capture);
-					emit sendProcessInfo(tr("ต๗สิ")+QString::number(frame->height, 10));
-					msleep(200);
-				}
-				emit sendProcessInfo(tr("ต๗สิ")+QString::number(1000, 10));
-				msleep(200);
-				cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, 0);
-				frame = cvQueryFrame(capture);
-				emit sendProcessInfo(tr("ต๗สิ")+QString::number(frame->height, 10));
-				msleep(20000);
-				*/
 	QString videoPath, videoName;
 	Globals::getFileDirFromQString(filePath, videoPath);
 	Globals::getFileNameFromQString(filePath, videoName);

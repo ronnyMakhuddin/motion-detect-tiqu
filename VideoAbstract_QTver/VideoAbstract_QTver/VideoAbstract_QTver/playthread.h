@@ -17,6 +17,8 @@ public:
 	~PlayThread();
 signals:
 	void sendPlayImage(QImage);
+	void sendSliderRange(int,int);
+	void sendSliderValue(int);
 protected:
 	void run();
 private:
@@ -33,6 +35,8 @@ public:
 	int jiange;
 	int frameCount;
 	EventNode node;
+	bool isPlaying;
+	int pos;
 };
 
 #endif // PLAYTHREAD_H

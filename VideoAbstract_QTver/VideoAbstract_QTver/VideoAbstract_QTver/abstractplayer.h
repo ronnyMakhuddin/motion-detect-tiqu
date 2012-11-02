@@ -32,6 +32,9 @@ public:
 private slots:
 	void on_play_button_clicked();
 	void showImage(QImage image);
+	void getSliderMoved(int);
+	void setSliderValue(int value);
+	void setSliderRange(int min, int max);
 };
 
 #endif // ABSTRACTPLAYER_H
