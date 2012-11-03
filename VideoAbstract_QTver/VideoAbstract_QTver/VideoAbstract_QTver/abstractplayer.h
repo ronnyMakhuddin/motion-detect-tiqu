@@ -36,6 +36,7 @@ private slots:
 	void setSliderValue(int value);
 	void setSliderRange(int min, int max);
 	void getThreadEnd();
+	void getLoopCheckBoxStateChange(int);
 };
 
 #endif // ABSTRACTPLAYER_H

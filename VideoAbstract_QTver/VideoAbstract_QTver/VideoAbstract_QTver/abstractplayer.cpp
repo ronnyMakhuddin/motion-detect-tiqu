@@ -10,7 +10,8 @@ AbstractPlayer::AbstractPlayer()
 	connect(thread, SIGNAL(sendSliderValue(int)), this, SLOT(setSliderValue(int)));
 	connect(thread, SIGNAL(threadEnd()), this, SLOT(getThreadEnd()));
 
-	connect(ui.play_slider, SIGNAL(valueChanged(int)), this, SLOT(getSliderMoved(int)));
+	connect(ui.play_slider, SIGNAL(sliderMoved(int)), this, SLOT(getSliderMoved(int)));
+	connect(ui.loop_checkbox, SIGNAL(stateChanged (int)), this, SLOT(getLoopCheckBoxStateChange(int)));
 	//sliderMoved ( int value )只有在选中并且移动的时候才触发
 	//valueChanged ( int value )在播放的时候改变value也会触发，不用鼠标选中
 }
@@ -60,8 +61,7 @@ void AbstractPlayer::showImage(QImage image)
 
 void AbstractPlayer::getSliderMoved(int value)
 {
-	value++;
-	value--;
+	thread->getFrameByPos(value);
 }
 
 void AbstractPlayer::setSliderValue(int value)
@@ -81,4 +81,9 @@ void AbstractPlayer::getThreadEnd()
 	//重置进度条和pos
 	ui.play_slider->setValue(thread->node.startFrame);
 	thread->pos = thread->node.startFrame;
+}
+
+void AbstractPlayer::getLoopCheckBoxStateChange(int state)
+{
+	thread->isLoop = ui.loop_checkbox->isChecked();
 }

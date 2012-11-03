@@ -5,6 +5,7 @@ PlayThread::PlayThread(QObject *parent=0)
 {
 	isPlaying = false;
 	pos = 0;
+	isLoop = false;
 }
 
 PlayThread::~PlayThread()
@@ -17,8 +18,19 @@ void PlayThread::run()
 	
 	int trackIndex = 0;
 	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, pos);
-	for(; pos < node.endFrame && isPlaying; pos++)
+	for(; isPlaying; pos++)
 	{
+		if(pos >= node.endFrame)
+		{
+			if(isLoop)
+			{
+				pos = node.startFrame;
+				cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, pos);
+			}else
+			{
+				break;
+			}
+		}
 		frame = cvQueryFrame(capture);
 		trackIndex = (pos-node.startFrame) / jiange;
 		Rect r = node.trackList[trackIndex];
@@ -102,4 +114,24 @@ bool PlayThread::init(QString filePath, EventNode node, int jiange)
 	iplImg->imageData = (char*)qImg->bits();
 	emit sendSliderRange(node.startFrame, node.endFrame-1);
 	return true;
+}
+
+void PlayThread::getFrameByPos(int value)
+{
+	pos = value;
+	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, pos);
+	frame = cvQueryFrame(capture);
+	int trackIndex = (pos-node.startFrame) / jiange;
+	Rect r = node.trackList[trackIndex];
+	cvRectangle(frame, cvPoint(r.x, r.y), cvPoint(r.x+r.width, r.y+r.height), cvScalar(255, 0, 0));
+	if (frame->origin == IPL_ORIGIN_TL)  
+	{  
+		cvCopy(frame,iplImg,0);  
+	}  
+	else  
+	{  
+		cvFlip(frame,iplImg,0);  
+	}
+	cvCvtColor(iplImg,iplImg,CV_BGR2RGB);
+	emit sendPlayImage(*qImg);
 }

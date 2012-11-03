@@ -52,7 +52,7 @@
     <string>播放</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox">
+  <widget class="QCheckBox" name="loop_checkbox">
    <property name="geometry">
     <rect>
      <x>330</x>

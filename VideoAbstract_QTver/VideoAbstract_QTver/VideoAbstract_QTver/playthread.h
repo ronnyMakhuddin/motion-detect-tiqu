@@ -13,6 +13,7 @@ class PlayThread : public QThread
 
 public:
 	bool init(QString,EventNode,int);
+	void getFrameByPos(int);
 	PlayThread(QObject *parent);
 	~PlayThread();
 signals:
@@ -37,6 +38,7 @@ public:
 	int frameCount;
 	EventNode node;
 	bool isPlaying;
+	bool isLoop;
 	int pos;
 };
 
