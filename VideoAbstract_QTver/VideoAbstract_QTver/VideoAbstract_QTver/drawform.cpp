@@ -34,7 +34,7 @@ void DrawForm::mousePressEvent(QMouseEvent* ev)
 	int y = ev->y();
 	if(x >= ui.label->x() && x <= ui.label->x()+ui.label->width() &&
 		y >= ui.label->y() && y <= ui.label->y()+ui.label->height())
-	{
+	{ 
 		state = PRESSED;
 		startP.setX(x);
 		startP.setY(y);
