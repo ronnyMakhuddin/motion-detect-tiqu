@@ -35,6 +35,7 @@ private slots:
 	void getSliderMoved(int);
 	void setSliderValue(int value);
 	void setSliderRange(int min, int max);
+	void getThreadEnd();
 };
 
 #endif // ABSTRACTPLAYER_H

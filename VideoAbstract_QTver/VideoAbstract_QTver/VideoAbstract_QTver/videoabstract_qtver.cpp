@@ -306,6 +306,7 @@ void VideoAbstract_QTver::playAbstract(int index)
 {
 	player->show();
 	player->thread->init(analyzeThread->filePath, analyzeThread->eventList[index], analyzeThread->jiange);
+	player->thread->pos = analyzeThread->eventList[index].startFrame;
 	player->thread->start();
 	player->thread->isPlaying = true;
 	player->ui.play_button->setText(tr("ÔÝÍ£"));

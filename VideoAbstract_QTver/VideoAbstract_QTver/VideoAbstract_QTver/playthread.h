@@ -19,6 +19,7 @@ signals:
 	void sendPlayImage(QImage);
 	void sendSliderRange(int,int);
 	void sendSliderValue(int);
+	void threadEnd();   //播放完毕后发送此消息，让按钮状态改变
 protected:
 	void run();
 private:

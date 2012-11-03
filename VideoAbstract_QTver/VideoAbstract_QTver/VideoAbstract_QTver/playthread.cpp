@@ -16,8 +16,8 @@ void PlayThread::run()
 {
 	
 	int trackIndex = 0;
-	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node.startFrame);
-	for(pos = node.startFrame; pos < node.endFrame; pos++)
+	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, pos);
+	for(; pos < node.endFrame && isPlaying; pos++)
 	{
 		frame = cvQueryFrame(capture);
 		trackIndex = (pos-node.startFrame) / jiange;
@@ -36,7 +36,10 @@ void PlayThread::run()
 		emit sendSliderValue(pos);
 		msleep(20);
 	}
-	
+	if(isPlaying)
+	{
+		emit threadEnd();
+	}
 	/*
 	//下面分状态来进行
 	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node.startFrame);

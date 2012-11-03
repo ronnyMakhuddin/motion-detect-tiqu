@@ -8,6 +8,7 @@ AbstractPlayer::AbstractPlayer()
 	connect(thread, SIGNAL(sendPlayImage(QImage)), this,SLOT(showImage(QImage)));
 	connect(thread, SIGNAL(sendSliderRange(int,int)), this, SLOT(setSliderRange(int,int)));
 	connect(thread, SIGNAL(sendSliderValue(int)), this, SLOT(setSliderValue(int)));
+	connect(thread, SIGNAL(threadEnd()), this, SLOT(getThreadEnd()));
 
 	connect(ui.play_slider, SIGNAL(valueChanged(int)), this, SLOT(getSliderMoved(int)));
 	//sliderMoved ( int value )只有在选中并且移动的时候才触发
@@ -43,6 +44,7 @@ void AbstractPlayer::on_play_button_clicked()
 	{
 		thread->isPlaying = true;
 		ui.play_button->setText(tr("暂停"));
+		thread->start();
 	}else
 	{
 		thread->isPlaying = false;
@@ -70,4 +72,13 @@ void AbstractPlayer::setSliderValue(int value)
 void AbstractPlayer::setSliderRange(int min, int max)
 {
 	ui.play_slider->setRange(min, max);
+}
+
+void AbstractPlayer::getThreadEnd()
+{
+	thread->isPlaying = false;
+	ui.play_button->setText(tr("开始"));
+	//重置进度条和pos
+	ui.play_slider->setValue(thread->node.startFrame);
+	thread->pos = thread->node.startFrame;
 }
