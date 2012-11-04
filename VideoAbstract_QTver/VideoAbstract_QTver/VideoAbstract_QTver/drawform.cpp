@@ -111,5 +111,10 @@ void DrawForm::setBaseFrame(IplImage* frame)
 		ui.groupBox->move(ui.ok_button->width()*2+3*jianju, y);
 	}else
 	{
+		jianju = ui.ok_button->width();
+		int bianyuan = (this->width()-3*ui.ok_button->width()-2*jianju)/2;
+		ui.ok_button->move(bianyuan, y);
+		ui.clear_button->move(bianyuan+ui.ok_button->width()+jianju, y);
+		ui.groupBox->move(bianyuan+ui.ok_button->width()*2+jianju*2, y);
 	}
 }
