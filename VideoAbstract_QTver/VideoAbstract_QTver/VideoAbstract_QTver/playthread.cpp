@@ -104,7 +104,7 @@ bool PlayThread::init(QString filePath, EventNode node, int jiange)
 	capture = cvCaptureFromAVI(file);
 	if(!capture)
 		return false;
-	this->jiange = jiange;
+	this->jiange = jiange; 
 	captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
 			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
 	fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
