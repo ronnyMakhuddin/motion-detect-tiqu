@@ -13,8 +13,8 @@ DrawForm::DrawForm(QWidget *parent)
 	baseFrame = 0;
 	showFrame = 0;
 	qImg = 0;
-	ui.label->setText("aaa");
-	connect(ui.label, SIGNAL(mousePressEvent(QMouseEvent*)), this, SLOT(label_mouse_press(QMouseEvent*)));
+	ui.image_label->setText("aaa");
+	connect(ui.image_label, SIGNAL(mousePressEvent(QMouseEvent*)), this, SLOT(label_mouse_press(QMouseEvent*)));
 }
 
 DrawForm::~DrawForm()
@@ -32,8 +32,8 @@ void DrawForm::mousePressEvent(QMouseEvent* ev)
 	//判断是不是在label范围内
 	int x = ev->x();
 	int y = ev->y();
-	if(x >= ui.label->x() && x <= ui.label->x()+ui.label->width() &&
-		y >= ui.label->y() && y <= ui.label->y()+ui.label->height())
+	if(x >= ui.image_label->x() && x <= ui.image_label->x()+ui.image_label->width() &&
+		y >= ui.image_label->y() && y <= ui.image_label->y()+ui.image_label->height())
 	{ 
 		state = PRESSED;
 		startP.setX(x);
@@ -57,7 +57,7 @@ void DrawForm::mouseMoveEvent(QMouseEvent*ev)
 		//ui.label->setText(text);
 		cvCopy(baseFrame, showFrame);
 		cvLine(showFrame, cvPoint(startP.x(),startP.y()), cvPoint(endP.x(),endP.y()), cvScalar(255,0,0));
-		ui.label->setPixmap(QPixmap::fromImage(*qImg));
+		ui.image_label->setPixmap(QPixmap::fromImage(*qImg));
 	}
 }
 
@@ -84,7 +84,7 @@ void DrawForm::setBaseFrame(IplImage* frame)
 		showFrame = 0;
 	}
 	baseFrame = cvCreateImage(cvSize(frame->width, frame->height), frame->depth, frame->nChannels);
-	ui.label->resize(frame->width, frame->height);
+	ui.image_label->resize(frame->width, frame->height);
 	if (frame->origin == IPL_ORIGIN_TL)  
 	{  
 		cvCopy(frame,baseFrame,0);  
@@ -98,5 +98,18 @@ void DrawForm::setBaseFrame(IplImage* frame)
 	showFrame = cvCreateImageHeader(cvSize(frame->width, frame->height),  8, 3);
 	showFrame->imageData = (char*)qImg->bits();
 	cvCopy(baseFrame, showFrame);
-	ui.label->setPixmap(QPixmap::fromImage(*qImg));
+	ui.image_label->setPixmap(QPixmap::fromImage(*qImg));
+
+	//重置控件大小
+	this->resize(baseFrame->width, baseFrame->height+100);
+	int jianju = (this->width()-3*ui.ok_button->width())/4;
+	int y = ui.image_label->height()+12;
+	if(jianju <= ui.ok_button->width())
+	{
+		ui.ok_button->move(jianju, y);
+		ui.clear_button->move(ui.ok_button->width()+2*jianju, y);
+		ui.groupBox->move(ui.ok_button->width()*2+3*jianju, y);
+	}else
+	{
+	}
 }
