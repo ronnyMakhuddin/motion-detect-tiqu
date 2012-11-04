@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>350</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>drawform</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="image_label">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -26,18 +26,70 @@
     <string>TextLabel</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="ok_button">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>40</x>
      <y>310</y>
      <width>75</width>
-     <height>23</height>
+     <height>75</height>
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>确定</string>
    </property>
+  </widget>
+  <widget class="QPushButton" name="clear_button">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>310</y>
+     <width>75</width>
+     <height>75</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>清除</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>310</y>
+     <width>75</width>
+     <height>75</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QRadioButton" name="line_radiobutton">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>15</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>直线</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rect_radiobutton">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>45</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>矩形</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
