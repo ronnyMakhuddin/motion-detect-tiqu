@@ -52,47 +52,6 @@ void PlayThread::run()
 	{
 		emit threadEnd();
 	}
-	/*
-	//下面分状态来进行
-	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node.startFrame);
-	pos = node.startFrame;
-	int trackIndex = 0;
-	while(true)
-	{
-		if(isPlaying)
-		{
-			frame = cvQueryFrame(capture);
-			if(pos >= node.endFrame)
-			{
-				cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node.startFrame);
-				frame = cvQueryFrame(capture);
-				pos = node.startFrame;
-			}
-			trackIndex = (pos-node.startFrame) / jiange;
-			Rect r = node.trackList[trackIndex];
-			cvRectangle(frame, cvPoint(r.x, r.y), cvPoint(r.x+r.width, r.y+r.height), cvScalar(255, 0, 0));
-			if (frame->origin == IPL_ORIGIN_TL)  
-			{  
-				cvCopy(frame,iplImg,0);  
-			}  
-			else  
-			{  
-				cvFlip(frame,iplImg,0);  
-			}  
-			cvCvtColor(iplImg,iplImg,CV_BGR2RGB);
-			emit sendPlayImage(*qImg);
-			emit sendSliderValue(pos);
-			msleep(20);
-			pos++;
-			if(pos == node.endFrame)
-			{
-				isPlaying = false;
-			}
-		}else
-		{
-
-		}
-	}*/
 }
 
 bool PlayThread::init(QString filePath, EventNode node, int jiange)
