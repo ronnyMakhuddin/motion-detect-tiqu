@@ -191,10 +191,12 @@ void VideoAnalyze::realTimeAnalysis()
 	//初始化摄像头视频
 	initRealTime();
 	analyzeRealTimeVideo();
-	filePath = tr("D:\\vs2010Projects\\VideoAbstract_QTver\\VideoAbstract_QTver\\videowrite.avi"); //必须在写入文本文件之前保存
+	filePath = tr("videowrite.avi"); //必须在写入文本文件之前保存
+	//emit sendProcessInfo(tr("开始写入文件"));
 	this->saveEventToFile();
 	release();
 	init();
+	//emit sendProcessInfo(tr("开始生成所有摘要视频"));
 	this->createAllEventVideo();
 	release();
 }
@@ -475,6 +477,8 @@ void VideoAnalyze::saveEventToFile()
 		QByteArray ba = newFilePath.toLocal8Bit();
 		char* newFilePath_char = ba.data();
 		FileOperation::writeToFile(newFilePath_char, jiange, fps, key_jiange, eventList);
+		//emit sendProcessInfo(newFilePath_char);
+		msleep(1000);
 	}
 }
 
@@ -650,11 +654,22 @@ void VideoAnalyze::release()
 	}
 }
 
+void VideoAnalyze::getSettingData(int zoom,int width,int height,int min_area,int max_area,int jiange,int fps,int max_event_num)
+{
+	this->minArea = min_area;
+	this->maxArea = max_area;
+	this->jiange = jiange;
+	this->LIMIT = max_event_num;
+
+	//fps = data.fps;
+	//int zoom = data.zoom;
+}
+
 VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 {
 	fps = 0;
 	minArea = 1000;
-	maxArea = 60000;
+	maxArea = 100000;
 	jiange = 2;
 	key_jiange = 0;
 	maxEventNum = 0;

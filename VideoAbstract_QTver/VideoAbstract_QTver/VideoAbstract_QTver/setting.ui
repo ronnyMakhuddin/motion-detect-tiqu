@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>766</width>
-    <height>467</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="font">
@@ -22,34 +22,34 @@
   <widget class="QPushButton" name="ok_pushbutton">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>410</y>
-     <width>101</width>
+     <x>30</x>
+     <y>380</y>
+     <width>71</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>确   定</string>
+    <string>确 定</string>
    </property>
   </widget>
   <widget class="QPushButton" name="cancel_pushbutton">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>410</y>
-     <width>91</width>
+     <x>150</x>
+     <y>380</y>
+     <width>71</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>取   消</string>
+    <string>取 消</string>
    </property>
   </widget>
   <widget class="QPushButton" name="default_pushbutton">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>410</y>
+     <x>270</x>
+     <y>380</y>
      <width>91</width>
      <height>31</height>
     </rect>
@@ -176,51 +176,51 @@
      <rect>
       <x>10</x>
       <y>130</y>
-      <width>81</width>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>目标最小宽</string>
+     <string>目标最小面积</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="min_width_lineedit">
+   <widget class="QLineEdit" name="min_area_lineedit">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>110</x>
       <y>130</y>
-      <width>61</width>
+      <width>71</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>50</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>190</x>
       <y>130</y>
-      <width>81</width>
+      <width>101</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>目标最小高</string>
+     <string>目标最大面积</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="min_height_lineedit">
+   <widget class="QLineEdit" name="max_area_lineedit">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>290</x>
       <y>130</y>
-      <width>61</width>
+      <width>71</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>50</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
@@ -259,7 +259,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>2</string>
+     <string/>
     </property>
    </widget>
   </widget>
@@ -278,7 +278,7 @@
     </font>
    </property>
    <property name="title">
-    <string>摘要视频</string>
+    <string>全摘要视频</string>
    </property>
    <widget class="QLabel" name="label_7">
     <property name="geometry">
@@ -370,7 +370,7 @@
      <string>最小</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="min_area_lineedit">
+   <widget class="QLineEdit" name="min_area_lineedit1">
     <property name="geometry">
      <rect>
       <x>70</x>
@@ -396,7 +396,7 @@
      <string>最大</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="max_area_lineedit">
+   <widget class="QLineEdit" name="max_area_lineedit1">
     <property name="geometry">
      <rect>
       <x>70</x>

@@ -9,6 +9,7 @@
 #include "EventNodeOperation.h"
 #include "Globals.h"
 #include "FileOperation.h"
+#include "setting_widget.h"
 
 class VideoAnalyze:public QThread
 {
@@ -78,5 +79,6 @@ signals:
 	void sendEventCount(int num); //发送事件数量
 private slots:
 	void updateOneSecond();       //更新时间
+	void getSettingData(int,int,int,int,int,int,int,int); //获取设置信息
 };
 

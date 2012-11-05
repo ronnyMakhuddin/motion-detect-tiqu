@@ -136,7 +136,7 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	gLayout->update();
 	*/
 
-	/*
+	
 	//时事摘要分析测试代码
 	analyzeThread->isRealTime = true;
 	if(ui.show_video_check_box->isChecked())
@@ -146,13 +146,15 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	{
 		analyzeThread->isShowVideo = false;
 	}
+	analyzeThread->isSaveToFile = true;
 	analyzeThread->start();
-	*/
+	
 }
 
 //设置按钮
 void VideoAbstract_QTver::on_setting_button_clicked()
 {
+	settingUI->readData();
 	settingUI->show();
 }
 
@@ -188,6 +190,7 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 
 	settingUI = new setting_widget(0);   //设置界面
 	connect(settingUI, SIGNAL(send_enter_checkbox_state(bool)), this, SLOT(get_enter_checkbox_state(bool)));
+	connect(settingUI, SIGNAL(send_data(int,int,int,int,int,int,int,int)), analyzeThread, SLOT(getSettingData(int,int,int,int,int,int,int,int)));
 }
 
 VideoAbstract_QTver::~VideoAbstract_QTver()
