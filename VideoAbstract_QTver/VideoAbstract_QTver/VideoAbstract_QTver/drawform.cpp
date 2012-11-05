@@ -13,7 +13,17 @@ DrawForm::DrawForm(QWidget *parent)
 	baseFrame = 0;
 	showFrame = 0;
 	qImg = 0;
-	ui.image_label->setText("aaa");
+	currentLineP1.setX(-1);
+	currentLineP1.setY(-1);
+	currentLineP2.setX(-1);
+	currentLineP2.setY(-1);
+	currentRectP1.setX(-1);
+	currentRectP1.setY(-1);
+	currentRectP2.setX(-1);
+	currentRectP2.setY(-1);
+
+	ui.line_radiobutton->setChecked(true);
+	ui.clear_button->setToolTip(tr("aaaaaaa"));
 	connect(ui.image_label, SIGNAL(mousePressEvent(QMouseEvent*)), this, SLOT(label_mouse_press(QMouseEvent*)));
 }
 
@@ -48,16 +58,44 @@ void DrawForm::mouseMoveEvent(QMouseEvent*ev)
 		state = DRAGED;
 		int x = ev->x();
 		int y = ev->y();
+		//边界判断
+		if(x >= ui.image_label->width())
+		{
+			x = ui.image_label->width()-1;
+		}else if(x < 0)
+		{
+			x = 0;
+		}
+
+		if(y >= ui.image_label->height())
+		{
+			y = ui.image_label->height()-1;
+		}else if(y < 0)
+		{
+			y = 0;
+		}
 		endP.setX(x);
 		endP.setY(y);
-		//img.load(tr("windowIcon.png"));
-		//ui.label->setPixmap(QPixmap::fromImage(img));
-		QString text = tr("startP:") + QString::number(startP.x()) + tr(",") + QString::number(startP.y());
-		text = text + tr("   ") +tr("endP:") + QString::number(endP.x()) + tr(",") + QString::number(endP.y());
-		//ui.label->setText(text);
-		cvCopy(baseFrame, showFrame);
-		cvLine(showFrame, cvPoint(startP.x(),startP.y()), cvPoint(endP.x(),endP.y()), cvScalar(255,0,0));
-		ui.image_label->setPixmap(QPixmap::fromImage(*qImg));
+		
+		if(ui.line_radiobutton->isChecked())
+		{//直线
+			//QString text = tr("startP:") + QString::number(startP.x()) + tr(",") + QString::number(startP.y());
+			//text = text + tr("   ") +tr("endP:") + QString::number(endP.x()) + tr(",") + QString::number(endP.y());
+			//ui.label->setText(text);
+			currentLineP1.setX(startP.x());
+			currentLineP1.setY(startP.y());
+			currentLineP2.setX(endP.x());
+			currentLineP2.setY(endP.y());
+		}else
+		{//矩形
+			currentRectP1.setX(startP.x());
+			currentRectP1.setY(startP.y());
+			currentRectP2.setX(endP.x());
+			currentRectP2.setY(endP.y());
+		}
+
+		//画图代码
+		reDrawFunction();
 	}
 }
 
@@ -66,13 +104,47 @@ void DrawForm::mouseReleaseEvent(QMouseEvent*ev)
 	state = FREE;
 }
 
+void DrawForm::on_clear_button_clicked()
+{
+	currentLineP1.setX(-1);
+	currentLineP1.setY(-1);
+	currentLineP2.setX(-1);
+	currentLineP2.setY(-1);
+	currentRectP1.setX(-1);
+	currentRectP1.setY(-1);
+	currentRectP2.setX(-1);
+	currentRectP2.setY(-1);
+	reDrawFunction();
+}
+
+void DrawForm::on_ok_button_clicked()
+{
+	//发送信息给分析类进行事件筛选
+	this->setShown(false);
+}
+
+void DrawForm::reDrawFunction()
+{
+	cvCopy(baseFrame, showFrame);
+	if(currentLineP1.x()!=-1)
+	{
+		//cvLine(showFrame, cvPoint(currentLineP1.x(),currentLineP1.y()), cvPoint(currentLineP2.x(),currentLineP2.y()), cvScalar(255,0,0));
+		drawArrow(showFrame,cvPoint(currentLineP1.x(),currentLineP1.y()), cvPoint(currentLineP2.x(),currentLineP2.y()), 17, 15, Scalar(255,0,0), 1, 4);
+	}
+
+	if(currentRectP1.x()!=-1)
+	{
+		cvRectangle(showFrame, cvPoint(currentRectP1.x(),currentRectP1.y()), cvPoint(currentRectP2.x(),currentRectP2.y()), cvScalar(0,0,255));
+	}
+	ui.image_label->setPixmap(QPixmap::fromImage(*qImg));
+}
+
 void DrawForm::paintEvent(QPaintEvent*)
 {
 }
 
 void DrawForm::setBaseFrame(IplImage* frame)
 {
-	
 	if(baseFrame)
 	{
 		cvReleaseImage(&baseFrame);
@@ -117,4 +189,21 @@ void DrawForm::setBaseFrame(IplImage* frame)
 		ui.clear_button->move(bianyuan+ui.ok_button->width()+jianju, y);
 		ui.groupBox->move(bianyuan+ui.ok_button->width()*2+jianju*2, y);
 	}
+}
+
+void DrawForm::drawArrow(IplImage*& img, Point pStart, Point pEnd, int len, int alpha,             
+	Scalar& color, int thickness, int lineType)
+{    
+	const double PI = 3.1415926;    
+	Point arrow;    
+	//计算 θ 角
+	double angle = atan2((double)(pStart.y - pEnd.y), (double)(pStart.x - pEnd.x));  
+	cvLine(img, pStart, pEnd, color, thickness, lineType);   
+	//计算箭角边的另一端的端点位置（上面的还是下面的要看箭头的指向，也就是pStart和pEnd的位置） 
+	arrow.x = pEnd.x + len * cos(angle + PI * alpha / 180);     
+	arrow.y = pEnd.y + len * sin(angle + PI * alpha / 180);  
+	cvLine(img, pEnd, arrow, color, thickness, lineType);   
+	arrow.x = pEnd.x + len * cos(angle - PI * alpha / 180);     
+	arrow.y = pEnd.y + len * sin(angle - PI * alpha / 180);    
+	cvLine(img, pEnd, arrow, color, thickness, lineType);
 }
