@@ -50,7 +50,7 @@ void VideoAnalyze::run()
 		this->singleAnalysis();
 	}
 	isContinue = false;
-	emit sendChangeAnalyzeButtonText(tr("¿ªÊ¼·ÖÎö"));
+	emit sendAnalyzeButtonState(0);
 	emit sendEndTimeCount();
 	emit sendEventCount(eventList.size());
 }

@@ -38,7 +38,8 @@ private slots:
 	void updateProcessBar(int);
 	void drawAbstracts(QImage,QString,QString,int);
 	void updateProcessInfo(QString);
-	void changeAnalyzeButton(QString);
+	void changeAnalyzeButton(QString);  //分析按钮文字
+	void changeAnalyzeButtonState(int);       //分析按钮状态
 	void updateRunTime();        //更新分析时间
 	void endTimeCount();         //结束计时
 	void updateEventCount(int);     //更新事件数量

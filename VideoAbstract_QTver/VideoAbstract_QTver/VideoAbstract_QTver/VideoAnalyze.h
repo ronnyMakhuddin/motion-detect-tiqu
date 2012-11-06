@@ -80,7 +80,8 @@ signals:
 	void sendOpenFileFailed();    //文件打开失败
 	void sendDrawAbstracts(QImage,QString,QString,int);     //发送画摘要缩略图的信号
 	void sendProcessInfo(QString);                      //发送视频处理信息
-	void sendChangeAnalyzeButtonText(QString);
+	void sendChangeAnalyzeButtonText(QString);  //改变分析按钮的文字
+	void sendAnalyzeButtonState(int);            //改变分析按钮状态
 	void sendQImage2(QImage);
 	void sendRunTime(QString);   //发送运行时间
 	void sendEndTimeCount();     //发送结束计时新号

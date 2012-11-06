@@ -76,7 +76,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 				analyzeThread->isReadFromFile = false;
 				analyzeThread->start();
 			}
-			ui.analysis_button->setText(tr("结束分析"));
+			this->changeAnalyzeButtonState(1);
 		}else if(Globals::files.count()>1)  //打开多个文件
 		{
 			analyzeThread->filePathList = Globals::files;
@@ -92,7 +92,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 			analyzeThread->isIgnoreExistAnalyze = QMessageBox::information(this, tr("请选择"), tr("已经分析过的视频是否略过？"), tr("不略过"), tr("略过"));
 
 			analyzeThread->start();
-			ui.analysis_button->setText(tr("结束分析"));
+			this->changeAnalyzeButtonState(1);
 			//batchAnalysis();
 		}else  //弹出对话框，提示请选择文件
 		{
@@ -101,7 +101,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 	}else
 	{
 		analyzeThread->isContinue = false;
-		ui.analysis_button->setText(tr("开始分析"));
+		this->changeAnalyzeButtonState(0);
 	}
 }
 
@@ -138,6 +138,7 @@ void VideoAbstract_QTver::on_search_button_clicked()
 
 	
 	//时事摘要分析测试代码
+	/*
 	analyzeThread->isRealTime = true;
 	if(ui.show_video_check_box->isChecked())
 	{
@@ -148,7 +149,16 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	}
 	analyzeThread->isSaveToFile = true;
 	analyzeThread->start();
+	*/
 	
+	//摘要检索代码
+	if(analyzeThread->filePath.size()<=1)
+	{
+		QMessageBox::warning(this, tr("错误"), tr("请先选择视频文件！"));
+		return;
+	}
+	drawForm->setBaseFrame(analyzeThread->getFrameByNumber(18));
+	drawForm->show();
 }
 
 //设置按钮
@@ -179,7 +189,8 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	connect(analyzeThread, SIGNAL(sendProcessBarValue(int)), this, SLOT(updateProcessBar(int)));
 	connect(analyzeThread, SIGNAL(sendDrawAbstracts(QImage,QString,QString,int)), this, SLOT(drawAbstracts(QImage,QString,QString,int)));
 	connect(analyzeThread, SIGNAL(sendProcessInfo(QString)), this, SLOT(updateProcessInfo(QString)));
-	connect(analyzeThread, SIGNAL(sendChangeAnalyzeButtonText(QString)), this, SLOT(changeAnalyzeButton(QString)));
+	//connect(analyzeThread, SIGNAL(sendChangeAnalyzeButtonText(QString)), this, SLOT(changeAnalyzeButton(QString)));
+	connect(analyzeThread, SIGNAL(sendAnalyzeButtonState(int)), this, SLOT(changeAnalyzeButtonState(int)));
 	connect(analyzeThread, SIGNAL(sendRunTime(QString)), this, SLOT(updateRunTime(QString)));
 	connect(analyzeThread, SIGNAL(sendEndTimeCount()), this, SLOT(endTimeCount()));
 	connect(analyzeThread, SIGNAL(sendEventCount(int)), this, SLOT(updateEventCount(int)));
@@ -311,6 +322,23 @@ void VideoAbstract_QTver::updateProcessBar(int value)
 void VideoAbstract_QTver::changeAnalyzeButton(QString text)
 {
 	ui.analysis_button->setText(text);
+}
+
+void VideoAbstract_QTver::changeAnalyzeButtonState(int state)
+{
+	if(state == 0)
+	{
+		QIcon icon;
+		icon.addFile(QString::fromUtf8(":/VideoAbstract_QTver/Resources/startanalyze.png"), QSize(), QIcon::Normal, QIcon::Off);
+		ui.analysis_button->setIcon(icon);
+		ui.analysis_button->setIconSize(QSize(90, 90));
+	}else
+	{
+		QIcon icon;
+		icon.addFile(QString::fromUtf8(":/VideoAbstract_QTver/Resources/stopanalyze.png"), QSize(), QIcon::Normal, QIcon::Off);
+		ui.analysis_button->setIcon(icon);
+		ui.analysis_button->setIconSize(QSize(90, 90));
+	}
 }
 
 void VideoAbstract_QTver::updateEventCount(int num)
