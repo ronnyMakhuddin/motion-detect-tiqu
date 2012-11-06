@@ -9,6 +9,14 @@ void VideoAnalyze::run()
 		//第一步：删除原界面中的摘要事件
 		emit sendRemoveAllAbstracts();
 		//第二步：遍历所有摘要，对摘要进行筛选（可能要新建一个空间存储筛选的摘要）
+		isSaveToFile = true;
+		QString fileDir, fileName;
+		Globals::getFileDirFromQString(filePath, fileDir);
+		Globals::getFileNameFromQString(filePath, fileName);
+		fileDir = fileDir + tr("analyze\\");
+		QString analyzeFilePath = fileDir + fileName + tr(".txt");
+		FileOperation::readFromFile(analyzeFilePath, jiange, fps, key_jiange, eventList);
+
 		EventNodeOperation::selectAbstractEvent(eventList, lineP1, lineP2, rectP1, rectP2);
 		//第三步：重画摘要
 		if(!capture)
