@@ -49,6 +49,40 @@ bool EventNodeOperation::isTheSame(Rect r1, Rect r2)
 	return false;
 }
 
+bool EventNodeOperation::isTheSameDirect(Point lineP1, Point lineP2, Point eventP1, Point eventP2)  //判断是否按方向运动
+{
+	Point a(lineP2.x-lineP1.x, lineP2.y-lineP1.y);
+	Point b(eventP2.x-eventP1.x, eventP2.y-eventP1.y);
+	float ab = a.x*b.x + a.y*b.y;
+	float a_ = sqrt(float(a.x*a.x+a.y*a.y));
+	float b_ = sqrt(float(b.x*b.x+b.y*b.y));
+	float cos = ab/(a_*b_);
+	float angel = acos(cos)*180/3.14159;
+	if(angel > 0 && angel < 45)
+		return true;
+	return false;
+}
+
+bool EventNodeOperation::isEnterRect(Rect r1, Rect r2)  //判断是否入侵r1为划定的矩形，r2为事件矩形
+{
+	if((r1.x+r1.width)<r2.x || r1.x>(r2.x+r2.width) || (r1.y+r1.height)<r2.y || r1.y>(r2.y+r2.height))
+	{
+
+	}else
+	{
+		int xLength[] = {r1.x, r1.x+r1.width, r2.x, r2.x+r2.width};
+		int yHeight[] = {r1.y, r1.y+r1.height, r2.y, r2.y+r2.height};
+		double mianji = findLength(xLength) * findLength(yHeight);
+		double mianji1 = r1.width*r1.height;
+		double mianji2 = r2.width*r2.height;
+		if((mianji/mianji1 > 0.5) || (mianji/mianji2 > 0.5))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 EventNode EventNodeOperation::insertEventNode(vector<EventNode> &eventList, Rect r, int frameNum)
 {
 	EventNode insert;
@@ -96,6 +130,45 @@ void EventNodeOperation::eventFilter(vector<EventNode> &eventList, int fps)
 			iter = eventList.erase(iter);
 		else
 			iter++ ;
+	}
+}
+
+void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point lineP1, Point lineP2, Point rectP1, Point rectP2)
+{
+	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
+	{
+		EventNode node = *iter;
+		bool isDirect = true;
+		bool isEnter = true;
+		if(lineP1.x!=-1)
+		{
+			Point eventP1(node.trackList[0].x + node.trackList[0].width/2, node.trackList[0].y + node.trackList[0].height/2);
+			int endIndex = node.trackList.size()-1;
+			Point eventP2(node.trackList[endIndex].x + node.trackList[endIndex].width/2, node.trackList[endIndex].y + node.trackList[endIndex].height/2);
+			isDirect = isTheSameDirect(lineP1, lineP2, eventP1, eventP2);
+		}
+		if(rectP1.x!=-1)
+		{
+			isEnter = false;
+			Rect r1;
+			r1.x = rectP1.x>rectP2.x?rectP2.x:rectP1.x; 
+			r1.y = rectP1.y>rectP2.y?rectP2.y:rectP1.y;
+			r1.width = abs(rectP1.x-rectP2.x);
+			r1.height = abs(rectP1.y-rectP2.y);
+			for(int i = 0; i < node.trackList.size(); i++)
+			{
+				Rect r2 = node.trackList[i];
+				isEnter = isEnterRect(r1, r2);
+				if(isEnter)
+					break;
+			}
+			//
+		}
+
+		if(isEnter && isDirect)  //条件不符合就删除,否则指向下一条
+			iter++;
+		else
+			iter = eventList.erase(iter);
 	}
 }
 

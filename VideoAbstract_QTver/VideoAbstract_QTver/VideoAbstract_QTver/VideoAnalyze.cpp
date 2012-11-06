@@ -1,7 +1,34 @@
 #include "VideoAnalyze.h"
 
+int VideoAnalyze::SELECTEVENT = 4;
+
 void VideoAnalyze::run()
 {
+	if(flag == VideoAnalyze::SELECTEVENT)
+	{
+		//第一步：删除原界面中的摘要事件
+		emit sendRemoveAllAbstracts();
+		//第二步：遍历所有摘要，对摘要进行筛选（可能要新建一个空间存储筛选的摘要）
+		EventNodeOperation::selectAbstractEvent(eventList, lineP1, lineP2, rectP1, rectP2);
+		//第三步：重画摘要
+		if(!capture)
+		{
+			QByteArray ba = filePath.toLocal8Bit();
+			const char *file = ba.data();
+			capture = cvCaptureFromAVI(file);
+			captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
+				(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
+			fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
+			frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
+			qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
+			iplImg = cvCreateImageHeader(captureSize,  8, 3);
+			iplImg->imageData = (char*)qImg->bits();
+			getBaseFrame();
+		}
+		drawAbstracts();
+		release();
+		return;
+	}
 
 	isContinue = true;
 	if(isRealTime)
@@ -652,6 +679,17 @@ void VideoAnalyze::release()
 		cvReleaseImage(&baseFrame);
 		baseFrame = 0;
 	}
+
+	flag = -1;
+
+	lineP1.x = -1;
+	lineP1.y = -1;
+	lineP2.x = -1;
+	lineP2.y = -1;
+	rectP1.x = -1;
+	rectP1.y = -1;
+	rectP2.x = -1;
+	rectP2.y = -1;
 }
 
 void VideoAnalyze::getSettingData(int zoom,int width,int height,int min_area,int max_area,int jiange,int fps,int max_event_num)
@@ -663,6 +701,22 @@ void VideoAnalyze::getSettingData(int zoom,int width,int height,int min_area,int
 
 	//fps = data.fps;
 	//int zoom = data.zoom;
+}
+
+void VideoAnalyze::getShuaixuanData(Point currentLineP1,Point currentLineP2,Point currentRectP1,Point currentRectP2)
+{
+	lineP1.x = currentLineP1.x;
+	lineP1.y = currentLineP1.y;
+	lineP2.x = currentLineP2.x;
+	lineP2.y = currentLineP2.y;
+
+	rectP1.x = currentRectP1.x;
+	rectP1.y = currentRectP1.y;
+	rectP2.x = currentRectP2.x;
+	rectP2.y = currentRectP2.y;
+	//开始筛选操作
+	flag = VideoAnalyze::SELECTEVENT;
+	start();
 }
 
 VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
@@ -689,6 +743,15 @@ VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 	baseFrame = 0;
 	capture = 0;
 	videoWriter = 0;
+
+	lineP1.x = -1;
+	lineP1.y = -1;
+	lineP2.x = -1;
+	lineP2.y = -1;
+	rectP1.x = -1;
+	rectP1.y = -1;
+	rectP2.x = -1;
+	rectP2.y = -1;
 }
 
 VideoAnalyze::VideoAnalyze(void)

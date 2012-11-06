@@ -183,10 +183,12 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	connect(analyzeThread, SIGNAL(sendRunTime(QString)), this, SLOT(updateRunTime(QString)));
 	connect(analyzeThread, SIGNAL(sendEndTimeCount()), this, SLOT(endTimeCount()));
 	connect(analyzeThread, SIGNAL(sendEventCount(int)), this, SLOT(updateEventCount(int)));
+	connect(analyzeThread, SIGNAL(sendRemoveAllAbstracts()), this, SLOT(removeAllAbstracts()));
 	
 	player = new AbstractPlayer();   //播放器
 
 	drawForm = new DrawForm(this);       //画线界面
+	connect(drawForm, SIGNAL(sendLineAndRect(Point,Point,Point,Point)), analyzeThread, SLOT(getShuaixuanData(Point,Point,Point,Point)));
 
 	settingUI = new setting_widget(0);   //设置界面
 	connect(settingUI, SIGNAL(send_enter_checkbox_state(bool)), this, SLOT(get_enter_checkbox_state(bool)));
@@ -267,6 +269,18 @@ void VideoAbstract_QTver::drawAbstracts(QImage newImage, QString start, QString 
 	form->ui.start_time_label->setText(start);
 	form->ui.end_time_label->setText(end);
 	gLayout->addWidget(form, row, col);
+}
+
+void VideoAbstract_QTver::removeAllAbstracts()
+{
+	QLayoutItem* child;
+	while ((child = gLayout->takeAt(0)) != 0) 
+	{
+		//((AbstractForm*)child)->destroyMySelf();
+		child->widget()->deleteLater();
+		delete child;
+	}
+	gLayout->update();
 }
 
 void VideoAbstract_QTver::updateProcessInfo(QString info)

@@ -43,6 +43,7 @@ private slots:
 	void endTimeCount();         //结束计时
 	void updateEventCount(int);     //更新事件数量
 	void playAbstract(int);       //播放选中的摘要事件
+	void removeAllAbstracts();    //删除所有摘要事件
 
 	void get_enter_checkbox_state(bool);
 

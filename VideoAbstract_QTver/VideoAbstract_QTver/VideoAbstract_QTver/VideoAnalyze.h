@@ -37,6 +37,14 @@ public:
 	CvSize captureSize;    //视频分辨率大小
 
 	int runSeconds;     //运行时间
+
+	int flag;
+	static int SELECTEVENT;
+
+	Point lineP1;  //事件筛选的4个点（一条直线和一个矩形）
+	Point lineP2;
+	Point rectP1;
+	Point rectP2;
 private:
 	CvCapture *capture;
 	CvVideoWriter* videoWriter;
@@ -77,8 +85,10 @@ signals:
 	void sendRunTime(QString);   //发送运行时间
 	void sendEndTimeCount();     //发送结束计时新号
 	void sendEventCount(int num); //发送事件数量
+	void sendRemoveAllAbstracts(); //通知界面删除所有摘要事件
 private slots:
 	void updateOneSecond();       //更新时间
 	void getSettingData(int,int,int,int,int,int,int,int); //获取设置信息
+	void getShuaixuanData(Point,Point,Point,Point);    //获取筛选信息
 };
 
