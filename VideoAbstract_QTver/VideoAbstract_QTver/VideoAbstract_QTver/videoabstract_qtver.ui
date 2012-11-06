@@ -53,8 +53,21 @@
       <height>90</height>
      </rect>
     </property>
-    <property name="text">
+    <property name="toolTip">
      <string>打开视频</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="videoabstract_qtver.qrc">
+      <normaloff>:/VideoAbstract_QTver/Resources/openvideo.png</normaloff>:/VideoAbstract_QTver/Resources/openvideo.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>75</width>
+      <height>75</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="setting_button">
@@ -66,8 +79,21 @@
       <height>90</height>
      </rect>
     </property>
-    <property name="text">
+    <property name="toolTip">
      <string>参数设置</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="videoabstract_qtver.qrc">
+      <normaloff>:/VideoAbstract_QTver/Resources/setting.png</normaloff>:/VideoAbstract_QTver/Resources/setting.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>75</width>
+      <height>75</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="analysis_button">
@@ -79,11 +105,24 @@
       <height>90</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>开始分析</string>
+    </property>
     <property name="styleSheet">
      <string notr="true">border-color: rgb(255, 0, 0);</string>
     </property>
     <property name="text">
-     <string>开始分析</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="videoabstract_qtver.qrc">
+      <normaloff>:/VideoAbstract_QTver/Resources/startanalyze.png</normaloff>:/VideoAbstract_QTver/Resources/startanalyze.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>75</width>
+      <height>75</height>
+     </size>
     </property>
    </widget>
    <widget class="QProgressBar" name="progress_bar">
@@ -139,8 +178,21 @@
       <height>90</height>
      </rect>
     </property>
-    <property name="text">
+    <property name="toolTip">
      <string>摘要检索</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="videoabstract_qtver.qrc">
+      <normaloff>:/VideoAbstract_QTver/Resources/search.png</normaloff>:/VideoAbstract_QTver/Resources/search.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>90</width>
+      <height>90</height>
+     </size>
     </property>
    </widget>
    <widget class="QTextBrowser" name="progress_info">
@@ -166,7 +218,7 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'宋体'; font-size:11pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'SimSun';&quot;&gt;正在分析第n个视频文件：xxx.avi，摘要数量：100，剩余n个视频文件。正在分析第n个视频文件：xxx.avi，摘要数量：100，剩余n个视频文件。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;请选择一个文件&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="show_video_check_box">

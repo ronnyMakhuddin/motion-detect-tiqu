@@ -1,5 +1,10 @@
 <RCC>
-    <qresource prefix="/VideoAbstract_QTver">
-        <file>windowIcon.png</file>
-    </qresource>
+  <qresource prefix="/VideoAbstract_QTver">
+    <file>Resources/stopanalyze.png</file>
+    <file>Resources/startanalyze.png</file>
+    <file>Resources/search.png</file>
+    <file>Resources/setting.png</file>
+    <file>Resources/openvideo.png</file>
+    <file>windowIcon.png</file>
+  </qresource>
 </RCC>
