@@ -16,7 +16,10 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
 	
     if(Globals::files.count()==1) //打开一个文件
 	{
-        QString filePath = tr("文件路径:") + Globals::files[0];
+		QString fileDir, fileName;
+		Globals::getFileDirFromQString(Globals::files[0], fileDir);
+		Globals::getFileNameFromQString(Globals::files[0], fileName);
+        QString filePath = tr("已选文件:") + fileName;
 		ui.progress_info->setText(filePath);
 	}else if(Globals::files.count()>1)  //打开多个文件
 	{
@@ -49,7 +52,6 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 		if(Globals::files.count()==1) //打开一个文件
 		{
 			QString filePath = tr("文件路径:") + Globals::files[0];
-			ui.progress_info->setText(filePath);
 			analyzeThread->filePath = Globals::files[0];
 			if(ui.show_video_check_box->isChecked())
 			{
