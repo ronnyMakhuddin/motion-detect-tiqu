@@ -63,7 +63,9 @@ void RealTimeThread::endMonitor()
 void RealTimeThread::saveToFile()
 {
 	if(!isSaveToFile || !writer)
+	{
 		return;
+	}
 	cvWriteFrame(writer, frame);
 }
 
@@ -128,14 +130,42 @@ RealTimeThread::~RealTimeThread()
 void RealTimeThread::run()
 {	
 	init();
-	
-    
+	//算法开始
+	int N = 3;
+	IplImage*motion = 0;   //内存未释放！
+	IplImage**buf = 0;
+	IplImage*mhi = 0;
+	int last = 0;
+	double lastTime = 0;
 	flag = 1;
 	int frameNum = 0;
-	for(; flag; frameNum++)
+
+	mhi = cvCreateImage(captureSize, IPL_DEPTH_32F, 1);
+	cvZero(mhi);
+	buf = new IplImage*[N];
+	for (int i = 0; i < N; i++)
+	{
+		//cvReleaseImage(&buf[i]);
+		buf[i] = cvCreateImage(captureSize, IPL_DEPTH_8U, 1);
+		cvZero(buf[i]);
+	}
+	for(; flag; )
 	{
 		frame = cvQueryFrame(capture);  //获取帧
-		saveToFile();    //保存文件
+
+		//算法部分
+		if (!frame || !flag)
+		{
+			msleep(100);//这里如果不暂停的话，会因为现实图片被释放而出现内存错误
+			break;
+		}
+
+		if(isSaveToFile)
+		{
+			saveToFile();    //保存文件
+		}
+
+
 		showFPS();       //显示帧率
 		if (frame->origin == IPL_ORIGIN_TL)  
 		{  

@@ -74,6 +74,12 @@
     <ClCompile Include="GeneratedFiles\Release\moc_realtimesetting.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="EventNode.cpp">
+      <Filter>Source Files\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="EventNodeOperation.cpp">
+      <Filter>Source Files\algorithm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.h">
@@ -101,6 +107,12 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_realtimesetting.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventNode.h">
+      <Filter>Header Files\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="EventNodeOperation.h">
+      <Filter>Header Files\algorithm</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

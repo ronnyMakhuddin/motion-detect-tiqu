@@ -8,6 +8,8 @@
 #include <QStringList>
 #include <cv.h>
 #include <highgui.h>
+#include "EventNode.h"
+#include "EventNodeOperation.h"
 
 class RealTimeThread : public QThread
 {
