@@ -13,6 +13,10 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{174C16BF-682D-4EE3-9395-68003C320DE7}</ProjectGuid>
     <Keyword>Qt4VSv1.0</Keyword>
+    <SccProjectName>Svn</SccProjectName>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
