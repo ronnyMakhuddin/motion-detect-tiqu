@@ -21,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	connect(timer, SIGNAL(timeout()), this, SLOT(updateTime()));
 	timer->start();
 
+	//设置界面
+	realTimeSetting = new RealTimeSetting(0);
+
 	isStartMonitor = false;
 }
 
@@ -136,6 +139,14 @@ void MainWindow::updateTime()
 //system slots
 void MainWindow::on_pushButton_start_clicked()
 {
+	for(int i = 0; i < 5; i++)//判断有没有打开摄像头
+	{
+		if(i == 4)
+			return;
+		if(rtThread[i])
+			break;
+	}
+
 	if(!isStartMonitor)
 	{
 		for(int i = 0; i < num; i++)
@@ -159,7 +170,7 @@ void MainWindow::on_pushButton_start_clicked()
 
 void MainWindow::on_pushButton_setting_clicked()
 {
-	
+	realTimeSetting->exec();
 }
 
 void MainWindow::on_checkBox_cam0_clicked()
