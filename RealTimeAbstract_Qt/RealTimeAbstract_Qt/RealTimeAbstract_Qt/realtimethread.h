@@ -29,6 +29,9 @@ public:
 	RealTimeThread(QObject *parent);
 	~RealTimeThread();
 
+private:
+	void update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime);
+
 protected:
 	void run();
 
@@ -59,7 +62,7 @@ private:
 	CvSize captureSize;   //视频大小
 	CvFont fontFPS;	      //帧率的显示字体
 	//其它变量
-
+	vector<EventNode> eventList;
 signals:
 	void sendCameraImage(int, QImage);
 private slots:
