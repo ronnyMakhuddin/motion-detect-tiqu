@@ -42,7 +42,8 @@ void RealTimeThread::startMonitor()
 {
 	//获取本地时间，作为视频文件名
 	QString time = QDateTime::currentDateTime().toString("yyyy_MM_dd_hh_mm_ss_");
-	QString filePath = fileDir + time + QString::number(num+1) + tr(".avi");
+    fileName = time + QString::number(num+1) + tr(".avi");
+	QString filePath = fileDir + fileName;
 	QByteArray ba = filePath.toLocal8Bit();
 	char* filePath_c = ba.data();
 	//注意字符串处理，视频文件名和路径名不能有中文，否则会出错
@@ -57,6 +58,7 @@ void RealTimeThread::endMonitor()
 	isSaveToFile = false;
 	msleep(100);
 	cvReleaseVideoWriter(&writer);
+	saveEventToFile();
 	writer = 0;
 }
 
@@ -104,6 +106,28 @@ void RealTimeThread::setDataFromSetting(QString data)
 	fps = dataList.at(4).toInt();     //录制帧率
 	max_event_num = dataList.at(5).toInt(); //同一时间最大摘要数
 	fileDir = dataList.at(6);  //保存的文件夹路径
+}
+
+void RealTimeThread::saveEventToFile()
+{
+	//fps测试值
+	fps = 8;
+	if(isSaveToFile||1)
+	{
+		EventNodeOperation::eventFilter(eventList, fps);
+		QDir tempDir(fileDir);
+		if(!tempDir.cd("analyze"))
+		{
+			tempDir.mkdir("analyze");
+			tempDir.cd("analyze");
+		}
+		QString newFilePath = fileDir + "analyze/" + fileName + ".txt";
+		QByteArray ba = newFilePath.toLocal8Bit();
+		char* newFilePath_char = ba.data();
+		FileOperation::writeToFile(newFilePath_char, jiange, fps, -1, eventList);
+		//emit sendProcessInfo(newFilePath_char);
+		msleep(1000);
+	}
 }
 
 //构造函数
@@ -258,7 +282,7 @@ void RealTimeThread::run()
 		if(isSaveToFile)
 		{
 			saveToFile();    //保存文件
-			if (frameNum % jiange == 0)
+			if (frameNum % jiange == 0 )
 			{
 				if (frame)
 				{
@@ -270,6 +294,7 @@ void RealTimeThread::run()
 				}
 				update_mhi(frame, motion, frameNum, buf, last, mhi, captureSize, lastTime);
 			}
+			frameNum++;
 		}
 		//算法部分结束
 		showFPS();       //显示帧率

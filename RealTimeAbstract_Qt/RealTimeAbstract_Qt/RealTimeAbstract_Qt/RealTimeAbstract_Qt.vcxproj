@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClCompile Include="EventNode.cpp" />
     <ClCompile Include="EventNodeOperation.cpp" />
+    <ClCompile Include="FileOperation.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_realtimesetting.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -144,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="EventNode.h" />
     <ClInclude Include="EventNodeOperation.h" />
+    <ClInclude Include="FileOperation.h" />
     <ClInclude Include="GeneratedFiles\ui_realtimesetting.h" />
     <CustomBuild Include="realtimesetting.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>

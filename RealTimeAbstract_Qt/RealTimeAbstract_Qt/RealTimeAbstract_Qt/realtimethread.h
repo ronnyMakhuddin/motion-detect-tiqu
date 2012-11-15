@@ -6,10 +6,13 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QStringList>
+#include <QDir>
 #include <cv.h>
 #include <highgui.h>
 #include "EventNode.h"
 #include "EventNodeOperation.h"
+#include "FileOperation.h"
+
 
 class RealTimeThread : public QThread
 {
@@ -26,6 +29,7 @@ public:
 	void showFPS();     //显示帧率
 	void releseShowFPS(); //释放显示帧率模块
 	void setDataFromSetting(QString data);  //从设置界面设置分析参数
+	void saveEventToFile();     //将事件保存至文件
 	RealTimeThread(QObject *parent);
 	~RealTimeThread();
 
@@ -53,6 +57,7 @@ private:
 	int jiange;    //分析帧间隔
 	int max_event_num; //同一时间最大摘要数
 	QString fileDir;  //保存的文件夹路径
+	QString fileName;  //文件名字
 
 	CvCapture* capture;   //视频
 	CvVideoWriter* writer; //写视频
