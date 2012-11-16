@@ -112,7 +112,9 @@ void EventNodeOperation::bianliEventList(vector<EventNode> &eventList, int endFr
 		if (eventList[i].mark == false)
 		{
 			if (eventList[i].endFrame == -1)
+			{
 				eventList[i].endFrame = endFrame;
+			}
 		}
 		else
 		{
