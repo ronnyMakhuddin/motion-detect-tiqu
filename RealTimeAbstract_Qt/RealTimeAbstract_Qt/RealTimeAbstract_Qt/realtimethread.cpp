@@ -47,7 +47,7 @@ void RealTimeThread::startMonitor()
 	QByteArray ba = filePath.toLocal8Bit();
 	char* filePath_c = ba.data();
 	//注意字符串处理，视频文件名和路径名不能有中文，否则会出错
-	writer = cvCreateVideoWriter(filePath_c, CV_FOURCC('X', 'V', 'I', 'D'), 25, captureSize, 1);
+	writer = cvCreateVideoWriter(filePath_c, CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
 	eventList.clear();
 	isSaveToFile = true;
 }
@@ -111,7 +111,7 @@ void RealTimeThread::setDataFromSetting(QString data)
 void RealTimeThread::saveEventToFile()
 {
 	//fps测试值
-	fps = 8;
+	//fps = 8;
 	if(isSaveToFile||1)
 	{
 		EventNodeOperation::eventFilter(eventList, fps);
@@ -239,7 +239,8 @@ void RealTimeThread::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplI
 		}
 	}
 
-	EventNodeOperation::bianliEventList(eventList, frameNum);
+	//EventNodeOperation::bianliEventList(eventList, frameNum);
+	EventNodeOperation::bianliEventList(eventList, frameNum, 15);
 
 	cvReleaseMemStorage(&stor);
 	cvReleaseImage(&pyr);

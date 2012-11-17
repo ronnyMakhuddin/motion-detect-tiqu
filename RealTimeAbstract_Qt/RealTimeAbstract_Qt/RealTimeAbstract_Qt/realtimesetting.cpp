@@ -78,7 +78,7 @@ void RealTimeSetting::readFromUi()
 
 	fps = ui.lineEdit_fps->text().toInt();
 	max_event = ui.lineEdit_max_event_num->text().toInt();
-	filePath = ui.pushButton_path->text();
+	filePath = ui.lineEdit_path->text();
 }
 
 //设置为默认数据
