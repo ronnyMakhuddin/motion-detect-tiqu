@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>RealTimeSetting</string>
+   <string>设置</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="mainwindow.qrc">
+    <normaloff>:/MainWindow/Resources/2010101312255863647.png</normaloff>:/MainWindow/Resources/2010101312255863647.png</iconset>
   </property>
   <widget class="QPushButton" name="pushButton_default">
    <property name="geometry">
@@ -359,6 +363,8 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="mainwindow.qrc"/>
+ </resources>
  <connections/>
 </ui>

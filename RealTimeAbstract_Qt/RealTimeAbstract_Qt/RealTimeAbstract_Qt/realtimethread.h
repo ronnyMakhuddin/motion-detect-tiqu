@@ -20,7 +20,7 @@ class RealTimeThread : public QThread
 
 public:
 	bool init(); //初始化
-	void release(); //释放内存
+	void release(); //释放内存 
 	void setNum(int num); //设置摄像头编号
 	void startMonitor();  //开始监控
 	void endMonitor();    //停止监控

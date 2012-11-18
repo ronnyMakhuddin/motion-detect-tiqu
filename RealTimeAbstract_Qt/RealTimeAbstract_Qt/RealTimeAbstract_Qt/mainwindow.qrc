@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="MainWindow">
+    <file>Resources/windowIcon.png</file>
+    <file>Resources/2010101312255863647.png</file>
     <file>Resources/nocapture.png</file>
   </qresource>
 </RCC>

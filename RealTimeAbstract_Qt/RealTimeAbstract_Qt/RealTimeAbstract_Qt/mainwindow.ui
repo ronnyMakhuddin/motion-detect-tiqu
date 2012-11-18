@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>实时视频摘要</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="mainwindow.qrc">
+    <normaloff>:/MainWindow/Resources/windowIcon.png</normaloff>:/MainWindow/Resources/windowIcon.png</iconset>
   </property>
   <widget class="QLabel" name="label_cam0">
    <property name="geometry">
@@ -185,7 +189,7 @@
    <property name="geometry">
     <rect>
      <x>910</x>
-     <y>200</y>
+     <y>170</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -211,7 +215,7 @@
    <property name="geometry">
     <rect>
      <x>820</x>
-     <y>200</y>
+     <y>170</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -224,7 +228,7 @@
    <property name="geometry">
     <rect>
      <x>820</x>
-     <y>250</y>
+     <y>220</y>
      <width>161</width>
      <height>21</height>
     </rect>
@@ -237,7 +241,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <resources>
   <include location="mainwindow.qrc"/>
-  <include location="C:/Users/liuyuanyi/.designer/backup/mainwindow.qrc"/>
+  <include location="mainwindow.qrc"/>
  </resources>
  <connections/>
 </ui>
