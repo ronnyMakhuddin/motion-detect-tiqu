@@ -240,7 +240,8 @@ void RealTimeThread::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplI
 	}
 
 	//EventNodeOperation::bianliEventList(eventList, frameNum);
-	EventNodeOperation::bianliEventList(eventList, frameNum, 15);
+	int count = EventNodeOperation::bianliEventList(eventList, frameNum, fps);
+	emit sendAbstractCount(count);
 
 	cvReleaseMemStorage(&stor);
 	cvReleaseImage(&pyr);

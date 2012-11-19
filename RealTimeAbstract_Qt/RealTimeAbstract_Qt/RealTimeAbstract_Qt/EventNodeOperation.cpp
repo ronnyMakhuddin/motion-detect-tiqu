@@ -123,21 +123,24 @@ void EventNodeOperation::bianliEventList(vector<EventNode> &eventList, int endFr
 	}
 }
 
-void EventNodeOperation::bianliEventList(vector<EventNode> &eventList, int endFrame, int fps)
+int EventNodeOperation::bianliEventList(vector<EventNode> &eventList, int endFrame, int fps)
 {
+	int count = 0;
 	if (eventList.size() == 0)
-		return;
+		return count;
 	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
 	{
 
 		if ((*iter).mark == false)
 		{
+			count++;
 			if ((*iter).endFrame == -1)
 			{
 				(*iter).endFrame = endFrame;
 				if( ((*iter).endFrame - (*iter).startFrame < fps*2) || ((*iter).startFrame < 17))  //2秒存在就记为事件,另外这里要开始帧大于17是因为如果小于17的话opencv无法定位，所以过滤掉
 				{
 					iter = eventList.erase(iter);
+					count--;
 					continue;
 				}
 			}
@@ -147,6 +150,7 @@ void EventNodeOperation::bianliEventList(vector<EventNode> &eventList, int endFr
 		}
 		iter++;
 	}
+	return count;
 }
 
 void EventNodeOperation::eventFilter(vector<EventNode> &eventList, int fps)

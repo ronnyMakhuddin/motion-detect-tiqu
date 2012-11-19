@@ -8,9 +8,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	setWindowFlags(windowFlags() &~ Qt::WindowMinMaxButtonsHint);
 	setWindowFlags(windowFlags() &~ Qt::WindowCloseButtonHint);
 	//setWindowFlags(windowFlags() &~ (Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint));
-	setFixedSize(1000, 600);
+	setFixedSize(this->width(), this->height());
 
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < 2; i++)
 	{
 		rtThread[i] = 0;
 	}
@@ -29,9 +29,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 
 MainWindow::~MainWindow()
 {
-	while(rtThread[0] || rtThread[1] || rtThread[2] || rtThread[3])//释放掉4个线程
+	while(rtThread[0] || rtThread[1])//释放掉2个线程
 	{
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 2; i++)
 		{
 			if(!rtThread[i])
 				continue;
@@ -52,29 +52,16 @@ void MainWindow::getCameraNum()  //获取摄像头数量，并且设置checkBox的可点击属性
 	num = vi.listDevices(true);
 	ui.checkBox_cam0->setDisabled(false);
 	ui.checkBox_cam1->setDisabled(false);
-	ui.checkBox_cam2->setDisabled(false);
-	ui.checkBox_cam3->setDisabled(false);
 	switch(num)
 	{
 	case 0:
 		ui.checkBox_cam0->setDisabled(true);
 		ui.checkBox_cam1->setDisabled(true);
-		ui.checkBox_cam2->setDisabled(true);
-		ui.checkBox_cam3->setDisabled(true);
 		break;
 	case 1:
 		ui.checkBox_cam1->setDisabled(true);
-		ui.checkBox_cam2->setDisabled(true);
-		ui.checkBox_cam3->setDisabled(true);
 		break;
 	case 2:
-		ui.checkBox_cam2->setDisabled(true);
-		ui.checkBox_cam3->setDisabled(true);
-		break;
-	case 3:
-		ui.checkBox_cam3->setDisabled(true);
-		break;
-	case 4:
 		break;
 	}
 }
@@ -83,6 +70,7 @@ void MainWindow::startCamThread(int index)
 {
 	rtThread[index] = new RealTimeThread(this);
 	connect(rtThread[index], SIGNAL(sendCameraImage(int, QImage)), this, SLOT(showVideo(int, QImage)));
+	connect(rtThread[index], SIGNAL(sendAbstractCount(int)), this, SLOT(updataAbstractNum(int)));
 	connect(timer, SIGNAL(timeout()), rtThread[index], SLOT(timerTimeOut()));
 	rtThread[index]->setNum(index);
 	rtThread[index]->start();
@@ -105,12 +93,6 @@ void MainWindow::endCamThread(int index)
 	case 1:
 		ui.label_cam1->setPixmap(QPixmap(QString::fromUtf8(":/MainWindow/Resources/nocapture.png")));
 		break;
-	case 2:
-		ui.label_cam2->setPixmap(QPixmap(QString::fromUtf8(":/MainWindow/Resources/nocapture.png")));
-		break;
-	case 3:
-		ui.label_cam3->setPixmap(QPixmap(QString::fromUtf8(":/MainWindow/Resources/nocapture.png")));
-		break;
 	}
 }
 
@@ -126,12 +108,6 @@ void MainWindow::showVideo(int num, QImage img)
 	case 1:
 		ui.label_cam1->setPixmap(QPixmap::fromImage(image));
 		break;
-	case 2:
-		ui.label_cam2->setPixmap(QPixmap::fromImage(image));
-		break;
-	case 3:
-		ui.label_cam3->setPixmap(QPixmap::fromImage(image));
-		break;
 	}
 }
 
@@ -140,12 +116,17 @@ void MainWindow::updateTime()
 	ui.label_time->setText(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss ddd"));
 }
 
+void MainWindow::updataAbstractNum(int count)
+{
+	ui.label_abstract_num->setText(QString::number(count));
+}
+
 //system slots
 void MainWindow::on_pushButton_start_clicked()
 {
-	for(int i = 0; i < 5; i++)//判断有没有打开摄像头
+	for(int i = 0; i < 3; i++)//判断有没有打开摄像头
 	{
-		if(i == 4)
+		if(i == 2)
 			return;
 		if(rtThread[i])
 			break;
@@ -162,11 +143,13 @@ void MainWindow::on_pushButton_start_clicked()
 			}
 		}
 		isStartMonitor = true;
-		ui.pushButton_start->setText(tr("停止监控"));
+		QIcon icon;
+        icon.addFile(QString::fromUtf8(":/MainWindow/Resources/stopanalyze.png"), QSize(), QIcon::Normal, QIcon::Off);
+        ui.pushButton_start->setIcon(icon);
+		ui.pushButton_start->setToolTip(tr("停止监控"));
+		ui.pushButton_setting->setDisabled(true);
 		ui.checkBox_cam0->setDisabled(true);
 		ui.checkBox_cam1->setDisabled(true);
-		ui.checkBox_cam2->setDisabled(true);
-		ui.checkBox_cam3->setDisabled(true);
 	}else
 	{
 		for(int i = 0; i < num; i++)
@@ -175,7 +158,11 @@ void MainWindow::on_pushButton_start_clicked()
 				rtThread[i]->endMonitor();
 		}
 		isStartMonitor = false;
-		ui.pushButton_start->setText(tr("开始监控"));
+		QIcon icon;
+        icon.addFile(QString::fromUtf8(":/MainWindow/Resources/startanalyze.png"), QSize(), QIcon::Normal, QIcon::Off);
+        ui.pushButton_start->setIcon(icon);
+		ui.pushButton_start->setToolTip(tr("开始监控"));
+		ui.pushButton_setting->setDisabled(false);
 		getCameraNum();
 	}
 }
@@ -209,6 +196,7 @@ void MainWindow::on_checkBox_cam1_clicked()
 
 void MainWindow::on_checkBox_cam2_clicked()
 {
+	/*
 	if(ui.checkBox_cam2->isChecked())
 	{
 		startCamThread(2);
@@ -216,10 +204,12 @@ void MainWindow::on_checkBox_cam2_clicked()
 	{
 		endCamThread(2);
 	}
+	*/
 }
 
 void MainWindow::on_checkBox_cam3_clicked()
 {
+	/*
 	if(ui.checkBox_cam3->isChecked())
 	{
 		startCamThread(3);
@@ -227,5 +217,7 @@ void MainWindow::on_checkBox_cam3_clicked()
 	{
 		endCamThread(3);
 	}
+
+	*/
 }
 

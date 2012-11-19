@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>301</height>
+    <width>800</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,45 +49,13 @@
     <pixmap resource="mainwindow.qrc">:/MainWindow/Resources/nocapture.png</pixmap>
    </property>
   </widget>
-  <widget class="QLabel" name="label_cam2">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>300</y>
-     <width>400</width>
-     <height>300</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="mainwindow.qrc">:/MainWindow/Resources/nocapture.png</pixmap>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_cam3">
-   <property name="geometry">
-    <rect>
-     <x>400</x>
-     <y>300</y>
-     <width>400</width>
-     <height>300</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="mainwindow.qrc">:/MainWindow/Resources/nocapture.png</pixmap>
-   </property>
-  </widget>
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>300</y>
+     <y>301</y>
      <width>800</width>
-     <height>3</height>
+     <height>2</height>
     </rect>
    </property>
    <property name="orientation">
@@ -99,8 +67,8 @@
     <rect>
      <x>400</x>
      <y>0</y>
-     <width>3</width>
-     <height>600</height>
+     <width>2</width>
+     <height>301</height>
     </rect>
    </property>
    <property name="orientation">
@@ -110,10 +78,10 @@
   <widget class="Line" name="line_3">
    <property name="geometry">
     <rect>
-     <x>802</x>
+     <x>801</x>
      <y>0</y>
-     <width>3</width>
-     <height>600</height>
+     <width>2</width>
+     <height>301</height>
     </rect>
    </property>
    <property name="orientation">
@@ -123,8 +91,8 @@
   <widget class="QCheckBox" name="checkBox_cam0">
    <property name="geometry">
     <rect>
-     <x>820</x>
-     <y>80</y>
+     <x>30</x>
+     <y>340</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -136,8 +104,8 @@
   <widget class="QCheckBox" name="checkBox_cam1">
    <property name="geometry">
     <rect>
-     <x>910</x>
-     <y>80</y>
+     <x>30</x>
+     <y>370</y>
      <width>71</width>
      <height>16</height>
     </rect>
@@ -146,37 +114,11 @@
     <string>摄像头2</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_cam2">
-   <property name="geometry">
-    <rect>
-     <x>820</x>
-     <y>110</y>
-     <width>71</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>摄像头3</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_cam3">
-   <property name="geometry">
-    <rect>
-     <x>910</x>
-     <y>110</y>
-     <width>71</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>摄像头4</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>810</x>
-     <y>50</y>
+     <x>20</x>
+     <y>310</y>
      <width>81</width>
      <height>21</height>
     </rect>
@@ -188,21 +130,37 @@
   <widget class="QPushButton" name="pushButton_setting">
    <property name="geometry">
     <rect>
-     <x>910</x>
-     <y>170</y>
-     <width>75</width>
-     <height>23</height>
+     <x>280</x>
+     <y>310</y>
+     <width>81</width>
+     <height>81</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>参数设置</string>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
    <property name="text">
-    <string>设置按钮</string>
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/MainWindow/Resources/setting.png</normaloff>:/MainWindow/Resources/setting.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>60</width>
+     <height>60</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>914</x>
-     <y>10</y>
+     <x>710</x>
+     <y>310</y>
      <width>71</width>
      <height>21</height>
     </rect>
@@ -214,21 +172,34 @@
   <widget class="QPushButton" name="pushButton_start">
    <property name="geometry">
     <rect>
-     <x>820</x>
-     <y>170</y>
-     <width>75</width>
-     <height>23</height>
+     <x>160</x>
+     <y>310</y>
+     <width>81</width>
+     <height>81</height>
     </rect>
    </property>
-   <property name="text">
+   <property name="toolTip">
     <string>开始监控</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/MainWindow/Resources/startanalyze.png</normaloff>:/MainWindow/Resources/startanalyze.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>60</width>
+     <height>60</height>
+    </size>
    </property>
   </widget>
   <widget class="QLabel" name="label_time">
    <property name="geometry">
     <rect>
-     <x>820</x>
-     <y>220</y>
+     <x>500</x>
+     <y>360</y>
      <width>161</width>
      <height>21</height>
     </rect>
@@ -237,10 +208,22 @@
     <string>时间：</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label_abstract_num">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>330</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>人物数量：</string>
+   </property>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="mainwindow.qrc"/>
   <include location="mainwindow.qrc"/>
  </resources>
  <connections/>

@@ -26,6 +26,7 @@ private slots:
 	//my slots
 	void showVideo(int, QImage);//显示摄像头
 	void updateTime();          //更新时间
+	void updataAbstractNum(int);   //更新事件个数
 
 	//system slots
 	void on_pushButton_start_clicked();
