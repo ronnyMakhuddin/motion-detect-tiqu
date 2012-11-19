@@ -198,14 +198,19 @@
   <widget class="QLabel" name="label_time">
    <property name="geometry">
     <rect>
-     <x>500</x>
+     <x>480</x>
      <y>360</y>
-     <width>161</width>
+     <width>201</width>
      <height>21</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+    </font>
+   </property>
    <property name="text">
-    <string>时间：</string>
+    <string>时间:</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_abstract_num">
@@ -217,8 +222,13 @@
      <height>21</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+    </font>
+   </property>
    <property name="text">
-    <string>人物数量：</string>
+    <string>人物数量:</string>
    </property>
   </widget>
  </widget>
