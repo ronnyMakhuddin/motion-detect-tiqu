@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="mainwindow.qrc">
-    <normaloff>:/MainWindow/Resources/2010101312255863647.png</normaloff>:/MainWindow/Resources/2010101312255863647.png</iconset>
+    <normaloff>:/MainWindow/Resources/setting.png</normaloff>:/MainWindow/Resources/setting.png</iconset>
   </property>
   <widget class="QPushButton" name="pushButton_default">
    <property name="geometry">
