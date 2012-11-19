@@ -113,12 +113,12 @@ void MainWindow::showVideo(int num, QImage img)
 
 void MainWindow::updateTime()
 {
-	ui.label_time->setText(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss ddd"));
+	ui.label_time->setText(QDateTime::currentDateTime().toString(tr("时间:")+"yyyy-MM-dd hh:mm:ss ddd"));
 }
 
 void MainWindow::updataAbstractNum(int count)
 {
-	ui.label_abstract_num->setText(QString::number(count));
+	ui.label_abstract_num->setText(tr("人物数量:")+QString::number(count));
 }
 
 //system slots
