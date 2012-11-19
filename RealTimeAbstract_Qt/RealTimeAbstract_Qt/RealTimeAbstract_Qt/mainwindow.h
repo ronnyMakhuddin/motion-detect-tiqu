@@ -9,6 +9,7 @@
 #include "realtimethread.h"
 #include "videoInput.h"
 #include "realtimesetting.h"
+#include "test.h"
 
 
 class MainWindow : public QWidget
@@ -31,6 +32,7 @@ private slots:
 	//system slots
 	void on_pushButton_start_clicked();
 	void on_pushButton_setting_clicked();
+	void on_pushButton_localModel_clicked();
 	void on_checkBox_cam0_clicked();
 	void on_checkBox_cam1_clicked();
 	void on_checkBox_cam2_clicked();

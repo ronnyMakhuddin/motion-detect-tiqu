@@ -172,6 +172,13 @@ void MainWindow::on_pushButton_setting_clicked()
 	realTimeSetting->exec();
 }
 
+void MainWindow::on_pushButton_localModel_clicked()
+{
+	test *t = new test(0);
+	t->show();
+	this->close();
+}
+
 void MainWindow::on_checkBox_cam0_clicked()
 {
 	if(ui.checkBox_cam0->isChecked())
