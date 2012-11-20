@@ -39,12 +39,27 @@
     <Filter Include="Source Files\algorithm">
       <UniqueIdentifier>{3431b20a-ecb8-44c8-aea3-879bc09af417}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\realtimeform">
+      <UniqueIdentifier>{46dda419-4ab9-4237-9c50-5ffa9c7ea4ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\realtimeform">
+      <UniqueIdentifier>{ff1a8852-cd48-465b-bac4-fdcbf1a9e6fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\localform">
+      <UniqueIdentifier>{8f21e1f1-5a37-4eb9-ae14-72a9edeab001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\localform">
+      <UniqueIdentifier>{43fc8c0e-9e6a-4bbc-987d-7853b2c1474a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Form Files\realtimeform">
+      <UniqueIdentifier>{0adb63bd-8591-4f7b-9ac9-1df3063b644f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Form Files\localform">
+      <UniqueIdentifier>{b4e0ed46-a42b-4092-ae0e-dabdfb05dde9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mainwindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_mainwindow.cpp">
@@ -65,9 +80,6 @@
     <ClCompile Include="realtimethread.cpp">
       <Filter>Source Files\algorithm</Filter>
     </ClCompile>
-    <ClCompile Include="realtimesetting.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_realtimesetting.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -83,40 +95,148 @@
     <ClCompile Include="FileOperation.cpp">
       <Filter>Source Files\algorithm</Filter>
     </ClCompile>
-    <ClCompile Include="test.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="mainwindow.cpp">
+      <Filter>Source Files\realtimeform</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_test.cpp">
+    <ClCompile Include="realtimesetting.cpp">
+      <Filter>Source Files\realtimeform</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_drawform.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_test.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_drawform.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="drawform.cpp">
+      <Filter>Source Files\localform</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_abstractsearchform.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_abstractsearchform.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="abstractsearchform.cpp">
+      <Filter>Source Files\localform</Filter>
+    </ClCompile>
+    <ClCompile Include="abstractform.cpp">
+      <Filter>Source Files\localform</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_abstractform.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_abstractform.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_abstractplayer.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_abstractplayer.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_playthread.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_playthread.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="abstractplayer.cpp">
+      <Filter>Source Files\localform</Filter>
+    </ClCompile>
+    <ClCompile Include="playthread.cpp">
+      <Filter>Source Files\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="setting_widget.cpp">
+      <Filter>Source Files\localform</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_setting_widget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_setting_widget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="videoabstract_qtver.cpp">
+      <Filter>Source Files\localform</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_videoabstract_qtver.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_videoabstract_qtver.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoAnalyze.cpp">
+      <Filter>Source Files\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_VideoAnalyze.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_VideoAnalyze.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Globals.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="mainwindow.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="mainwindow.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
     <CustomBuild Include="realtimethread.h">
       <Filter>Header Files\algorithm</Filter>
     </CustomBuild>
-    <CustomBuild Include="realtimesetting.ui">
-      <Filter>Form Files</Filter>
+    <CustomBuild Include="realtimesetting.h">
+      <Filter>Header Files\realtimeform</Filter>
     </CustomBuild>
     <CustomBuild Include="mainwindow.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\realtimeform</Filter>
     </CustomBuild>
-    <CustomBuild Include="realtimesetting.h">
-      <Filter>Header Files</Filter>
+    <CustomBuild Include="drawform.h">
+      <Filter>Header Files\localform</Filter>
     </CustomBuild>
-    <CustomBuild Include="test.h">
-      <Filter>Header Files</Filter>
+    <CustomBuild Include="mainwindow.ui">
+      <Filter>Form Files\realtimeform</Filter>
     </CustomBuild>
-    <CustomBuild Include="test.ui">
-      <Filter>Form Files</Filter>
+    <CustomBuild Include="realtimesetting.ui">
+      <Filter>Form Files\realtimeform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="drawform.ui">
+      <Filter>Form Files\localform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="abstractsearchform.ui">
+      <Filter>Form Files\localform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="abstractsearchform.h">
+      <Filter>Header Files\localform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="abstractform.h">
+      <Filter>Header Files\localform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="abstract.ui">
+      <Filter>Form Files\localform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="playform.ui">
+      <Filter>Form Files\localform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="abstractplayer.h">
+      <Filter>Header Files\localform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="playthread.h">
+      <Filter>Header Files\algorithm</Filter>
+    </CustomBuild>
+    <CustomBuild Include="setting_widget.h">
+      <Filter>Header Files\localform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="setting.ui">
+      <Filter>Form Files\localform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="videoabstract_qtver.h">
+      <Filter>Header Files\localform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="videoabstract_qtver.ui">
+      <Filter>Form Files\localform</Filter>
+    </CustomBuild>
+    <CustomBuild Include="VideoAnalyze.h">
+      <Filter>Header Files\algorithm</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -135,8 +255,26 @@
     <ClInclude Include="FileOperation.h">
       <Filter>Header Files\algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_test.h">
+    <ClInclude Include="GeneratedFiles\ui_drawform.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_abstractsearchform.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_abstract.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_playform.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_setting.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_videoabstract_qtver.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

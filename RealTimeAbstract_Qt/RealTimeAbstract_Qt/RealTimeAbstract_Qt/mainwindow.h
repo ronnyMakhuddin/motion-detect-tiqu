@@ -9,7 +9,7 @@
 #include "realtimethread.h"
 #include "videoInput.h"
 #include "realtimesetting.h"
-#include "test.h"
+#include "videoabstract_qtver.h"
 
 
 class MainWindow : public QWidget
@@ -28,6 +28,7 @@ private slots:
 	void showVideo(int, QImage);//显示摄像头
 	void updateTime();          //更新时间
 	void updataAbstractNum(int);   //更新事件个数
+	void switchToRealTimeForm();   //切换到实时视频界面
 
 	//system slots
 	void on_pushButton_start_clicked();
@@ -40,6 +41,8 @@ private slots:
 
 private:
 	Ui::MainWindowClass ui;
+
+	VideoAbstract_QTver *localForm;
 
 	RealTimeThread* rtThread[4];  //4条线程
 

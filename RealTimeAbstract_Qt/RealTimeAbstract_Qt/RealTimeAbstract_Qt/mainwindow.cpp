@@ -25,6 +25,10 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	realTimeSetting = new RealTimeSetting(0);
 
 	isStartMonitor = false;
+
+	//初始化本地界面
+	 localForm = new VideoAbstract_QTver(0);
+	 connect(localForm, SIGNAL(sendSwitchToRealTimeForm()), this, SLOT(switchToRealTimeForm()));
 }
 
 MainWindow::~MainWindow()
@@ -121,6 +125,12 @@ void MainWindow::updataAbstractNum(int count)
 	ui.label_abstract_num->setText(tr("人物数量:")+QString::number(count));
 }
 
+void MainWindow::switchToRealTimeForm()
+{
+	localForm->hide();
+	show();
+}
+
 //system slots
 void MainWindow::on_pushButton_start_clicked()
 {
@@ -174,9 +184,8 @@ void MainWindow::on_pushButton_setting_clicked()
 
 void MainWindow::on_pushButton_localModel_clicked()
 {
-	test *t = new test(0);
-	t->show();
-	this->close();
+	hide();
+	localForm->show();
 }
 
 void MainWindow::on_checkBox_cam0_clicked()
