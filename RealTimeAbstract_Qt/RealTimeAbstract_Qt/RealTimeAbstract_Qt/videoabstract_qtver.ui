@@ -20,8 +20,8 @@
    <string>智能视频摘要软件</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/VideoAbstract_QTver/windowIcon.png</normaloff>:/VideoAbstract_QTver/windowIcon.png</iconset>
+   <iconset resource="mainwindow.qrc">
+    <normaloff>:/MainWindow/Resources/windowIcon.png</normaloff>:/MainWindow/Resources/windowIcon.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">border-color: rgb(255, 19, 125);</string>
@@ -86,8 +86,8 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset>
-      <normaloff>:/VideoAbstract_QTver/Resources/setting.png</normaloff>:/VideoAbstract_QTver/Resources/setting.png</iconset>
+     <iconset resource="mainwindow.qrc">
+      <normaloff>:/MainWindow/Resources/setting.png</normaloff>:/MainWindow/Resources/setting.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -115,8 +115,8 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset>
-      <normaloff>:/VideoAbstract_QTver/Resources/startanalyze.png</normaloff>:/VideoAbstract_QTver/Resources/startanalyze.png</iconset>
+     <iconset resource="mainwindow.qrc">
+      <normaloff>:/MainWindow/Resources/startanalyze.png</normaloff>:/MainWindow/Resources/startanalyze.png</iconset>
     </property>
     <property name="iconSize">
      <size>
