@@ -60,8 +60,8 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset>
-      <normaloff>:/VideoAbstract_QTver/Resources/openvideo.png</normaloff>:/VideoAbstract_QTver/Resources/openvideo.png</iconset>
+     <iconset resource="mainwindow.qrc">
+      <normaloff>:/MainWindow/Resources/openvideo.png</normaloff>:/MainWindow/Resources/openvideo.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -185,8 +185,8 @@
      <string/>
     </property>
     <property name="icon">
-     <iconset>
-      <normaloff>:/VideoAbstract_QTver/Resources/search.png</normaloff>:/VideoAbstract_QTver/Resources/search.png</iconset>
+     <iconset resource="mainwindow.qrc">
+      <normaloff>:/MainWindow/Resources/search.png</normaloff>:/MainWindow/Resources/search.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -281,6 +281,9 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="mainwindow.qrc">:/MainWindow/Resources/nocapture.png</pixmap>
     </property>
    </widget>
   </widget>

@@ -5,7 +5,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags)
 {
 	ui.setupUi(this);
-	setWindowFlags(windowFlags() &~ Qt::WindowMinMaxButtonsHint);
+	//setWindowFlags(windowFlags() &~ Qt::WindowMinMaxButtonsHint);
 	setWindowFlags(windowFlags() &~ Qt::WindowCloseButtonHint);
 	//setWindowFlags(windowFlags() &~ (Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint));
 	setFixedSize(this->width(), this->height());

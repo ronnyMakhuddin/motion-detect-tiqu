@@ -9,6 +9,7 @@ DrawForm::DrawForm(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
+	setFixedSize(width(), height());
 	state = 0;
 	baseFrame = 0;
 	showFrame = 0;
@@ -23,7 +24,6 @@ DrawForm::DrawForm(QWidget *parent)
 	currentRectP2.y = -1;
 
 	ui.line_radiobutton->setChecked(true);
-	ui.clear_button->setToolTip(tr("aaaaaaa"));
 	connect(ui.image_label, SIGNAL(mousePressEvent(QMouseEvent*)), this, SLOT(label_mouse_press(QMouseEvent*)));
 }
 

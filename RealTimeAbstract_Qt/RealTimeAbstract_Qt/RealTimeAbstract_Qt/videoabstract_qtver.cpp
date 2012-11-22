@@ -8,7 +8,7 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
        // options |= QFileDialog::DontUseNativeDialog;
     QString selectedFilter;
     Globals::files = QFileDialog::getOpenFileNames(
-		this, tr("QFileDialog::getOpenFileNames()"),
+		this, tr("请选择一个或者多个视频文件"),
 		QDir::currentPath(),
         tr("视频文件 (*.avi)"),
         &selectedFilter,
@@ -180,6 +180,7 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags)
 {
 	ui.setupUi(this);
+	setFixedSize(this->width(), this->height());
 	analyzeThread = 0;
 	gLayout = new QGridLayout();
 	gLayout->setSpacing(1);
@@ -276,7 +277,7 @@ void VideoAbstract_QTver::showVideo(QImage qImage, int value)
 	ui.progress_bar->setValue(value);
 }
 
-void VideoAbstract_QTver::drawAbstracts(QImage newImage, QString start, QString end, int count)
+void VideoAbstract_QTver::drawAbstracts(QImage image, QString start, QString end, int count)
 {
 	int row = 0, col = 0;
 	if(count % 2 == 1)
@@ -284,6 +285,7 @@ void VideoAbstract_QTver::drawAbstracts(QImage newImage, QString start, QString 
 	row = count / 2;
 	AbstractForm*form = new AbstractForm(count);
 	connect(form, SIGNAL(sendAbstractPlay(int)), this, SLOT(playAbstract(int)));
+	QImage newImage = image.scaled(form->ui.image_label->width(), form->ui.image_label->height());
 	form->ui.image_label->setPixmap(QPixmap::fromImage(newImage));
 	form->ui.start_time_label->setText(start);
 	form->ui.end_time_label->setText(end);
@@ -337,13 +339,13 @@ void VideoAbstract_QTver::changeAnalyzeButtonState(int state)
 	if(state == 0)
 	{
 		QIcon icon;
-		icon.addFile(QString::fromUtf8(":/VideoAbstract_QTver/Resources/startanalyze.png"), QSize(), QIcon::Normal, QIcon::Off);
+		icon.addFile(QString::fromUtf8(":/MainWindow/Resources/startanalyze.png"), QSize(), QIcon::Normal, QIcon::Off);
 		ui.analysis_button->setIcon(icon);
 		ui.analysis_button->setIconSize(QSize(90, 90));
 	}else
 	{
 		QIcon icon;
-		icon.addFile(QString::fromUtf8(":/VideoAbstract_QTver/Resources/stopanalyze.png"), QSize(), QIcon::Normal, QIcon::Off);
+		icon.addFile(QString::fromUtf8(":/MainWindow/Resources/stopanalyze.png"), QSize(), QIcon::Normal, QIcon::Off);
 		ui.analysis_button->setIcon(icon);
 		ui.analysis_button->setIconSize(QSize(90, 90));
 	}
