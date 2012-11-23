@@ -50,6 +50,8 @@ void RealTimeThread::startMonitor()
 	writer = cvCreateVideoWriter(filePath_c, CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
 	eventList.clear();
 	isSaveToFile = true;
+
+	//≤‚ ‘ ”∆µ
 }
 
 //Õ£÷πº‡øÿ
@@ -241,7 +243,7 @@ void RealTimeThread::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplI
 
 	//EventNodeOperation::bianliEventList(eventList, frameNum);
 	int count = EventNodeOperation::bianliEventList(eventList, frameNum, fps);
-	emit sendAbstractCount(count);
+	emit sendAbstractCount(count,num);
 
 	cvReleaseMemStorage(&stor);
 	cvReleaseImage(&pyr);

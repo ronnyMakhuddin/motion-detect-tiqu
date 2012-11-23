@@ -143,7 +143,9 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
 		}
 	}
 
-	EventNodeOperation::bianliEventList(eventList, frameNum);
+	//EventNodeOperation::bianliEventList(eventList, frameNum);
+	int count = EventNodeOperation::bianliEventList(eventList, frameNum, fps);
+	emit sendEventCount(count);
 
 	cvReleaseMemStorage(&stor);
 	cvReleaseImage(&pyr);

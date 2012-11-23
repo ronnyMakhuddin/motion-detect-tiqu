@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="MainWindow">
+    <file>Resources/switch.png</file>
     <file>Resources/openvideo.png</file>
     <file>Resources/search.png</file>
     <file>Resources/nocapture.png</file>

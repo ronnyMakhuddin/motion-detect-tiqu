@@ -74,7 +74,7 @@ void MainWindow::startCamThread(int index)
 {
 	rtThread[index] = new RealTimeThread(this);
 	connect(rtThread[index], SIGNAL(sendCameraImage(int, QImage)), this, SLOT(showVideo(int, QImage)));
-	connect(rtThread[index], SIGNAL(sendAbstractCount(int)), this, SLOT(updataAbstractNum(int)));
+	connect(rtThread[index], SIGNAL(sendAbstractCount(int,int)), this, SLOT(updataAbstractNum(int,int)));
 	connect(timer, SIGNAL(timeout()), rtThread[index], SLOT(timerTimeOut()));
 	rtThread[index]->setNum(index);
 	rtThread[index]->start();
@@ -120,9 +120,15 @@ void MainWindow::updateTime()
 	ui.label_time->setText(QDateTime::currentDateTime().toString(tr("时间:")+"yyyy-MM-dd hh:mm:ss ddd"));
 }
 
-void MainWindow::updataAbstractNum(int count)
+void MainWindow::updataAbstractNum(int count, int index)
 {
-	ui.label_abstract_num->setText(tr("人物数量:")+QString::number(count));
+	if(index == 0)
+	{
+		ui.label_abstract_num_0->setText(tr("摄像头1人物数量:")+QString::number(count));
+	}else if(index == 1)
+	{
+		ui.label_abstract_num_1->setText(tr("摄像头2人物数量:")+QString::number(count));
+	}
 }
 
 void MainWindow::switchToRealTimeForm()

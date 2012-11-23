@@ -247,19 +247,6 @@ p, li { white-space: pre-wrap; }
      <string>事件数量:0</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_switch">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>240</y>
-      <width>51</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>切换</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QWidget" name="left_widget_up" native="true">
    <property name="geometry">
@@ -351,6 +338,26 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string> 视频摘要列表：</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_switch">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>0</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>切换到实时模式</string>
+    </property>
+    <property name="text">
+     <string>实时模式</string>
+    </property>
+    <property name="icon">
+     <iconset resource="mainwindow.qrc">
+      <normaloff>:/MainWindow/Resources/switch.png</normaloff>:/MainWindow/Resources/switch.png</iconset>
     </property>
    </widget>
   </widget>

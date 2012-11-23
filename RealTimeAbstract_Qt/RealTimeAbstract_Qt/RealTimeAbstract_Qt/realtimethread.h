@@ -70,7 +70,7 @@ private:
 	vector<EventNode> eventList;
 signals:
 	void sendCameraImage(int, QImage);
-	void sendAbstractCount(int);
+	void sendAbstractCount(int,int);
 private slots:
 	void timerTimeOut();  //计时器到时（1s）
 };

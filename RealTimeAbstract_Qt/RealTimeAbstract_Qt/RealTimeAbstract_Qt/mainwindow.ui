@@ -161,12 +161,19 @@
     <rect>
      <x>710</x>
      <y>310</y>
-     <width>71</width>
+     <width>81</width>
      <height>21</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>切换到本地模式</string>
+   </property>
    <property name="text">
     <string>本地模式</string>
+   </property>
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/MainWindow/Resources/switch.png</normaloff>:/MainWindow/Resources/switch.png</iconset>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_start">
@@ -199,7 +206,7 @@
    <property name="geometry">
     <rect>
      <x>480</x>
-     <y>360</y>
+     <y>370</y>
      <width>201</width>
      <height>21</height>
     </rect>
@@ -213,7 +220,25 @@
     <string>时间:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_abstract_num">
+  <widget class="QLabel" name="label_abstract_num_1">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>350</y>
+     <width>161</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>宋体</family>
+    </font>
+   </property>
+   <property name="text">
+    <string>摄像头2人物数量:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_abstract_num_0">
    <property name="geometry">
     <rect>
      <x>480</x>
@@ -228,7 +253,7 @@
     </font>
    </property>
    <property name="text">
-    <string>人物数量:</string>
+    <string>摄像头1人物数量:</string>
    </property>
   </widget>
  </widget>

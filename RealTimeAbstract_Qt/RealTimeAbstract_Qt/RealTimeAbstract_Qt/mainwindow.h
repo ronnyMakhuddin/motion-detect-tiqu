@@ -27,7 +27,7 @@ private slots:
 	//my slots
 	void showVideo(int, QImage);//显示摄像头
 	void updateTime();          //更新时间
-	void updataAbstractNum(int);   //更新事件个数
+	void updataAbstractNum(int,int);   //更新事件个数
 	void switchToRealTimeForm();   //切换到实时视频界面
 
 	//system slots
