@@ -9,7 +9,7 @@ DrawForm::DrawForm(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-	setFixedSize(width(), height());
+	//setFixedSize(width(), height());
 	state = 0;
 	baseFrame = 0;
 	showFrame = 0;
@@ -174,6 +174,9 @@ void DrawForm::setBaseFrame(IplImage* frame)
 	ui.image_label->setPixmap(QPixmap::fromImage(*qImg));
 
 	//重置控件大小
+	this->setFixedSize(baseFrame->width, baseFrame->height+100);
+	ui.frame->move(0, baseFrame->height);
+	/*
 	this->resize(baseFrame->width, baseFrame->height+100);
 	int jianju = (this->width()-3*ui.ok_button->width())/4;
 	int y = ui.image_label->height()+12;
@@ -190,6 +193,7 @@ void DrawForm::setBaseFrame(IplImage* frame)
 		ui.clear_button->move(bianyuan+ui.ok_button->width()+jianju, y);
 		ui.groupBox->move(bianyuan+ui.ok_button->width()*2+jianju*2, y);
 	}
+	*/
 }
 
 void DrawForm::drawArrow(IplImage*& img, Point pStart, Point pEnd, int len, int alpha,             

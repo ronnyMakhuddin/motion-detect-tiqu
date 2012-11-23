@@ -1,7 +1,7 @@
 #include "setting_widget.h"
 
-setting_widget::setting_widget(QWidget *parent)
-	: QWidget(parent)
+setting_widget::setting_widget(QDialog *parent)
+	: QDialog(parent)
 {
 	ui.setupUi(this);
 	setFixedSize(this->width(), this->height());
@@ -21,10 +21,6 @@ setting_widget::setting_widget(QWidget *parent)
 setting_widget::~setting_widget()
 {
 
-}
-
-void setting_widget::on_enter_checkbox_clicked()
-{
 }
 
 void setting_widget::on_default_pushbutton_clicked()
@@ -62,7 +58,10 @@ void setting_widget::on_ok_pushbutton_clicked()
 	*/
 }
 
-
+void setting_widget::on_cancel_pushbutton_clicked()
+{
+	hide();
+}
 
 void setting_widget::setDefault()
 {

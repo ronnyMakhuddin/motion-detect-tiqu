@@ -160,14 +160,14 @@ void VideoAbstract_QTver::on_search_button_clicked()
 		return;
 	}
 	drawForm->setBaseFrame(analyzeThread->getFrameByNumber(18));
-	drawForm->show();
+	drawForm->exec();
 }
 
 //ÉèÖÃ°´Å¥
 void VideoAbstract_QTver::on_setting_button_clicked()
 {
 	settingUI->readData();
-	settingUI->show();
+	settingUI->exec();
 }
 
 //ÇÐ»»°´Å¥

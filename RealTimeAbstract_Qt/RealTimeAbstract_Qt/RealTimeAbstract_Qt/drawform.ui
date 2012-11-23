@@ -33,80 +33,156 @@
     <string/>
    </property>
   </widget>
-  <widget class="QPushButton" name="ok_button">
+  <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>310</y>
-     <width>75</width>
-     <height>75</height>
+     <x>0</x>
+     <y>300</y>
+     <width>401</width>
+     <height>101</height>
     </rect>
    </property>
-   <property name="toolTip">
-    <string>点击确定保存</string>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
    </property>
-   <property name="text">
-    <string>确定</string>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
    </property>
-  </widget>
-  <widget class="QPushButton" name="clear_button">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>310</y>
-     <width>75</width>
-     <height>75</height>
-    </rect>
-   </property>
-   <property name="toolTip">
-    <string>清除所有画线</string>
-   </property>
-   <property name="text">
-    <string>清除</string>
-   </property>
-  </widget>
-  <widget class="QGroupBox" name="groupBox">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>310</y>
-     <width>75</width>
-     <height>75</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string/>
-   </property>
-   <widget class="QRadioButton" name="line_radiobutton">
+   <widget class="QTimeEdit" name="timeEdit_end">
     <property name="geometry">
      <rect>
-      <x>15</x>
-      <y>15</y>
-      <width>51</width>
-      <height>16</height>
+      <x>230</x>
+      <y>60</y>
+      <width>81</width>
+      <height>31</height>
      </rect>
     </property>
-    <property name="toolTip">
-     <string>画一条带箭头的直线，检索按照直线方向运动的视频摘要</string>
-    </property>
-    <property name="text">
-     <string>直线</string>
+    <property name="time">
+     <time>
+      <hour>13</hour>
+      <minute>50</minute>
+      <second>0</second>
+     </time>
     </property>
    </widget>
-   <widget class="QRadioButton" name="rect_radiobutton">
+   <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>15</x>
-      <y>45</y>
-      <width>51</width>
-      <height>16</height>
+      <x>110</x>
+      <y>10</y>
+      <width>75</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QRadioButton" name="line_radiobutton">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>15</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>画一条带箭头的直线，检索按照直线方向运动的视频摘要</string>
+     </property>
+     <property name="text">
+      <string>直线</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="rect_radiobutton">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>50</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>在视频中画一个矩形，检索进入这个矩形的视频摘要</string>
+     </property>
+     <property name="text">
+      <string>矩形</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>60</y>
+      <width>21</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>到</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>10</y>
+      <width>21</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>从</string>
+    </property>
+   </widget>
+   <widget class="QTimeEdit" name="timeEdit_start">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>10</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="time">
+     <time>
+      <hour>12</hour>
+      <minute>20</minute>
+      <second>0</second>
+     </time>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="ok_button">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>75</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="toolTip">
-     <string>在视频中画一个矩形，检索进入这个矩形的视频摘要</string>
+     <string>点击确定保存</string>
     </property>
     <property name="text">
-     <string>矩形</string>
+     <string>确定</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="clear_button">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>75</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>清除所有画线</string>
+    </property>
+    <property name="text">
+     <string>清除</string>
     </property>
    </widget>
   </widget>

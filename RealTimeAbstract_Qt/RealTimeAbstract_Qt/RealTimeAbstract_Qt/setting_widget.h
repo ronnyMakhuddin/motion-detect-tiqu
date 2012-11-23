@@ -1,7 +1,7 @@
 #ifndef SETTING_WIDGET_H
 #define SETTING_WIDGET_H
 
-#include <QWidget>
+#include <QDialog>
 #include <ui_setting.h>
 #include "FileOperation.h"
 
@@ -18,7 +18,7 @@ struct Settings
 	int max_event_num;
 };
 
-class setting_widget : public QWidget
+class setting_widget : public QDialog
 {
 	Q_OBJECT
 
@@ -26,16 +26,16 @@ public:
 	void setDefault();
 	void readData();
 	void writeData();
-	setting_widget(QWidget *parent);
+	setting_widget(QDialog *parent);
 	~setting_widget();
 
 public:
 	Ui::setting_ui ui;
 	Settings data;
 private slots:
-    void on_enter_checkbox_clicked();
 	void on_ok_pushbutton_clicked();
 	void on_default_pushbutton_clicked();
+	void on_cancel_pushbutton_clicked();
 signals:
 	void send_enter_checkbox_state(bool);
 	void send_data(int,int,int,int,int,int,int,int);
