@@ -12,6 +12,7 @@ class PlayThread : public QThread
 	Q_OBJECT
 
 public:
+	bool init(QString);
 	bool init(QString,EventNode,int);
 	void getFrameByPos(int);
 	PlayThread(QObject *parent);
@@ -40,6 +41,7 @@ public:
 	bool isPlaying;
 	bool isLoop;
 	int pos;
+	bool isAllAbstract;
 };
 
 #endif // PLAYTHREAD_H

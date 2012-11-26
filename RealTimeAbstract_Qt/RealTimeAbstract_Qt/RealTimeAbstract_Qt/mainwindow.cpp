@@ -29,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags)
 	//初始化本地界面
 	 localForm = new VideoAbstract_QTver(0);
 	 connect(localForm, SIGNAL(sendSwitchToRealTimeForm()), this, SLOT(switchToRealTimeForm()));
+
+	 ui.label_time->hide();
 }
 
 MainWindow::~MainWindow()
@@ -54,6 +56,7 @@ void MainWindow::getCameraNum()  //获取摄像头数量，并且设置checkBox的可点击属性
 {
 	videoInput vi;
 	num = vi.listDevices(true);
+	num = 2;
 	ui.checkBox_cam0->setDisabled(false);
 	ui.checkBox_cam1->setDisabled(false);
 	switch(num)

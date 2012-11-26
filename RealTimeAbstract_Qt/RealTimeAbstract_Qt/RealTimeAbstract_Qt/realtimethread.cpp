@@ -4,11 +4,16 @@
 //�潦明牾�兵晒痕方
 bool RealTimeThread::init()
 {
-	capture = cvCaptureFromCAM(num);
+	//capture = cvCaptureFromCAM(num);
+	//霞編。。。。。。。。。。。。。。。。。。。。。。。。。。。。
+	if(num == 0)
+	capture = cvCaptureFromAVI("D:\\video\\2012-11-16-142501T101.avi");
+	else
+		capture = cvCaptureFromAVI("D:\\video\\2012-11-16-142501T102.avi");
 	if(!capture)
 		return false;
 	captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
-			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
+		(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
 	qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
 	iplImg = cvCreateImageHeader(captureSize,  8, 3);
 	iplImg->imageData = (char*)qImg->bits();
@@ -312,7 +317,7 @@ void RealTimeThread::run()
 		}
 		cvCvtColor(iplImg,iplImg,CV_BGR2RGB);
 		emit sendCameraImage(num, *qImg);
-		//msleep(20);
+		msleep(65);
 	}
 }
 

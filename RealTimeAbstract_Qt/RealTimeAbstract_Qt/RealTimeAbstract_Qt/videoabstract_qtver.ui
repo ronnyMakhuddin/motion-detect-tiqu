@@ -326,7 +326,7 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>500</width>
+      <width>111</width>
       <height>30</height>
      </rect>
     </property>
@@ -358,6 +358,19 @@ p, li { white-space: pre-wrap; }
     <property name="icon">
      <iconset resource="mainwindow.qrc">
       <normaloff>:/MainWindow/Resources/switch.png</normaloff>:/MainWindow/Resources/switch.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_playAll">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>0</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>播放所有事件</string>
     </property>
    </widget>
   </widget>

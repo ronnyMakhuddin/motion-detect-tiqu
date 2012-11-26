@@ -163,6 +163,12 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	drawForm->exec();
 }
 
+//播放所有事件按钮
+void VideoAbstract_QTver::on_pushButton_playAll_clicked()
+{
+	playAbstract(-1);
+}
+
 //设置按钮
 void VideoAbstract_QTver::on_setting_button_clicked()
 {
@@ -359,12 +365,26 @@ void VideoAbstract_QTver::updateEventCount(int num)
 
 void VideoAbstract_QTver::playAbstract(int index)
 {
-	player->show();
-	player->thread->init(analyzeThread->filePath, analyzeThread->eventList[index], analyzeThread->jiange);
-	player->thread->pos = analyzeThread->eventList[index].startFrame;
-	player->thread->start();
-	player->thread->isPlaying = true;
-	player->ui.play_button->setText(tr("暂停"));
+	if(index == -1)//播放所有事件
+	{
+		QString fileDir, fileName;
+		Globals::getFileDirFromQString(analyzeThread->filePath, fileDir);
+		Globals::getFileNameFromQString(analyzeThread->filePath, fileName);
+		QString allAbstractPath = fileDir + tr("analyze\\") + fileName;
+		player->show();
+		player->thread->init(allAbstractPath);
+		player->thread->start();
+		player->thread->isPlaying = true;
+		player->ui.play_button->setText(tr("暂停"));
+	}else
+	{
+		player->show();
+		player->thread->init(analyzeThread->filePath, analyzeThread->eventList[index], analyzeThread->jiange);
+		player->thread->pos = analyzeThread->eventList[index].startFrame;
+		player->thread->start();
+		player->thread->isPlaying = true;
+		player->ui.play_button->setText(tr("暂停"));
+	}
 	//connect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
 	//disconnect(analyzeThread, SIGNAL(sendQImage(QImage,int)), player, SLOT(showImage(QImage)));
 }

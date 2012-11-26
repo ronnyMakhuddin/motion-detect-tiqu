@@ -32,6 +32,7 @@ private slots:
 	void on_setting_button_clicked();
 	void on_pushButton_switch_clicked();
 	void on_search_button_clicked();
+	void on_pushButton_playAll_clicked();
 	void on_show_video_check_box_clicked();
 	void showVideo(QImage, int);
 	void openFileFailed();

@@ -6,6 +6,7 @@ AbstractForm::AbstractForm(int index = -1)
 	this->index = index;
 	ui.setupUi(this);
 	this->setMinimumSize(QSize(300,255));
+	ui.label_abstract_index->setText(tr("ժҪ") + QString::number(index+1));
 }
 
 AbstractForm::~AbstractForm()
