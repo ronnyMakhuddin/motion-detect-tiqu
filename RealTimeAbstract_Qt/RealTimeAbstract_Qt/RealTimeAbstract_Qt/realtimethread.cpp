@@ -4,12 +4,14 @@
 //�潦明牾�兵晒痕方
 bool RealTimeThread::init()
 {
-	//capture = cvCaptureFromCAM(num);
+	capture = cvCaptureFromCAM(num);
 	//霞編。。。。。。。。。。。。。。。。。。。。。。。。。。。。
+	/*
 	if(num == 0)
 	capture = cvCaptureFromAVI("D:\\video\\2012-11-16-142501T101.avi");
 	else
 		capture = cvCaptureFromAVI("D:\\video\\2012-11-16-142501T102.avi");
+		*/
 	if(!capture)
 		return false;
 	captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
