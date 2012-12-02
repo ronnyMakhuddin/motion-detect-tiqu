@@ -9,7 +9,7 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
     QString selectedFilter;
     Globals::files = QFileDialog::getOpenFileNames(
 		this, tr("请选择一个或者多个视频文件"),
-		QDir::currentPath(),
+		QDir::rootPath(),
         tr("视频文件 (*.avi)"),
         &selectedFilter,
         options);
@@ -373,6 +373,7 @@ void VideoAbstract_QTver::playAbstract(int index)
 		QString allAbstractPath = fileDir + tr("analyze\\") + fileName;
 		player->show();
 		player->thread->init(allAbstractPath);
+		player->thread->pos = 0;
 		player->thread->start();
 		player->thread->isPlaying = true;
 		player->ui.play_button->setText(tr("暂停"));

@@ -31,6 +31,7 @@ public:
 	void init(QString filePath);
 private slots:
 	void on_play_button_clicked();
+    void on_exit_button_clicked();
 	void showImage(QImage image);
 	void getSliderMoved(int);
 	void setSliderValue(int value);

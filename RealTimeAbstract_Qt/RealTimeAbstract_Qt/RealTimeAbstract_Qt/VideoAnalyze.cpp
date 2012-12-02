@@ -470,7 +470,7 @@ void VideoAnalyze::createAllEventVideo()
 				//msleep(200);
 				//截取矩形图像合成
 				cvSetImageROI(frame, rect);
-				sprintf(eventNumber, "%d", j);
+				sprintf(eventNumber, "%d", j+1);
 				cvPutText(frame, eventNumber, cvPoint(10, 15), &font, EventNodeOperation::sampleColor[1]);
 				cvSetImageROI(allEventImage, rect);
 				cvAddWeighted(frame, alpha_value, allEventImage, 1 - alpha_value, 0, allEventImage);
@@ -568,7 +568,7 @@ void VideoAnalyze::drawAbstracts()
 			QString startTime = tr("开始时间:") + Globals::getTimeFromFrameNum(node.startFrame, fps);
 			QString endTime = tr("结束时间:") + Globals::getTimeFromFrameNum(node.endFrame, fps);
 			emit sendDrawAbstracts(*qImg, startTime, endTime, i);
-			msleep(10);
+			msleep(100);
 		}
 	}
 	//发送信号画摘要事件缩略图

@@ -53,6 +53,11 @@ void AbstractPlayer::on_play_button_clicked()
 	}
 }
 
+void AbstractPlayer::on_exit_button_clicked()
+{
+	this->hide(); 
+}
+
 void AbstractPlayer::showImage(QImage image)
 {
 	QImage newImg = image.scaled(ui.image_label->width(), ui.image_label->height());
