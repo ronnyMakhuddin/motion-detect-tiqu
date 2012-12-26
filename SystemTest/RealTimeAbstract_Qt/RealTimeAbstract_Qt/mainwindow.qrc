@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="MainWindow">
+    <file>Resources/switch.png</file>
+    <file>Resources/openvideo.png</file>
+    <file>Resources/search.png</file>
+    <file>Resources/nocapture.png</file>
+    <file>Resources/startanalyze.png</file>
+    <file>Resources/stopanalyze.png</file>
+    <file>Resources/windowIcon.png</file>
+    <file>Resources/setting.png</file>
+  </qresource>
+</RCC>
