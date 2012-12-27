@@ -740,6 +740,39 @@ void VideoAnalyze::getShuaixuanData(Point currentLineP1,Point currentLineP2,Poin
 	start();
 }
 
+//将像素点从rgb转换到hsv
+void VideoAnalyze::rgb2hsv(int R, int G, int B, int&H, int&S, int&V)
+{
+	int max = max_(max_(R,G),B);
+	int min = min_(min_(R,G),B);
+	V = max;
+	S = (max - min)/max;
+	if(R == max)
+	{
+		H = 1.0*(G - B)/(max-min)*60;
+	}else if(G == max)
+	{
+		H = 120 + 1.0*(B - R)/(max-min)*60;
+	}else if(B == max)
+	{
+		H = 240 + 1.0*(R - G)/(max-min)*60;
+	}
+	if(H < 0)
+		H = H + 360;
+}
+
+//返回最大值
+int VideoAnalyze::max_(int x, int y)
+{
+	return x > y ? x : y;
+}
+
+//返回最小值
+int VideoAnalyze::min_(int x, int y)
+{
+	return x < y ? x : y;
+}
+
 VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 {
 	fps = 0;

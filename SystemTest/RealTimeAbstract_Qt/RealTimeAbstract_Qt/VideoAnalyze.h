@@ -5,6 +5,7 @@
 #include <qdir.h>
 #include <qtime>
 #include <QTimer>
+#include <math.h>
 #include "EventNode.h"
 #include "EventNodeOperation.h"
 #include "Globals.h"
@@ -97,5 +98,8 @@ private slots:
 	void updateOneSecond();       //更新时间
 	void getSettingData(int,int,int,int,int,int,int,int); //获取设置信息
 	void getShuaixuanData(Point,Point,Point,Point, int, QString, int, int);    //获取筛选信息
+	void rgb2hsv(int R, int G, int B, int&H, int&S, int&V); //将像素点从rgb转到hsv
+	int max_(int x, int y);  //返回最大值函数
+	int min_(int x, int y);   //返回最小值
 };
 
