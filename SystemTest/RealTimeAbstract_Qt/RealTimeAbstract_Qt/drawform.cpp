@@ -158,7 +158,7 @@ void DrawForm::setBaseFrame(IplImage* frame)
 	}
 	baseFrame = cvCreateImage(cvSize(frame->width, frame->height), frame->depth, frame->nChannels);
 	ui.image_label->resize(frame->width, frame->height);
-	if (frame->origin == IPL_ORIGIN_TL)  
+	if (frame->origin == IPL_ORIGIN_TL)
 	{  
 		cvCopy(frame,baseFrame,0);  
 	}  
@@ -174,26 +174,9 @@ void DrawForm::setBaseFrame(IplImage* frame)
 	ui.image_label->setPixmap(QPixmap::fromImage(*qImg));
 
 	//重置控件大小
-	this->setFixedSize(baseFrame->width, baseFrame->height+100);
+	ui.frame_1->setFixedSize(baseFrame->width, baseFrame->height+100);
 	ui.frame->move(0, baseFrame->height);
-	/*
-	this->resize(baseFrame->width, baseFrame->height+100);
-	int jianju = (this->width()-3*ui.ok_button->width())/4;
-	int y = ui.image_label->height()+12;
-	if(jianju <= ui.ok_button->width())
-	{
-		ui.ok_button->move(jianju, y);
-		ui.clear_button->move(ui.ok_button->width()+2*jianju, y);
-		ui.groupBox->move(ui.ok_button->width()*2+3*jianju, y);
-	}else
-	{
-		jianju = ui.ok_button->width();
-		int bianyuan = (this->width()-3*ui.ok_button->width()-2*jianju)/2;
-		ui.ok_button->move(bianyuan, y);
-		ui.clear_button->move(bianyuan+ui.ok_button->width()+jianju, y);
-		ui.groupBox->move(bianyuan+ui.ok_button->width()*2+jianju*2, y);
-	}
-	*/
+	
 }
 
 void DrawForm::drawArrow(IplImage*& img, Point pStart, Point pEnd, int len, int alpha,             
