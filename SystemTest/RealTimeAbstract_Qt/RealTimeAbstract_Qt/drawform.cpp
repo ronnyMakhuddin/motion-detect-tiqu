@@ -25,6 +25,8 @@ DrawForm::DrawForm(QWidget *parent)
 
 	ui.line_radiobutton->setChecked(true);
 	connect(ui.image_label, SIGNAL(mousePressEvent(QMouseEvent*)), this, SLOT(label_mouse_press(QMouseEvent*)));
+
+	initComboBox_color();
 }
 
 DrawForm::~DrawForm()
@@ -119,8 +121,43 @@ void DrawForm::on_clear_button_clicked()
 
 void DrawForm::on_ok_button_clicked()
 {
+	int color = ui.comboBox_color->currentIndex();
+	QString minW = ui.lineEdit_minW->text();
+	QString maxW = ui.lineEdit_maxW->text();
+	QString minH = ui.lineEdit_minH->text();
+	QString maxH = ui.lineEdit_maxH->text();
+	QString jihe = minW+"_"+maxW+"_"+minH+"_"+maxH;
+
+	int waiguan = -1;
+	if(ui.radioButton_wth->isChecked())
+	{
+		waiguan = 0;
+	}else if(ui.radioButton_htw->isChecked())
+	{
+		waiguan = 1;
+	}else if(ui.radioButton_hew->isCheckable())
+	{
+		waiguan = 2;
+	}else
+	{
+		waiguan = -1;
+	}
+
+	int leixing = -1;
+	if(ui.radioButton_human->isChecked())
+	{
+		leixing = 0;
+	}else if(ui.radioButton_car->isChecked())
+	{
+		leixing = 1;
+	}else
+	{
+		leixing = -1;
+	}
+
+
 	//发送信息给分析类进行事件筛选
-	emit sendLineAndRect(currentLineP1, currentLineP2, currentRectP1, currentRectP2);
+	emit sendLineAndRect(currentLineP1, currentLineP2, currentRectP1, currentRectP2, color, jihe, waiguan, leixing);
 	this->setShown(false);
 }
 
@@ -194,4 +231,22 @@ void DrawForm::drawArrow(IplImage*& img, Point pStart, Point pEnd, int len, int 
 	arrow.x = pEnd.x + len * cos(angle - PI * alpha / 180);     
 	arrow.y = pEnd.y + len * sin(angle - PI * alpha / 180);    
 	cvLine(img, pEnd, arrow, color, thickness, lineType);
+}
+
+void DrawForm::initComboBox_color()
+{
+	QStringList texts;
+	texts.append(tr("红"));
+	texts.append(tr("橙"));
+	texts.append(tr("黄"));
+	texts.append(tr("黄绿"));
+	texts.append(tr("绿"));
+	texts.append(tr("青绿"));
+	texts.append(tr("青"));
+	texts.append(tr("蓝绿"));
+	texts.append(tr("蓝"));
+	texts.append(tr("紫"));
+	texts.append(tr("品红"));
+	texts.append(tr("紫红"));
+	ui.comboBox_color->insertItems(0,texts);
 }

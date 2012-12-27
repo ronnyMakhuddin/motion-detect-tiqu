@@ -322,7 +322,7 @@
      </font>
     </property>
     <property name="text">
-     <string>10</string>
+     <string>65535</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_minH">
@@ -360,7 +360,7 @@
      </font>
     </property>
     <property name="text">
-     <string>10</string>
+     <string>65535</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_10">
@@ -387,7 +387,7 @@
      <rect>
       <x>10</x>
       <y>270</y>
-      <width>341</width>
+      <width>361</width>
       <height>51</height>
      </rect>
     </property>
@@ -416,7 +416,7 @@
     <widget class="QRadioButton" name="radioButton_htw">
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>100</x>
        <y>20</y>
        <width>71</width>
        <height>16</height>
@@ -435,7 +435,7 @@
     <widget class="QRadioButton" name="radioButton_hew">
      <property name="geometry">
       <rect>
-       <x>220</x>
+       <x>200</x>
        <y>20</y>
        <width>71</width>
        <height>16</height>
@@ -449,6 +449,25 @@
      </property>
      <property name="text">
       <string>高宽相似</string>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="radioButton_nolimit">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>20</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Agency FB</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>不限</string>
      </property>
     </widget>
    </widget>

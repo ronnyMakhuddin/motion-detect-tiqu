@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>播放界面</string>
   </property>
   <widget class="QSlider" name="play_slider">
    <property name="geometry">

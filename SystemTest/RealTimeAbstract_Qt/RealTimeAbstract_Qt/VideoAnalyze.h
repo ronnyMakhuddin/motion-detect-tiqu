@@ -45,6 +45,11 @@ public:
 	Point lineP2;
 	Point rectP1;
 	Point rectP2;
+	//其它筛选参数
+	int color;
+	QString jihe;
+	int waiguan;
+	int leixing;
 private:
 	CvCapture *capture;
 	CvVideoWriter* videoWriter;
@@ -54,6 +59,7 @@ private:
     QImage *qImg;
 	QTimer *timer;
 public:
+	void searchAbstract();   //摘要检索
 	void analyzeVideo();   //视频分析
 	void analyzeRealTimeVideo(); //分析实时视频
 	void singleAnalysis(); //单个视频分析
@@ -90,6 +96,6 @@ signals:
 private slots:
 	void updateOneSecond();       //更新时间
 	void getSettingData(int,int,int,int,int,int,int,int); //获取设置信息
-	void getShuaixuanData(Point,Point,Point,Point);    //获取筛选信息
+	void getShuaixuanData(Point,Point,Point,Point, int, QString, int, int);    //获取筛选信息
 };
 

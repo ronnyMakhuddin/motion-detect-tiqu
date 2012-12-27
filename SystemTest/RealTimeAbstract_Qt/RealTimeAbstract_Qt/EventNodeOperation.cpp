@@ -165,13 +165,20 @@ void EventNodeOperation::eventFilter(vector<EventNode> &eventList, int fps)
 	}
 }
 
-void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point lineP1, Point lineP2, Point rectP1, Point rectP2)
+void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point lineP1, Point lineP2, Point rectP1, Point rectP2, QString jihe, int waiguan)
 {
+	QStringList jiheList = jihe.split("_");
+	int minW = jiheList[0].toInt();
+	int maxW = jiheList[1].toInt();
+	int minH = jiheList[2].toInt();
+	int maxH = jiheList[3].toInt();
 	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
 	{
 		EventNode node = *iter;
 		bool isDirect = true;
 		bool isEnter = true;
+		bool isJihe = true;
+		bool isWaiguan = true;
 		if(lineP1.x!=-1)
 		{
 			Point eventP1(node.trackList[0].x + node.trackList[0].width/2, node.trackList[0].y + node.trackList[0].height/2);
@@ -194,10 +201,35 @@ void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point 
 				if(isEnter)
 					break;
 			}
-			//
+		}
+		{
+			int index = node.trackList.size()/2;
+			int w = node.trackList[index].width;
+			int h = node.trackList[index].height;
+			if(w > minW && w < maxW &&
+				h > minH && h < maxH)
+				isJihe = true;
+			else 
+				isJihe = false;
+			if(waiguan == -1 && w > h-h/10)
+			{
+				isWaiguan = true;
+			}else if(waiguan == 0 && w > h-h/10)
+			{
+				isWaiguan = true;
+			}else if(waiguan == 1 && h > w-w/10)
+			{
+				isWaiguan = true;
+			}else if(waiguan == 2 && abs(w - h) < w/10)
+			{
+				isWaiguan = true;
+			}else
+			{
+				isWaiguan = false;
+			}
 		}
 
-		if(isEnter && isDirect)  //条件不符合就删除,否则指向下一条
+		if(isEnter && isDirect && isJihe && isWaiguan)  //条件不符合就删除,否则指向下一条
 			iter++;
 		else
 			iter = eventList.erase(iter);

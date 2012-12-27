@@ -214,7 +214,7 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	player = new AbstractPlayer();   //播放器
 
 	drawForm = new DrawForm(this);       //画线界面
-	connect(drawForm, SIGNAL(sendLineAndRect(Point,Point,Point,Point)), analyzeThread, SLOT(getShuaixuanData(Point,Point,Point,Point)));
+	connect(drawForm, SIGNAL(sendLineAndRect(Point,Point,Point,Point, int, QString, int, int)), analyzeThread, SLOT(getShuaixuanData(Point,Point,Point,Point, int, QString, int, int)));
 
 	settingUI = new setting_widget(0);   //设置界面
 	connect(settingUI, SIGNAL(send_enter_checkbox_state(bool)), this, SLOT(get_enter_checkbox_state(bool)));

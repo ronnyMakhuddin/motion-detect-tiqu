@@ -32,8 +32,9 @@ private:
 	void resizeEvent(QResizeEvent*);
 	void reDrawFunction();  //重新画图
 	void drawArrow(IplImage*& img, Point pStart, Point pEnd, int len, int alpha, Scalar& color, int thickness, int lineType);  //画箭头
+	void initComboBox_color();  //初始化颜色选择框
 signals:
-	void sendLineAndRect(Point, Point, Point, Point);
+	void sendLineAndRect(Point, Point, Point, Point, int, QString, int, int);
 public:
 
 	Point startP;
@@ -43,6 +44,7 @@ public:
 	Point currentLineP2;
 	Point currentRectP1;
 	Point currentRectP2;
+
 
 	QImage img;
 
