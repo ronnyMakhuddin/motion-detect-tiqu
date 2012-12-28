@@ -26,6 +26,8 @@ DrawForm::DrawForm(QWidget *parent)
 	ui.line_radiobutton->setChecked(true);
 	connect(ui.image_label, SIGNAL(mousePressEvent(QMouseEvent*)), this, SLOT(label_mouse_press(QMouseEvent*)));
 
+	ui.radioButton_nolimit->setChecked(true);
+	ui.radioButton_all->setChecked(true);
 	initComboBox_color();
 }
 
@@ -135,7 +137,7 @@ void DrawForm::on_ok_button_clicked()
 	}else if(ui.radioButton_htw->isChecked())
 	{
 		waiguan = 1;
-	}else if(ui.radioButton_hew->isCheckable())
+	}else if(ui.radioButton_hew->isChecked())
 	{
 		waiguan = 2;
 	}else
@@ -236,6 +238,7 @@ void DrawForm::drawArrow(IplImage*& img, Point pStart, Point pEnd, int len, int 
 void DrawForm::initComboBox_color()
 {
 	QStringList texts;
+	texts.append(tr("²»ÏÞ"));
 	texts.append(tr("ºì"));
 	texts.append(tr("³È"));
 	texts.append(tr("»Æ"));

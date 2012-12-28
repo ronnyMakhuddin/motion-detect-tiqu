@@ -211,7 +211,7 @@ void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point 
 				isJihe = true;
 			else 
 				isJihe = false;
-			if(waiguan == -1 && w > h-h/10)
+			if(waiguan == -1)
 			{
 				isWaiguan = true;
 			}else if(waiguan == 0 && w > h-h/10)
