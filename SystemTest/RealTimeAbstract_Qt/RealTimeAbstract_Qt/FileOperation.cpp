@@ -30,6 +30,12 @@ void FileOperation::writeToFile(char* filePath, int jiange, int fps, int key_jia
 			fprintf(fs, "%d %d %d %d ", x, y, width, height);
 		}
 		fprintf(fs, "\n");
+
+		for(int j = 0; j < sizeof(node.histomgram)/sizeof(int); j++)
+		{
+			fprintf(fs, "%d ", node.histomgram[j]);
+		}
+		fprintf(fs, "\n");
 	}
 	//fflush(fs);
 	fclose(fs);
@@ -70,6 +76,13 @@ void FileOperation::readFromFile(QString filePath, int& jiange, int& fps, int& k
 			int height = data[j * 4 + N + 3].toInt();
 			Rect r(x, y, width, height);
 			node.trackList.push_back(r);
+		}
+		
+		QString line2 = stream.readLine();
+		QStringList data2 = line2.split(' ');
+		for(int j = 0; j < sizeof(node.histomgram)/sizeof(int); j++)
+		{
+			node.histomgram[j] = data2[j].toInt();
 		}
 		eventList.push_back(node);
 	}

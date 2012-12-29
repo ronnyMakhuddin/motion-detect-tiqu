@@ -165,7 +165,7 @@ void EventNodeOperation::eventFilter(vector<EventNode> &eventList, int fps)
 	}
 }
 
-void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point lineP1, Point lineP2, Point rectP1, Point rectP2, QString jihe, int waiguan)
+void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point lineP1, Point lineP2, Point rectP1, Point rectP2, int color, QString jihe, int waiguan)
 {
 	QStringList jiheList = jihe.split("_");
 	int minW = jiheList[0].toInt();
@@ -177,16 +177,17 @@ void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point 
 		EventNode node = *iter;
 		bool isDirect = true;
 		bool isEnter = true;
+		bool isColor = true;
 		bool isJihe = true;
 		bool isWaiguan = true;
-		if(lineP1.x!=-1)
+		if(lineP1.x!=-1)//方向筛选
 		{
 			Point eventP1(node.trackList[0].x + node.trackList[0].width/2, node.trackList[0].y + node.trackList[0].height/2);
 			int endIndex = node.trackList.size()-1;
 			Point eventP2(node.trackList[endIndex].x + node.trackList[endIndex].width/2, node.trackList[endIndex].y + node.trackList[endIndex].height/2);
 			isDirect = isTheSameDirect(lineP1, lineP2, eventP1, eventP2);
 		}
-		if(rectP1.x!=-1)
+		if(rectP1.x!=-1)//入侵区域筛选
 		{
 			isEnter = false;
 			Rect r1;
@@ -202,7 +203,7 @@ void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point 
 					break;
 			}
 		}
-		{
+		{//几何特征和外观特征筛选
 			int index = node.trackList.size()/2;
 			int w = node.trackList[index].width;
 			int h = node.trackList[index].height;
@@ -229,7 +230,19 @@ void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point 
 			}
 		}
 
-		if(isEnter && isDirect && isJihe && isWaiguan)  //条件不符合就删除,否则指向下一条
+		if(color != -1)
+		{//颜色特征筛选
+			int cCount = 0;
+			for(int i = 0; i < sizeof(node.histomgram)/sizeof(int); i++)
+			{
+				if(node.histomgram[color] >= node.histomgram[i])
+					cCount++;
+			}
+			if(cCount < 10)
+				isColor = false;
+		}
+
+		if(isEnter && isDirect && isJihe && isWaiguan && isColor)  //条件不符合就删除,否则指向下一条
 			iter++;
 		else
 			iter = eventList.erase(iter);

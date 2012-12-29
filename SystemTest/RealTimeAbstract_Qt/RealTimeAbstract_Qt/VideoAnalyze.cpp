@@ -40,7 +40,7 @@ void VideoAnalyze::searchAbstract()
 	QString analyzeFilePath = fileDir + fileName + tr(".txt");
 	FileOperation::readFromFile(analyzeFilePath, jiange, fps, key_jiange, eventList);
 
-	EventNodeOperation::selectAbstractEvent(eventList, lineP1, lineP2, rectP1, rectP2, jihe, waiguan);
+	EventNodeOperation::selectAbstractEvent(eventList, lineP1, lineP2, rectP1, rectP2, color, jihe, waiguan);
 	//第三步：重画摘要
 	if(!capture)
 	{
@@ -643,29 +643,30 @@ void VideoAnalyze::getNodeHistogram(IplImage*&img, IplImage*&dst, Rect r, vector
 	{
 		eventList[nodeI].histomgram[i] = 0;
 	}
-
+	/*
 	int dstStep = dst->widthStep/sizeof(uchar);
 	uchar*dstData = (uchar*)dst->imageData;
 	
 	int imgStep = img->widthStep/sizeof(uchar);
 	int imgChannels = img->nChannels;
 	uchar*imgData = (uchar*)img->imageData;
-
+	*/
 
 	for(int y = r.y; y < r.y+r.height; y++)
 	{
 		for(int x = r.x; x < r.x+r.width; x++)
 		{
-			//continue;
-			if(dstData[y*dstStep+x] < 100)
+			CvScalar dstS;
+			dstS = cvGet2D(dst, y, x);
+			if(dstS.val[0] < 100)
 				continue;
-
+			
 			CvScalar s;
 			s = cvGet2D(img,y,x);
 			B = s.val[0];
 			G = s.val[1];
 			R = s.val[2];
-
+			
 			//B = imgData[y*imgStep+x*imgChannels+0];
 			//G = imgData[y*imgStep+x*imgChannels+1];
 			//R = imgData[y*imgStep+x*imgChannels+2];
@@ -674,11 +675,13 @@ void VideoAnalyze::getNodeHistogram(IplImage*&img, IplImage*&dst, Rect r, vector
 			//G = ((uchar*)(img->imageData+y*img->widthStep))[x*img->nChannels+1];
 			//R = ((uchar*)(img->imageData+y*img->widthStep))[x*img->nChannels+2];
 			
+			
 			rgb2hsv(R,G,B,H,S,V);
-			int index;
+			int index = 0;
 			if(V*1.0/255 <= 0.25) //黑色判断条件
 			{
 				eventList[nodeI].histomgram[12]++;
+				continue;
 			}else if(H > 345 && H <= 15) //红色
 			{
 				index = 0;
@@ -717,6 +720,7 @@ void VideoAnalyze::getNodeHistogram(IplImage*&img, IplImage*&dst, Rect r, vector
 				index = 11;
 			}
 			eventList[nodeI].histomgram[index]++;
+			
 		}
 	}
 }

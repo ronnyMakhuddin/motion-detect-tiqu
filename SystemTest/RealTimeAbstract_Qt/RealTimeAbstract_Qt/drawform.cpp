@@ -124,6 +124,7 @@ void DrawForm::on_clear_button_clicked()
 void DrawForm::on_ok_button_clicked()
 {
 	int color = ui.comboBox_color->currentIndex();
+	color = color - 1;
 	QString minW = ui.lineEdit_minW->text();
 	QString maxW = ui.lineEdit_maxW->text();
 	QString minH = ui.lineEdit_minH->text();
@@ -251,5 +252,6 @@ void DrawForm::initComboBox_color()
 	texts.append(tr("×Ï"));
 	texts.append(tr("Æ·ºì"));
 	texts.append(tr("×Ïºì"));
+	texts.append(tr("ºÚ"));
 	ui.comboBox_color->insertItems(0,texts);
 }
