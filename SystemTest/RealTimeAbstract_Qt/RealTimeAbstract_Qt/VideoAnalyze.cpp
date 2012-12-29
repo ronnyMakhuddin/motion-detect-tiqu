@@ -141,14 +141,14 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
 			}
 			else
 			{
-				
-				if(!EventNodeOperation::searchEventList(eventList, r, node))
+				int tempIndex;
+				if(!EventNodeOperation::searchEventList(eventList, r, node, tempIndex))
 				{
 					node = EventNodeOperation::insertEventNode(eventList, r, frameNum);
 				}
-				else if( (node.endFrame-node.startFrame >= fps*1) && node.endFrame-node.startFrame < fps*1+jiange)
+				else if( (frameNum-node.startFrame >= fps*1) && (frameNum-node.startFrame < fps*1+jiange) )
 				{//进行HSV直方图提取,13种颜色
-
+					getNodeHistogram(img, tempDst, r, eventList, tempIndex);
 				}
 			}
 			s = EventNodeOperation::sampleColor[node.startFrame % 5];
@@ -635,18 +635,88 @@ IplImage* VideoAnalyze::getFrameByNumber(int pos)
 }
 
 //获取直方图
-void VideoAnalyze::getNodeHistogram(IplImage* img, IplImage* dst, Rect r, EventNode&node)
+void VideoAnalyze::getNodeHistogram(IplImage*&img, IplImage*&dst, Rect r, vector<EventNode> &eventList, int nodeI)
 {
 	int B,G,R;
 	int H,S,V;
+	for(int i = 0; i < 13; i++)
+	{
+		eventList[nodeI].histomgram[i] = 0;
+	}
+
+	int dstStep = dst->widthStep/sizeof(uchar);
+	uchar*dstData = (uchar*)dst->imageData;
+	
+	int imgStep = img->widthStep/sizeof(uchar);
+	int imgChannels = img->nChannels;
+	uchar*imgData = (uchar*)img->imageData;
+
+
 	for(int y = r.y; y < r.y+r.height; y++)
 	{
 		for(int x = r.x; x < r.x+r.width; x++)
 		{
-			B = ((uchar*)(img->imageData+y*img->widthStep))[x*img->nChannels+0];
-			G = ((uchar*)(img->imageData+y*img->widthStep))[x*img->nChannels+1];
-			R = ((uchar*)(img->imageData+y*img->widthStep))[x*img->nChannels+2];
+			//continue;
+			if(dstData[y*dstStep+x] < 100)
+				continue;
+
+			CvScalar s;
+			s = cvGet2D(img,y,x);
+			B = s.val[0];
+			G = s.val[1];
+			R = s.val[2];
+
+			//B = imgData[y*imgStep+x*imgChannels+0];
+			//G = imgData[y*imgStep+x*imgChannels+1];
+			//R = imgData[y*imgStep+x*imgChannels+2];
+
+			//B = ((uchar*)(img->imageData+y*img->widthStep))[x*img->nChannels+0];
+			//G = ((uchar*)(img->imageData+y*img->widthStep))[x*img->nChannels+1];
+			//R = ((uchar*)(img->imageData+y*img->widthStep))[x*img->nChannels+2];
+			
 			rgb2hsv(R,G,B,H,S,V);
+			int index;
+			if(V*1.0/255 <= 0.25) //黑色判断条件
+			{
+				eventList[nodeI].histomgram[12]++;
+			}else if(H > 345 && H <= 15) //红色
+			{
+				index = 0;
+			}else if(H > 15 && H <= 45) //红到黄
+			{
+				index = 1;
+			}else if(H > 45 && H <= 75) //黄
+			{
+				index = 2;
+			}else if(H > 75 && H <= 105) //黄到绿
+			{
+				index = 3;
+			}else if(H > 105 && H <= 135)//绿
+			{
+				index = 4;
+			}else if(H > 135 && H <= 165)//绿到青
+			{
+				index = 5;
+			}else if(H > 165 && H <= 195) //青
+			{
+				index = 6;
+			}else if(H > 195 && H <= 225) //青到蓝
+			{
+				index = 7;
+			}else if(H > 225 && H <= 255) //蓝
+			{
+				index = 8;
+			}else if(H > 255 && H <= 285) //蓝到品红
+			{
+				index = 9;
+			}else if(H > 285 && H <= 315) //品红
+			{
+				index = 10;
+			}else if(H > 315&& H < 345)//品红到红
+			{
+				index = 11;
+			}
+			eventList[nodeI].histomgram[index]++;
 		}
 	}
 }
@@ -773,8 +843,18 @@ void VideoAnalyze::rgb2hsv(int R, int G, int B, int&H, int&S, int&V)
 	int max = max_(max_(R,G),B);
 	int min = min_(min_(R,G),B);
 	V = max;
-	S = (max - min)/max;
-	if(R == max)
+	if(max==0)
+	{
+		S = 0;
+	}else
+	{
+		S = 1.0*(max - min)/max;
+	}
+	
+	if(max-min==0)
+	{
+		H = 0;
+	}else if(R == max)
 	{
 		H = 1.0*(G - B)/(max-min)*60;
 	}else if(G == max)

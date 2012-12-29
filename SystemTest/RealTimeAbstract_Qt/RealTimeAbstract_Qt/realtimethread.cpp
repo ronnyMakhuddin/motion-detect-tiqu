@@ -238,8 +238,8 @@ void RealTimeThread::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplI
 			}
 			else
 			{
-				
-				if(!EventNodeOperation::searchEventList(eventList, r, node))
+				int tempIndex;
+				if(!EventNodeOperation::searchEventList(eventList, r, node, tempIndex))
 					node = EventNodeOperation::insertEventNode(eventList, r, frameNum);
 			}
 			s = EventNodeOperation::sampleColor[node.startFrame % 5];

@@ -236,7 +236,7 @@ void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point 
 	}
 }
 
-bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, EventNode&node)
+bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, EventNode&node, int&index)
 {
 	for (int i = 0; i < eventList.size(); i++)
 	{
@@ -251,6 +251,7 @@ bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, 
 			//在跟踪列表插入最后一帧
 			eventList[i].trackList.push_back(r2);
 			node = eventList[i];
+			index = i;
 
 			return true;
 		}

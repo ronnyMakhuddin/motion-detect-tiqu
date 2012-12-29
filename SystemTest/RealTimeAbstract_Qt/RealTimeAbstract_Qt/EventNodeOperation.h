@@ -18,7 +18,7 @@ public:
 	static void bianliEventList(vector<EventNode> &eventList, int endFrame);  //遍历链表,更新跟踪标记
 	static int bianliEventList(vector<EventNode> &eventList, int endFrame, int fps);  //遍历链表，更新并删除标记
 	static void eventFilter(vector<EventNode> &eventList, int fps);     //过滤列表中过短事件
-	static bool searchEventList(vector<EventNode> &eventList, Rect r2, EventNode&node); //搜索链表,检查有没有相同事件
+	static bool searchEventList(vector<EventNode> &eventList, Rect r2, EventNode&node, int&index); //搜索链表,检查有没有相同事件
 	static void selectAbstractEvent(vector<EventNode>&eventList, Point lineP1, Point lineP2, Point rectP1, Point rectP2, QString jihe, int waiguan); //筛选摘要事件
 	
 	EventNodeOperation(void);
