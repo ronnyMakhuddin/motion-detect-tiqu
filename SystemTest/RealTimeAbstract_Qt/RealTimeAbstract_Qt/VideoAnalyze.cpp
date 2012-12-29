@@ -119,6 +119,9 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
     // 下面的程序段用来找到轮廓
     //
     // Create dynamic structure and sequence.
+	IplImage* tempDst = cvCreateImage(cvSize(dst->width, dst->height), 8, 1);  //备份一次dst对象
+	cvCopy(dst, tempDst);
+
     stor = cvCreateMemStorage(0);
     cont = cvCreateSeq(CV_SEQ_ELTYPE_POINT, sizeof(CvSeq), sizeof(CvPoint) , stor);
     
@@ -140,7 +143,13 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
 			{
 				
 				if(!EventNodeOperation::searchEventList(eventList, r, node))
+				{
 					node = EventNodeOperation::insertEventNode(eventList, r, frameNum);
+				}
+				else if( (node.endFrame-node.startFrame >= fps*1) && node.endFrame-node.startFrame < fps*1+jiange)
+				{//进行HSV直方图提取,13种颜色
+
+				}
 			}
 			s = EventNodeOperation::sampleColor[node.startFrame % 5];
 
@@ -152,6 +161,7 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
 	int count = EventNodeOperation::bianliEventList(eventList, frameNum, fps);
 	emit sendEventCount(count);
 
+	cvReleaseImage(&tempDst);
 	cvReleaseMemStorage(&stor);
 	cvReleaseImage(&pyr);
 }
@@ -622,6 +632,23 @@ IplImage* VideoAnalyze::getFrameByNumber(int pos)
 	}
 	cvReleaseCapture(&tempCapture);
 	return tempFrame;
+}
+
+//获取直方图
+void VideoAnalyze::getNodeHistogram(IplImage* img, IplImage* dst, Rect r, EventNode&node)
+{
+	int B,G,R;
+	int H,S,V;
+	for(int y = r.y; y < r.y+r.height; y++)
+	{
+		for(int x = r.x; x < r.x+r.width; x++)
+		{
+			B = ((uchar*)(img->imageData+y*img->widthStep))[x*img->nChannels+0];
+			G = ((uchar*)(img->imageData+y*img->widthStep))[x*img->nChannels+1];
+			R = ((uchar*)(img->imageData+y*img->widthStep))[x*img->nChannels+2];
+			rgb2hsv(R,G,B,H,S,V);
+		}
+	}
 }
 
 bool VideoAnalyze::initRealTime()

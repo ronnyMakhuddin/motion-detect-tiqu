@@ -14,6 +14,7 @@ public:
 	int startFrame;
 	int endFrame;
 	Rect rect;
+	int histomgram[13];
 	vector<Rect> trackList;
 	VideoCapture capture;
 };

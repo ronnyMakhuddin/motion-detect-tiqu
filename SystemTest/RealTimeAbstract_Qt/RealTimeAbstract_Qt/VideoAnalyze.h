@@ -76,6 +76,7 @@ public:
 	void release();            //初始化一些Image
 	bool initRealTime();         //初始化实时视频
 	IplImage* getFrameByNumber(int);  //通过位置获取帧
+	void getNodeHistogram(IplImage* img, IplImage* dst, Rect r, EventNode&node);
 	VideoAnalyze(void);
 	VideoAnalyze(QObject* parent);
 	~VideoAnalyze(void);
