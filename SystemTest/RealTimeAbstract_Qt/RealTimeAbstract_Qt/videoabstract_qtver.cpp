@@ -36,7 +36,6 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
 //分析视频按钮
 void VideoAbstract_QTver::on_analysis_button_clicked()
 {
-	startTimeCount();
 	if(!analyzeThread->isContinue)
 	{
 		//清除摘要事件列表控件
@@ -77,6 +76,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 			{
 				analyzeThread->isReadFromFile = false;
 				analyzeThread->start();
+				startTimeCount();
 			}
 			this->changeAnalyzeButtonState(1);
 		}else if(Globals::files.count()>1)  //打开多个文件
@@ -94,6 +94,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 			analyzeThread->isIgnoreExistAnalyze = QMessageBox::information(this, tr("请选择"), tr("已经分析过的视频是否略过？"), tr("不略过"), tr("略过"));
 
 			analyzeThread->start();
+			startTimeCount();
 			this->changeAnalyzeButtonState(1);
 			//batchAnalysis();
 		}else  //弹出对话框，提示请选择文件
@@ -103,6 +104,7 @@ void VideoAbstract_QTver::on_analysis_button_clicked()
 	}else
 	{
 		analyzeThread->isContinue = false;
+		//endTimeCount();
 		this->changeAnalyzeButtonState(0);
 	}
 }
@@ -460,7 +462,7 @@ void VideoAbstract_QTver::batchAnalysis()
 void VideoAbstract_QTver::startTimeCount()
 {
 	runSeconds = 0;
-	//timer = new QTimer(0);  
+	timer = new QTimer(0);  
 	timer->setInterval(1000);  
 	connect(timer,SIGNAL(timeout()),this,SLOT(updateRunTime()));  
 	timer->start();
@@ -471,5 +473,6 @@ void VideoAbstract_QTver::endTimeCount()
 	if(timer)
 	{
 		timer->stop();
+		timer->deleteLater();
 	}
 }
