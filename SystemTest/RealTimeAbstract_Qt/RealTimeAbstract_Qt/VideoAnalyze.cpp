@@ -40,7 +40,7 @@ void VideoAnalyze::searchAbstract()
 	QString analyzeFilePath = fileDir + fileName + tr(".txt");
 	FileOperation::readFromFile(analyzeFilePath, jiange, fps, key_jiange, eventList);
 
-	EventNodeOperation::selectAbstractEvent(eventList, lineP1, lineP2, rectP1, rectP2, color, jihe, waiguan);
+	EventNodeOperation::selectAbstractEvent(eventList, lineP1, lineP2, rectP1, rectP2, color, jihe, waiguan, leixing, this->fps);
 	//第三步：重画摘要
 	if(!capture)
 	{

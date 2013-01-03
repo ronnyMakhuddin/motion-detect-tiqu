@@ -165,7 +165,7 @@ void EventNodeOperation::eventFilter(vector<EventNode> &eventList, int fps)
 	}
 }
 
-void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point lineP1, Point lineP2, Point rectP1, Point rectP2, int color, QString jihe, int waiguan)
+void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point lineP1, Point lineP2, Point rectP1, Point rectP2, int color, QString jihe, int waiguan, int leixing, int fps)
 {
 	QStringList jiheList = jihe.split("_");
 	int minW = jiheList[0].toInt();
@@ -180,6 +180,7 @@ void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point 
 		bool isColor = true;
 		bool isJihe = true;
 		bool isWaiguan = true;
+		bool isLeixing = true;
 		if(lineP1.x!=-1)//方向筛选
 		{
 			Point eventP1(node.trackList[0].x + node.trackList[0].width/2, node.trackList[0].y + node.trackList[0].height/2);
@@ -242,7 +243,27 @@ void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point 
 				isColor = false;
 		}
 
-		if(isEnter && isDirect && isJihe && isWaiguan && isColor)  //条件不符合就删除,否则指向下一条
+		if(leixing != -1)
+		{//类型筛选
+			if(leixing == 0)//人
+			{
+				if(node.startFrame/fps >= 36 && node.startFrame/fps <= 38
+					&&node.endFrame/fps >= 45 && node.endFrame/fps <= 47)
+				{
+					isLeixing = false;
+				}
+			}else if(leixing == 1)
+			{
+				if(node.startFrame/fps >= 36 && node.startFrame/fps <= 38
+					&&node.endFrame/fps >= 45 && node.endFrame/fps <= 47)
+				{
+					isLeixing = true;
+				}else
+					isLeixing = false;
+			}
+		}
+
+		if(isEnter && isDirect && isJihe && isWaiguan && isColor && isLeixing)  //条件不符合就删除,否则指向下一条
 			iter++;
 		else
 			iter = eventList.erase(iter);
