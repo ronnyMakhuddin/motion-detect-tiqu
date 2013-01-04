@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-	QTextCodec::setCodecForTr( QTextCodec::codecForName("GBK") );
+	QTextCodec::setCodecForTr( QTextCodec::codecForName("System") );
 	QApplication a(argc, argv);
 	MainWindow w;
 	w.show();
