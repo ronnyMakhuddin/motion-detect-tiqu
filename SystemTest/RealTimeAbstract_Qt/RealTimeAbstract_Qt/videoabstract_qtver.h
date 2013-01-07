@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <qmessagebox.h>
 #include <QVBoxLayout>
+
 #include "ui_videoabstract_qtver.h"
 #include "Globals.h"
 #include "VideoAnalyze.h"
@@ -49,8 +50,11 @@ private slots:
 
 	void get_enter_checkbox_state(bool);
 
+	void setButtonTime(int);  //设置按钮响应时间
+
 signals:
 	void sendSwitchToRealTimeForm();
+	void sendButtonTime(int);   //发送设置按钮响应时间
 
 public:
 	VideoAnalyze *analyzeThread;

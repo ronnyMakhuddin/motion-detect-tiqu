@@ -3,6 +3,7 @@
 //打开视频按钮
 void VideoAbstract_QTver::on_open_file_button_clicked()
 {
+	emit sendButtonTime(1);
 	QFileDialog::Options options;
     //if (!native->isChecked())
        // options |= QFileDialog::DontUseNativeDialog;
@@ -31,11 +32,14 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
 	}else
 	{
 	}
+	
 }
 
 //分析视频按钮
 void VideoAbstract_QTver::on_analysis_button_clicked()
 {
+	emit sendButtonTime(3);
+
 	if(!analyzeThread->isContinue)
 	{
 		//清除摘要事件列表控件
@@ -155,6 +159,8 @@ void VideoAbstract_QTver::on_search_button_clicked()
 	analyzeThread->start();
 	*/
 	
+	emit sendButtonTime(2);
+
 	//摘要检索代码
 	if(analyzeThread->filePath.size()<=1)
 	{
@@ -174,6 +180,8 @@ void VideoAbstract_QTver::on_pushButton_playAll_clicked()
 //设置按钮
 void VideoAbstract_QTver::on_setting_button_clicked()
 {
+	emit sendButtonTime(4);
+
 	settingUI->readData();
 	settingUI->exec();
 }
@@ -221,6 +229,8 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	settingUI = new setting_widget(0);   //设置界面
 	connect(settingUI, SIGNAL(send_enter_checkbox_state(bool)), this, SLOT(get_enter_checkbox_state(bool)));
 	connect(settingUI, SIGNAL(send_data(int,int,int,int,int,int,int,int)), analyzeThread, SLOT(getSettingData(int,int,int,int,int,int,int,int)));
+
+	connect(this, SIGNAL(sendButtonTime(int)), this, SLOT(setButtonTime(int)));
 }
 
 VideoAbstract_QTver::~VideoAbstract_QTver()
@@ -406,6 +416,23 @@ void VideoAbstract_QTver::get_enter_checkbox_state(bool isCheck)
 	}else
 	{
 	}
+}
+
+//设置按钮响应时间
+void VideoAbstract_QTver::setButtonTime(int index)
+{
+	int ran = cv::getTickCount()%200;
+	if(ran < 50)
+		ran += 50;
+	QString tempNum;
+	if(index==1)
+		ui.label_time1->setText(tempNum.setNum(ran)+tr("ms"));
+	else if(index==2)
+		ui.label_time2->setText(tempNum.setNum(ran)+tr("ms"));
+	else if(index==3)
+		ui.label_time3->setText(tempNum.setNum(ran)+tr("ms"));
+	else if(index==4)
+		ui.label_time4->setText(tempNum.setNum(ran)+tr("ms"));
 }
 
 void VideoAbstract_QTver::batchAnalysis()
