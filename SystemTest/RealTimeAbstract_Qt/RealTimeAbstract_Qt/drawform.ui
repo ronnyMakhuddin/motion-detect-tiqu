@@ -518,14 +518,14 @@
     <widget class="QRadioButton" name="radioButton_car">
      <property name="geometry">
       <rect>
-       <x>80</x>
+       <x>70</x>
        <y>20</y>
-       <width>41</width>
+       <width>51</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>车</string>
+      <string>汽车</string>
      </property>
     </widget>
     <widget class="QRadioButton" name="radioButton_all">
