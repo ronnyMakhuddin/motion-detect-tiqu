@@ -192,7 +192,7 @@ VideoAbstract_QTver::VideoAbstract_QTver(QWidget *parent, Qt::WFlags flags)
 	gLayout->setSpacing(1);
 	gLayout->setMargin(1);
 	ui.scrollAreaWidgetContents->setLayout(gLayout);
-	timer = new QTimer(0);
+	//timer = new QTimer(0);
 
 	testInt = 0;
 	// 测试label点击事件代码
@@ -460,7 +460,7 @@ void VideoAbstract_QTver::batchAnalysis()
 void VideoAbstract_QTver::startTimeCount()
 {
 	runSeconds = 0;
-	//timer = new QTimer(0);  
+	timer = new QTimer(0);  
 	timer->setInterval(1000);  
 	connect(timer,SIGNAL(timeout()),this,SLOT(updateRunTime()));  
 	timer->start();
@@ -471,5 +471,6 @@ void VideoAbstract_QTver::endTimeCount()
 	if(timer)
 	{
 		timer->stop();
+		timer->deleteLater();
 	}
 }
