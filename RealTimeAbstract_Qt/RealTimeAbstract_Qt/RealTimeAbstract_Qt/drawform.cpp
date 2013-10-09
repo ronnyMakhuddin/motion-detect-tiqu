@@ -174,8 +174,12 @@ void DrawForm::setBaseFrame(IplImage* frame)
 	ui.image_label->setPixmap(QPixmap::fromImage(*qImg));
 
 	//重置控件大小
-	this->setFixedSize(baseFrame->width, baseFrame->height+100);
-	ui.frame->move(0, baseFrame->height);
+	int search_height = baseFrame->height+ui.frame_button->height();
+	if(ui.frame->height()>baseFrame->height+ui.frame_button->height())
+		search_height = ui.frame->height();
+	this->setFixedSize(baseFrame->width+ui.frame->width(), search_height);
+	ui.frame->move(baseFrame->width, 0);
+	ui.frame_button->move(0, baseFrame->height);
 	/*
 	this->resize(baseFrame->width, baseFrame->height+100);
 	int jianju = (this->width()-3*ui.ok_button->width())/4;
