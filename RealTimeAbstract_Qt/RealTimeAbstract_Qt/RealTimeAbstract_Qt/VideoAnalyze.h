@@ -45,6 +45,7 @@ public:
 	Point lineP2;
 	Point rectP1;
 	Point rectP2;
+	QString data;  //事件筛选的条件数据
 private:
 	CvCapture *capture;
 	CvVideoWriter* videoWriter;
@@ -59,6 +60,8 @@ public:
 	void singleAnalysis(); //单个视频分析
 	void batchAnalysis();  //批量视频分析
 	void realTimeAnalysis();  //实时视频分析
+	void videoSearch();       //视频检索
+	void typeFilter(int type); //类别过滤器
 	void update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime);
 	void getKeyFrameJiange();   //获取关键帧的间隔
 	void saveEventToFile();     //将事件保存至文件
@@ -90,6 +93,6 @@ signals:
 private slots:
 	void updateOneSecond();       //更新时间
 	void getSettingData(int,int,int,int,int,int,int,int); //获取设置信息
-	void getShuaixuanData(Point,Point,Point,Point);    //获取筛选信息
+	void getShuaixuanData(Point,Point,Point,Point,QString);    //获取筛选信息
 };
 

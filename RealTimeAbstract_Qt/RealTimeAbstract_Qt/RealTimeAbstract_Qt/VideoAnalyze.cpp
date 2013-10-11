@@ -6,35 +6,7 @@ void VideoAnalyze::run()
 {
 	if(flag == VideoAnalyze::SELECTEVENT)
 	{
-		//第一步：删除原界面中的摘要事件
-		emit sendRemoveAllAbstracts();
-		//第二步：遍历所有摘要，对摘要进行筛选（可能要新建一个空间存储筛选的摘要）
-		isSaveToFile = true;
-		QString fileDir, fileName;
-		Globals::getFileDirFromQString(filePath, fileDir);
-		Globals::getFileNameFromQString(filePath, fileName);
-		fileDir = fileDir + tr("analyze\\");
-		QString analyzeFilePath = fileDir + fileName + tr(".txt");
-		FileOperation::readFromFile(analyzeFilePath, jiange, fps, key_jiange, eventList);
-
-		EventNodeOperation::selectAbstractEvent(eventList, lineP1, lineP2, rectP1, rectP2);
-		//第三步：重画摘要
-		if(!capture)
-		{
-			QByteArray ba = filePath.toLocal8Bit();
-			const char *file = ba.data();
-			capture = cvCaptureFromAVI(file);
-			captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
-				(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
-			fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
-			frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
-			qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
-			iplImg = cvCreateImageHeader(captureSize,  8, 3);
-			iplImg->imageData = (char*)qImg->bits();
-			getBaseFrame();
-		}
-		drawAbstracts();
-		release();
+		videoSearch();
 		return;
 	}
 
@@ -53,6 +25,187 @@ void VideoAnalyze::run()
 	emit sendAnalyzeButtonState(0);
 	emit sendEndTimeCount();
 	emit sendEventCount(eventList.size());
+}
+
+//视频内容检索
+void VideoAnalyze::videoSearch()
+{
+	//FILE*fs = fopen("output.txt", "w+");
+	//fprintf(fs, "13456%s\n", data.toLocal8Bit().data());
+	//fclose(fs);
+	//第一步：删除原界面中的摘要事件
+	emit sendRemoveAllAbstracts();
+	//第二步：解析data数据
+	QStringList dataList = data.split("|");
+	//1解析时间数据
+	int isTimeLimit = 0;
+	{
+		QStringList subDataList = dataList[0].split(",");
+		if(subDataList[0].compare("1")==0)
+		{
+			isTimeLimit = 1;
+		}
+	}
+	//2解析运动特征
+	int isMotionLimit = 0;
+	{
+		if(dataList[1].compare("1")==0)
+		{
+			isMotionLimit = 1;
+		}
+	}
+	//3解析颜色特征
+	int isColorLimit = 0;
+	int r=0,g=0,b=0;
+	{
+		QStringList subDataList = dataList[2].split(",");
+		if(subDataList[0].compare("1")==0)
+		{
+			isColorLimit = 1;
+			r = subDataList[1].toInt();
+			g = subDataList[2].toInt();
+			b = subDataList[3].toInt();
+		}
+	}
+	//4解析类别特征
+	int isTypeLimit = 0;
+	int type=0;
+	{
+		QStringList subDataList = dataList[3].split(",");
+		if(subDataList[0].compare("1")==0)
+		{
+			isTypeLimit = 1;
+			type = subDataList[1].toInt();
+		}
+	}
+	//第三步：遍历所有摘要，对摘要进行筛选（可能要新建一个空间存储筛选的摘要）
+	//初始化
+	if(!capture)
+	{
+		QByteArray ba = filePath.toLocal8Bit();
+		const char *file = ba.data();
+		capture = cvCaptureFromAVI(file);
+		captureSize = cvSize((int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
+			(int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT));
+		fps = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
+		frameCount = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
+		qImg = new QImage(QSize(captureSize.width,captureSize.height), QImage::Format_RGB888);
+		iplImg = cvCreateImageHeader(captureSize,  8, 3);
+		iplImg->imageData = (char*)qImg->bits();
+		getBaseFrame();
+	}
+
+	if(isTimeLimit)//时间筛选
+	{
+	}
+	if(isMotionLimit)//运动特征筛选
+	{
+		isSaveToFile = true;
+		QString fileDir, fileName;
+		Globals::getFileDirFromQString(filePath, fileDir);
+		Globals::getFileNameFromQString(filePath, fileName);
+		fileDir = fileDir + tr("analyze\\");
+		QString analyzeFilePath = fileDir + fileName + tr(".txt");
+		FileOperation::readFromFile(analyzeFilePath, jiange, fps, key_jiange, eventList);
+		EventNodeOperation::selectAbstractEvent(eventList, lineP1, lineP2, rectP1, rectP2);
+	}
+	if(isColorLimit)//颜色筛选
+	{
+	}
+	if(isTypeLimit)//类别筛选
+	{
+		typeFilter(type);
+	}
+	
+	//第四步：重画摘要
+	drawAbstracts();
+	release();
+}
+
+//类别过滤
+void VideoAnalyze::typeFilter(int type)
+{
+	CascadeClassifier car_detector, human_detector;
+	if( !car_detector.load( "car_detector.xml" ) || !human_detector.load("human_detector.xml")) 
+	{
+		printf("--(!)Error loading\n"); 
+		return ; 
+	}
+
+	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
+	{
+		int frameNum = (*iter).startFrame+(*iter).trackList.size()/2*jiange-2;
+		cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
+		int count = 0;
+		for(int i = 0; i < 5*jiange; i++)//检查5帧
+		{
+			frame = cvQueryFrame(capture);
+			if(i%jiange==0)
+			{
+				std::vector<Rect> detectRects;
+				Mat fImage(frame,0);
+				if(type == 0)
+				{
+					//car_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100), Size(1000,1000) );
+					human_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(100,100) );
+					for(int j = 0; j < detectRects.size(); j++)
+					{
+						if(EventNodeOperation::isTheSame(detectRects[j], (*iter).trackList[frameNum-(*iter).startFrame]))
+						{
+							count++;
+							break;
+						}
+					}
+				}else if(type == 1)
+				{
+					car_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100), Size(1000,1000) );
+					//car_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(60,60) );
+					for(int j = 0; j < detectRects.size(); j++)
+					{
+						if(EventNodeOperation::isTheSame(detectRects[j], (*iter).trackList[frameNum-(*iter).startFrame]))
+						{
+							count++;
+							break;
+						}
+					}
+				}else if(type == 2)
+				{
+					bool mark = false;
+					human_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(100,100) );
+					for(int j = 0; j < detectRects.size(); j++)
+					{
+						if(EventNodeOperation::isTheSame(detectRects[j], (*iter).trackList[frameNum-(*iter).startFrame]))
+						{
+							mark = true;
+							break;
+						}
+					}
+					if(!mark)
+					{
+						detectRects.clear();
+						car_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100), Size(1000,1000) );
+						for(int j = 0; j < detectRects.size(); j++)
+						{
+							if(EventNodeOperation::isTheSame(detectRects[j], (*iter).trackList[frameNum-(*iter).startFrame]))
+							{
+								mark = true;
+								break;
+							}
+						}
+					}
+					if(!mark)
+						count++;
+				}
+				frameNum++;
+			}
+		}
+		
+		if( count < 2)  //2秒存在就记为事件,另外这里要开始帧大于17是因为如果小于17的话opencv无法定位，所以过滤掉
+			iter = eventList.erase(iter);
+		else
+			iter++ ;
+	}
+	
 }
 
 void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime)
@@ -118,7 +271,8 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
     cont = cvCreateSeq(CV_SEQ_ELTYPE_POINT, sizeof(CvSeq), sizeof(CvPoint) , stor);
     
     // 找到所有轮廓
-    cvFindContours( dst, stor, &cont, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
+    cvFindContours( dst, stor, &cont, sizeof(CvContour), CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
+	//cvFindContours( dst, stor, &cont, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE, cvPoint(0,0));
 	for (; cont; cont = cont->h_next)
 	{
 		CvRect r = ((CvContour*)cont)->rect;
@@ -342,6 +496,7 @@ void VideoAnalyze::analyzeVideo()
 		int totalFrames = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
 		isSaveToFile = true;
 		int frameNum = 0;
+		//int64 start_time = cv::getTickCount();
 		while (true)
 		{
 			frame = cvQueryFrame(capture);
@@ -392,6 +547,16 @@ void VideoAnalyze::analyzeVideo()
 			}
 			frameNum++;
 		}
+		//int64 end_time = cv::getTickCount();
+		/*
+		FILE*fs = fopen("output.txt", "w+");
+		fprintf(fs, "%d %d %d %d\n", captureSize.width, captureSize.height, fps, jiange);
+		fprintf(fs, "frameCount=%d\n", frameNum);
+		fprintf(fs, "time=%f\n", (end_time-start_time)/cv::getTickFrequency());
+		fclose(fs);
+		*/
+		//printf("frameCount=%d\n", frameNum);
+		//printf("time=%f\n", (end_time-start_time)/cv::getTickFrequency()/1000);
 	}
 	else
 	{
@@ -713,7 +878,7 @@ void VideoAnalyze::getSettingData(int zoom,int width,int height,int min_area,int
 	//int zoom = data.zoom;
 }
 
-void VideoAnalyze::getShuaixuanData(Point currentLineP1,Point currentLineP2,Point currentRectP1,Point currentRectP2)
+void VideoAnalyze::getShuaixuanData(Point currentLineP1,Point currentLineP2,Point currentRectP1,Point currentRectP2,QString data)
 {
 	lineP1.x = currentLineP1.x;
 	lineP1.y = currentLineP1.y;
@@ -724,6 +889,8 @@ void VideoAnalyze::getShuaixuanData(Point currentLineP1,Point currentLineP2,Poin
 	rectP1.y = currentRectP1.y;
 	rectP2.x = currentRectP2.x;
 	rectP2.y = currentRectP2.y;
+	
+	this->data = data;
 	//开始筛选操作
 	flag = VideoAnalyze::SELECTEVENT;
 	start();

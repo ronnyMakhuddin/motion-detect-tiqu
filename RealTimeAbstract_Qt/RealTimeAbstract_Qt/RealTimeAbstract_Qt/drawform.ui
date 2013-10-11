@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>662</width>
-    <height>361</height>
+    <height>414</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>摘要检索</string>
+   <string>视频检索</string>
   </property>
   <property name="windowIcon">
    <iconset resource="mainwindow.qrc">
@@ -373,7 +373,7 @@
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QPushButton" name="ok_button_2">
+   <widget class="QPushButton" name="cancel_button">
     <property name="geometry">
      <rect>
       <x>230</x>

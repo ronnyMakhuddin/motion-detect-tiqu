@@ -33,7 +33,7 @@ private:
 	void reDrawFunction();  //ÖØÐÂ»­Í¼
 	void drawArrow(IplImage*& img, Point pStart, Point pEnd, int len, int alpha, Scalar& color, int thickness, int lineType);  //»­¼ýÍ·
 signals:
-	void sendLineAndRect(Point, Point, Point, Point);
+	void sendLineAndRect(Point, Point, Point, Point, QString);
 public:
 
 	Point startP;
@@ -43,6 +43,7 @@ public:
 	Point currentLineP2;
 	Point currentRectP1;
 	Point currentRectP2;
+	QString data;
 
 	QImage img;
 

@@ -120,7 +120,50 @@ void DrawForm::on_clear_button_clicked()
 void DrawForm::on_ok_button_clicked()
 {
 	//发送信息给分析类进行事件筛选
-	emit sendLineAndRect(currentLineP1, currentLineP2, currentRectP1, currentRectP2);
+	data = "";
+	data.append("0,time|");  //时间数据
+	if(ui.checkBox_motion->isChecked()) //运动特征数据
+	{
+		data.append("1|");
+	}else
+	{
+		data.append("0|");
+	}
+
+	if(ui.checkBox_color->isChecked())//颜色数据
+	{
+		data.append("1,");
+		data.append(ui.lineEdit_red->text());
+		data.append(",");
+		data.append(ui.lineEdit_green->text());
+		data.append(",");
+		data.append(ui.lineEdit_blue->text());
+	}else
+	{
+		data.append("0,0,0,0");
+	}
+	data.append("|");
+
+	if(ui.checkBox_type->isChecked())
+	{
+		data.append("1,");
+		if(ui.radioButton_human->isChecked())
+		{
+			data.append("0");
+		}else if(ui.radioButton_car->isChecked())
+		{
+			data.append("1");
+		}else if(ui.radioButton_other->isChecked())
+		{
+			data.append("2");
+		}
+	}else
+	{
+		data.append("0,0");
+	}
+	//data.append("|");
+
+	emit sendLineAndRect(currentLineP1, currentLineP2, currentRectP1, currentRectP2, data);
 	this->setShown(false);
 }
 

@@ -13,7 +13,7 @@ setting_widget::setting_widget(QDialog *parent)
 	data.pix_height = 0;
 	data.min_area = 1000;
 	data.max_area = 1000000;
-	data.jiange = 2;
+	data.jiange = 1;
 	data.fps = 0;
 	data.max_event_num = 100;
 }
