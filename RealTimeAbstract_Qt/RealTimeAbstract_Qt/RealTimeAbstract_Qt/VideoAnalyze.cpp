@@ -179,8 +179,8 @@ bool VideoAnalyze::isHumanEvent(EventNode node, CascadeClassifier human_detector
 			}
 			if(count >=3)
 				return true;
-			frameNum++;
 		}
+		frameNum++;
 	}
 	return false;
 }
@@ -188,8 +188,8 @@ bool VideoAnalyze::isHumanEvent(EventNode node, CascadeClassifier human_detector
 //判断是不是车辆事件
 bool VideoAnalyze::isCarEvent(EventNode node, CascadeClassifier car_detector)
 {
-	int frameNum = node.startFrame+node.trackList.size()/3*jiange;
-	//int frameNum = (*iter).startFrame;
+	//int frameNum = node.startFrame+node.trackList.size()/3*jiange;
+	int frameNum = node.startFrame;
 	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
 	int count = 0;
 	for(int i = frameNum; i < node.endFrame; i++)//检查帧
@@ -211,8 +211,8 @@ bool VideoAnalyze::isCarEvent(EventNode node, CascadeClassifier car_detector)
 			}
 			if(count >=3)
 				return true;
-			frameNum++;
 		}
+		frameNum++;
 	}
 	return false;
 }
@@ -910,7 +910,7 @@ VideoAnalyze::VideoAnalyze(QObject* parent = 0):QThread(parent)
 	fps = 0;
 	minArea = 1000;
 	maxArea = 100000;
-	jiange = 2;
+	jiange = 1;
 	key_jiange = 0;
 	maxEventNum = 0;
 	minEventNum = 10000000;
