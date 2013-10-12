@@ -134,78 +134,87 @@ void VideoAnalyze::typeFilter(int type)
 
 	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
 	{
-		int frameNum = (*iter).startFrame+(*iter).trackList.size()/2*jiange-2;
-		cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
-		int count = 0;
-		for(int i = 0; i < 5*jiange; i++)//检查5帧
+		bool mark = false;
+		if(type == 0)  //人
 		{
-			frame = cvQueryFrame(capture);
-			if(i%jiange==0)
-			{
-				std::vector<Rect> detectRects;
-				Mat fImage(frame,0);
-				if(type == 0)
-				{
-					//car_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100), Size(1000,1000) );
-					human_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(100,100) );
-					for(int j = 0; j < detectRects.size(); j++)
-					{
-						if(EventNodeOperation::isTheSame(detectRects[j], (*iter).trackList[frameNum-(*iter).startFrame]))
-						{
-							count++;
-							break;
-						}
-					}
-				}else if(type == 1)
-				{
-					car_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100), Size(1000,1000) );
-					//car_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(60,60) );
-					for(int j = 0; j < detectRects.size(); j++)
-					{
-						if(EventNodeOperation::isTheSame(detectRects[j], (*iter).trackList[frameNum-(*iter).startFrame]))
-						{
-							count++;
-							break;
-						}
-					}
-				}else if(type == 2)
-				{
-					bool mark = false;
-					human_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(100,100) );
-					for(int j = 0; j < detectRects.size(); j++)
-					{
-						if(EventNodeOperation::isTheSame(detectRects[j], (*iter).trackList[frameNum-(*iter).startFrame]))
-						{
-							mark = true;
-							break;
-						}
-					}
-					if(!mark)
-					{
-						detectRects.clear();
-						car_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100), Size(1000,1000) );
-						for(int j = 0; j < detectRects.size(); j++)
-						{
-							if(EventNodeOperation::isTheSame(detectRects[j], (*iter).trackList[frameNum-(*iter).startFrame]))
-							{
-								mark = true;
-								break;
-							}
-						}
-					}
-					if(!mark)
-						count++;
-				}
-				frameNum++;
-			}
+			mark = isHumanEvent((*iter), human_detector);
+		}else if(type == 1) //车
+		{
+			mark = isCarEvent((*iter), car_detector);
+		}else if(type == 2) //其它
+		{
+			mark = !isCarEvent((*iter), car_detector) && !isHumanEvent((*iter), human_detector);
 		}
-		
-		if( count < 2)  //2秒存在就记为事件,另外这里要开始帧大于17是因为如果小于17的话opencv无法定位，所以过滤掉
+		if(!mark)  //删除不是检索的对象
 			iter = eventList.erase(iter);
 		else
 			iter++ ;
 	}
 	
+}
+
+//判断事件是不是人物事件
+bool VideoAnalyze::isHumanEvent(EventNode node, CascadeClassifier human_detector)
+{
+	int frameNum = node.startFrame+node.trackList.size()/3*jiange;
+	//int frameNum = (*iter).startFrame;
+	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
+	int count = 0;
+	for(int i = frameNum; i < node.endFrame; i++)//检查帧
+	{
+		frame = cvQueryFrame(capture);
+		if(i%jiange==0)
+		{
+			std::vector<Rect> detectRects;
+			Mat fImage(frame,0);
+			//car_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100), Size(1000,1000) );
+			human_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(100,100) );
+			for(int j = 0; j < detectRects.size(); j++)
+			{
+				if(EventNodeOperation::isTheSame(detectRects[j], node.trackList[frameNum-node.startFrame]))
+				{
+					count++;
+					break;
+				}
+			}
+			if(count >=3)
+				return true;
+			frameNum++;
+		}
+	}
+	return false;
+}
+
+//判断是不是车辆事件
+bool VideoAnalyze::isCarEvent(EventNode node, CascadeClassifier car_detector)
+{
+	int frameNum = node.startFrame+node.trackList.size()/3*jiange;
+	//int frameNum = (*iter).startFrame;
+	cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
+	int count = 0;
+	for(int i = frameNum; i < node.endFrame; i++)//检查帧
+	{
+		frame = cvQueryFrame(capture);
+		if(i%jiange==0)
+		{
+			std::vector<Rect> detectRects;
+			Mat fImage(frame,0);
+			car_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100), Size(1000,1000) );
+			//human_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(100,100) );
+			for(int j = 0; j < detectRects.size(); j++)
+			{
+				if(EventNodeOperation::isTheSame(detectRects[j], node.trackList[frameNum-node.startFrame]))
+				{
+					count++;
+					break;
+				}
+			}
+			if(count >=3)
+				return true;
+			frameNum++;
+		}
+	}
+	return false;
 }
 
 void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime)
