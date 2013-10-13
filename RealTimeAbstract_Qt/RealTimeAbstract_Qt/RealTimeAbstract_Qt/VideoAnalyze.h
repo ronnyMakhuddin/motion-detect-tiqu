@@ -62,6 +62,7 @@ public:
 	void realTimeAnalysis();  //实时视频分析
 	void videoSearch();       //视频检索
 	void typeFilter(int type); //类别过滤器
+	void colorFilter(int r, int g, int b); //颜色过滤器
 	bool isHumanEvent(EventNode node, CascadeClassifier detector);       //判断该事件是不是人物事件
 	bool isCarEvent(EventNode node, CascadeClassifier detector);    //判断该事件是不是车辆事件
 	void update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplImage**&buf, int&last, IplImage*&mhi, CvSize size, double&lastTime);

@@ -30,11 +30,12 @@ void VideoAnalyze::run()
 //视频内容检索
 void VideoAnalyze::videoSearch()
 {
-	//FILE*fs = fopen("output.txt", "w+");
-	//fprintf(fs, "13456%s\n", data.toLocal8Bit().data());
-	//fclose(fs);
+	FILE*fs = fopen("output.txt", "w+");
+	fprintf(fs, "13456%s\n", data.toLocal8Bit().data());
+	fclose(fs);
 	//第一步：删除原界面中的摘要事件
 	emit sendRemoveAllAbstracts();
+	emit sendAnalyzeButtonState(1);
 	//第二步：解析data数据
 	QStringList dataList = data.split("|");
 	//1解析时间数据
@@ -78,7 +79,7 @@ void VideoAnalyze::videoSearch()
 			type = subDataList[1].toInt();
 		}
 	}
-	//第三步：遍历所有摘要，对摘要进行筛选（可能要新建一个空间存储筛选的摘要）
+	
 	//初始化
 	if(!capture)
 	{
@@ -111,6 +112,7 @@ void VideoAnalyze::videoSearch()
 	}
 	if(isColorLimit)//颜色筛选
 	{
+		colorFilter(r,g,b);
 	}
 	if(isTypeLimit)//类别筛选
 	{
@@ -120,6 +122,7 @@ void VideoAnalyze::videoSearch()
 	//第四步：重画摘要
 	drawAbstracts();
 	release();
+	emit sendAnalyzeButtonState(0);
 }
 
 //类别过滤
@@ -150,7 +153,156 @@ void VideoAnalyze::typeFilter(int type)
 		else
 			iter++ ;
 	}
-	
+}
+
+//颜色过滤器
+void VideoAnalyze::colorFilter(int r, int g, int b)
+{
+	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
+	{
+		EventNode node = *iter;
+		int frameNum = node.startFrame+node.trackList.size()/3*jiange;//从运动事件的三分之一开始
+		//int frameNum = (*iter).startFrame;
+		cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
+		int count = 0;
+		for(int i = frameNum; i < node.endFrame; i++)//检查帧
+		{
+			frame = cvQueryFrame(capture);
+			//求直方图代码
+			IplImage* hsv = cvCreateImage(cvGetSize(frame), 8, 3);
+			cvCvtColor(frame, hsv, CV_BGR2HSV);
+			IplImage* h_plane = cvCreateImage(cvGetSize(frame), 8, 1);
+			IplImage* s_plane = cvCreateImage(cvGetSize(frame), 8, 1);
+			IplImage* v_plane = cvCreateImage(cvGetSize(frame), 8, 1);
+			IplImage* planes[] = {h_plane, s_plane};
+			cvCvtPixToPlane(hsv, h_plane, s_plane, v_plane, 0);
+
+			int h_bins = 30, s_bins = 32;
+			CvHistogram* hist;
+			{
+				int hist_size[] = {h_bins, s_bins};
+				float h_ranges[] = {0, 180};
+				float s_ranges[] = {0, 255};
+				float* ranges[] = {h_ranges, s_ranges};
+				hist = cvCreateHist(2, hist_size, CV_HIST_ARRAY, ranges, 1);
+			}
+			cvCalcHist(planes, hist, 0, 0);//计算直方图
+			cvNormalizeHist(hist, 1.0); //归一化
+
+			//创建图像显示直方图
+			int scale = 10;
+			IplImage* hist_img = cvCreateImage(cvSize(h_bins*scale, s_bins*scale), 8, 3);
+			cvZero(hist_img);
+			float max_value = 0;
+			cvGetMinMaxHistValue(hist, 0, &max_value, 0, 0);
+			for(int h = 0; h < h_bins; h++)
+			{
+				for(int s = 0; s < s_bins; s++)
+				{
+					float bin_val = cvQueryHistValue_2D(hist, h, s);
+					int intensity = cvRound(bin_val*255 / max_value);
+					cvRectangle(hist_img, cvPoint(h*scale, s*scale), cvPoint((h+1)*scale-1, (s+1)*scale-1),
+						CV_RGB(intensity, intensity, intensity), CV_FILLED);
+				}
+			}
+
+
+
+			if(i%jiange==0)
+			{
+				int sx_point = node.trackList[frameNum-node.startFrame].x;
+				int sy_point = node.trackList[frameNum-node.startFrame].y;
+				int ex_point = node.trackList[frameNum-node.startFrame].width;
+				int ey_point = node.trackList[frameNum-node.startFrame].height;
+				int color_count = 0;
+				for(int y = sy_point; y < ey_point; y++)
+				{
+					for(int x = sx_point; x < ey_point; x++)
+					{
+						int step       = frame->widthStep/sizeof(uchar);
+						int channels   = frame->nChannels;
+						uchar* data    = (uchar *)frame->imageData;
+						int B = data[y*step+x*channels+0];
+						int G = data[y*step+x*channels+1];
+						int R = data[y*step+x*channels+2];
+						int distance = (int)sqrt(float((r-R)*(r-R)+(g-G)*(g-G)+(b-B)*(b-B)));
+						if(distance <= 150)
+							color_count++;
+					}
+					if(color_count>20000)
+					{
+						count++;
+						break;
+					}
+				}
+				if(count > 15)
+				{
+					break;
+				}
+			}
+			frameNum++;
+		}
+
+		if(count < 16)  //删除不是检索的对象
+			iter = eventList.erase(iter);
+		else
+			iter++;
+	}
+}
+
+//颜色过滤器
+void VideoAnalyze::colorFilter(int r, int g, int b)
+{
+	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
+	{
+		EventNode node = *iter;
+		int frameNum = node.startFrame+node.trackList.size()/3*jiange;//从运动事件的三分之一开始
+		//int frameNum = (*iter).startFrame;
+		cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
+		int count = 0;
+		for(int i = frameNum; i < node.endFrame; i++)//检查帧
+		{
+			frame = cvQueryFrame(capture);
+			if(i%jiange==0)
+			{
+				int sx_point = node.trackList[frameNum-node.startFrame].x;
+				int sy_point = node.trackList[frameNum-node.startFrame].y;
+				int ex_point = node.trackList[frameNum-node.startFrame].width;
+				int ey_point = node.trackList[frameNum-node.startFrame].height;
+				int color_count = 0;
+				for(int y = sy_point; y < ey_point; y++)
+				{
+					for(int x = sx_point; x < ey_point; x++)
+					{
+						int step       = frame->widthStep/sizeof(uchar);
+						int channels   = frame->nChannels;
+						uchar* data    = (uchar *)frame->imageData;
+						int B = data[y*step+x*channels+0];
+						int G = data[y*step+x*channels+1];
+						int R = data[y*step+x*channels+2];
+						int distance = (int)sqrt(float((r-R)*(r-R)+(g-G)*(g-G)+(b-B)*(b-B)));
+						if(distance <= 150)
+							color_count++;
+					}
+					if(color_count>20000)
+					{
+						count++;
+						break;
+					}
+				}
+				if(count > 15)
+				{
+					break;
+				}
+			}
+			frameNum++;
+		}
+
+		if(count < 16)  //删除不是检索的对象
+			iter = eventList.erase(iter);
+		else
+			iter++;
+	}
 }
 
 //判断事件是不是人物事件
