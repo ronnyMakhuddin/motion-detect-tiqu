@@ -168,76 +168,46 @@ void VideoAnalyze::colorFilter(int r, int g, int b)
 		for(int i = frameNum; i < node.endFrame; i++)//检查帧
 		{
 			frame = cvQueryFrame(capture);
-			//求直方图代码
-			IplImage* hsv = cvCreateImage(cvGetSize(frame), 8, 3);
-			cvCvtColor(frame, hsv, CV_BGR2HSV);
-			IplImage* h_plane = cvCreateImage(cvGetSize(frame), 8, 1);
-			IplImage* s_plane = cvCreateImage(cvGetSize(frame), 8, 1);
-			IplImage* v_plane = cvCreateImage(cvGetSize(frame), 8, 1);
-			IplImage* planes[] = {h_plane, s_plane};
-			cvCvtPixToPlane(hsv, h_plane, s_plane, v_plane, 0);
-
-			int h_bins = 30, s_bins = 32;
-			CvHistogram* hist;
-			{
-				int hist_size[] = {h_bins, s_bins};
-				float h_ranges[] = {0, 180};
-				float s_ranges[] = {0, 255};
-				float* ranges[] = {h_ranges, s_ranges};
-				hist = cvCreateHist(2, hist_size, CV_HIST_ARRAY, ranges, 1);
-			}
-			cvCalcHist(planes, hist, 0, 0);//计算直方图
-			cvNormalizeHist(hist, 1.0); //归一化
-
-			//创建图像显示直方图
-			int scale = 10;
-			IplImage* hist_img = cvCreateImage(cvSize(h_bins*scale, s_bins*scale), 8, 3);
-			cvZero(hist_img);
-			float max_value = 0;
-			cvGetMinMaxHistValue(hist, 0, &max_value, 0, 0);
-			for(int h = 0; h < h_bins; h++)
-			{
-				for(int s = 0; s < s_bins; s++)
-				{
-					float bin_val = cvQueryHistValue_2D(hist, h, s);
-					int intensity = cvRound(bin_val*255 / max_value);
-					cvRectangle(hist_img, cvPoint(h*scale, s*scale), cvPoint((h+1)*scale-1, (s+1)*scale-1),
-						CV_RGB(intensity, intensity, intensity), CV_FILLED);
-				}
-			}
-
-
-
 			if(i%jiange==0)
 			{
-				int sx_point = node.trackList[frameNum-node.startFrame].x;
-				int sy_point = node.trackList[frameNum-node.startFrame].y;
-				int ex_point = node.trackList[frameNum-node.startFrame].width;
-				int ey_point = node.trackList[frameNum-node.startFrame].height;
-				int color_count = 0;
-				for(int y = sy_point; y < ey_point; y++)
+				//求直方图代码
+				cvSetImageROI(frame, node.trackList[frameNum-node.startFrame]);
+				IplImage* hsv = cvCreateImage(cvGetSize(frame), 8, 3);
+				cvCvtColor(frame, hsv, CV_BGR2HSV);
+				cvResetImageROI(frame);
+				IplImage* h_plane = cvCreateImage(cvGetSize(frame), 8, 1);
+				IplImage* s_plane = cvCreateImage(cvGetSize(frame), 8, 1);
+				IplImage* v_plane = cvCreateImage(cvGetSize(frame), 8, 1);
+				IplImage* planes[] = {h_plane, s_plane};
+				cvCvtPixToPlane(hsv, h_plane, s_plane, v_plane, 0);
+
+				int h_bins = 30, s_bins = 32;
+				CvHistogram* hist;
 				{
-					for(int x = sx_point; x < ey_point; x++)
-					{
-						int step       = frame->widthStep/sizeof(uchar);
-						int channels   = frame->nChannels;
-						uchar* data    = (uchar *)frame->imageData;
-						int B = data[y*step+x*channels+0];
-						int G = data[y*step+x*channels+1];
-						int R = data[y*step+x*channels+2];
-						int distance = (int)sqrt(float((r-R)*(r-R)+(g-G)*(g-G)+(b-B)*(b-B)));
-						if(distance <= 150)
-							color_count++;
-					}
-					if(color_count>20000)
-					{
-						count++;
-						break;
-					}
+					int hist_size[] = {h_bins, s_bins};
+					float h_ranges[] = {0, 180};
+					float s_ranges[] = {0, 255};
+					float* ranges[] = {h_ranges, s_ranges};
+					hist = cvCreateHist(2, hist_size, CV_HIST_ARRAY, ranges, 1);
 				}
-				if(count > 15)
+				cvCalcHist(planes, hist, 0, 0);//计算直方图
+				cvNormalizeHist(hist, 1.0); //归一化
+
+				//创建图像显示直方图
+				int scale = 10;
+				IplImage* hist_img = cvCreateImage(cvSize(h_bins*scale, s_bins*scale), 8, 3);
+				cvZero(hist_img);
+				float max_value = 0;
+				cvGetMinMaxHistValue(hist, 0, &max_value, 0, 0);
+				for(int h = 0; h < h_bins; h++)
 				{
-					break;
+					for(int s = 0; s < s_bins; s++)
+					{
+						float bin_val = cvQueryHistValue_2D(hist, h, s);
+						int intensity = cvRound(bin_val*255 / max_value);
+						cvRectangle(hist_img, cvPoint(h*scale, s*scale), cvPoint((h+1)*scale-1, (s+1)*scale-1),
+							CV_RGB(intensity, intensity, intensity), CV_FILLED);
+					}
 				}
 			}
 			frameNum++;
