@@ -154,7 +154,7 @@ void VideoAnalyze::typeFilter(int type)
 			iter++ ;
 	}
 }
-
+/*
 //颜色过滤器
 void VideoAnalyze::colorFilter(int r, int g, int b)
 {
@@ -219,10 +219,32 @@ void VideoAnalyze::colorFilter(int r, int g, int b)
 			iter++;
 	}
 }
+*/
 
 //颜色过滤器
 void VideoAnalyze::colorFilter(int r, int g, int b)
 {
+	//rgb转化为hsv
+	IplImage * hsv_color = cvCreateImage(cvSize(1,1),8,3);
+	IplImage * rgb_color = cvCreateImage(cvSize(1,1),8,3);
+	cvSet2D(rgb_color, 0, 0, CV_RGB(r,g,b));
+	cvCvtColor(rgb_color, hsv_color, CV_BGR2HSV);
+	int step       = hsv_color->widthStep/sizeof(uchar);
+	int channels   = hsv_color->nChannels;
+	uchar* data    = (uchar *)hsv_color->imageData;
+	int h = data[0*step+0*channels+0];
+	int s = data[0*step+0*channels+1];
+	int v = data[0*step+0*channels+2];
+	CvScalar ss = cvGet2D(hsv_color,0,0);
+	
+	FILE*fs = fopen("output.txt", "w+");
+	fprintf(fs, "%d %d %d\n", r, g, b);
+	fprintf(fs, "%d %d %d\n", h, s, v);
+	fprintf(fs, "%d %d %d\n", ss.val[0],ss.val[1],ss.val[2]);
+	fclose(fs);
+
+	cvReleaseImage(&hsv_color);
+	cvReleaseImage(&rgb_color);
 	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
 	{
 		EventNode node = *iter;
@@ -235,44 +257,82 @@ void VideoAnalyze::colorFilter(int r, int g, int b)
 			frame = cvQueryFrame(capture);
 			if(i%jiange==0)
 			{
+				cvSetImageROI(frame, node.trackList[frameNum-node.startFrame]);
+				IplImage* tempImage = cvCreateImage(cvGetSize(frame), 8, 3);
+				cvCvtColor(frame, tempImage, CV_BGR2HSV);
+				//char fileName[256];
+				//sprintf(fileName, "saveImage\\%d.jpg", i);
+				//cvSaveImage(fileName, frame);
 				int sx_point = node.trackList[frameNum-node.startFrame].x;
 				int sy_point = node.trackList[frameNum-node.startFrame].y;
 				int ex_point = node.trackList[frameNum-node.startFrame].width;
 				int ey_point = node.trackList[frameNum-node.startFrame].height;
 				int color_count = 0;
-				for(int y = sy_point; y < ey_point; y++)
+				for(int y = 0; y < node.trackList[frameNum-node.startFrame].height; y++)
 				{
-					for(int x = sx_point; x < ey_point; x++)
+					for(int x = 0; x < node.trackList[frameNum-node.startFrame].width; x++)
 					{
 						int step       = frame->widthStep/sizeof(uchar);
 						int channels   = frame->nChannels;
 						uchar* data    = (uchar *)frame->imageData;
-						int B = data[y*step+x*channels+0];
-						int G = data[y*step+x*channels+1];
-						int R = data[y*step+x*channels+2];
-						int distance = (int)sqrt(float((r-R)*(r-R)+(g-G)*(g-G)+(b-B)*(b-B)));
-						if(distance <= 150)
+						int H = data[y*step+x*channels+0];
+						int S = data[y*step+x*channels+1];
+						int V = data[y*step+x*channels+2];
+						//int distance = (int)sqrt(float(3*(r-R)*(r-R)+4*(g-G)*(g-G)+2*(b-B)*(b-B)));
+						if(isTheSameHSVColor(h,s,v,H,S,V))
 							color_count++;
 					}
-					if(color_count>20000)
+					if(color_count>10000)
 					{
 						count++;
 						break;
 					}
 				}
-				if(count > 15)
+				if(count >= 5)
 				{
 					break;
 				}
+				cvResetImageROI(frame);
+				cvReleaseImage(&tempImage);
 			}
 			frameNum++;
 		}
 
-		if(count < 16)  //删除不是检索的对象
+		if(count < 5)  //删除不是检索的对象
 			iter = eventList.erase(iter);
 		else
 			iter++;
 	}
+}
+
+//判断是不是同一个hsv颜色
+bool VideoAnalyze::isTheSameHSVColor(int h, int s, int v, int H, int S, int V)
+{
+	/*
+	if(v < 50 && V <50)  //同为黑色
+	{
+		return true;
+	}
+	if(v > 220 && V > 220)  //同为白色
+	{
+		return true;
+	}
+	if(s < 80 && S < 80)  //同为灰色
+	{
+		return true;
+	}
+	if(s >= 80 && S >= 80 
+		&& v >= 50 && v <= 220 && V >= 50 && V <=220
+		&& abs(h-H)<20)
+	{
+		return true;
+	}
+	*/
+	if(abs(h-H)<30&&abs(s-S)<40&&abs(v-V)<40)
+	{
+		return true;
+	}
+	return false;
 }
 
 //判断事件是不是人物事件
