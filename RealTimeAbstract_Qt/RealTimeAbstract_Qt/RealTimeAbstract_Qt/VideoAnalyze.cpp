@@ -282,13 +282,13 @@ void VideoAnalyze::colorFilter(int r, int g, int b)
 						if(isTheSameHSVColor(h,s,v,H,S,V))
 							color_count++;
 					}
-					if(color_count>10000)
+					if(color_count>0.1*node.trackList[frameNum-node.startFrame].width*node.trackList[frameNum-node.startFrame].height)
 					{
 						count++;
 						break;
 					}
 				}
-				if(count >= 5)
+				if(count >= 10)
 				{
 					break;
 				}
@@ -298,7 +298,7 @@ void VideoAnalyze::colorFilter(int r, int g, int b)
 			frameNum++;
 		}
 
-		if(count < 5)  //删除不是检索的对象
+		if(count < 10)  //删除不是检索的对象
 			iter = eventList.erase(iter);
 		else
 			iter++;
@@ -308,11 +308,21 @@ void VideoAnalyze::colorFilter(int r, int g, int b)
 //判断是不是同一个hsv颜色
 bool VideoAnalyze::isTheSameHSVColor(int h, int s, int v, int H, int S, int V)
 {
-	/*
-	if(v < 50 && V <50)  //同为黑色
+	
+	if(v < 40 && V <40)  //同为黑色
 	{
 		return true;
 	}
+	if(s < 15 && S < 15 && abs(v-V) <= 40) //接近灰色
+	{
+		return true;
+	}
+	if(v >= 40 && V >= 40 && s >= 15 && S >= 15
+		&& abs(h-H)<35 && abs(s-S) < 70 && abs(v-V) < 85)
+	{
+		return true;
+	}
+	/*
 	if(v > 220 && V > 220)  //同为白色
 	{
 		return true;
@@ -328,10 +338,9 @@ bool VideoAnalyze::isTheSameHSVColor(int h, int s, int v, int H, int S, int V)
 		return true;
 	}
 	*/
-	if(abs(h-H)<30&&abs(s-S)<40&&abs(v-V)<40)
-	{
-		return true;
-	}
+	/*
+	降低S值增加白色，降低V值增加黑色
+	*/
 	return false;
 }
 
