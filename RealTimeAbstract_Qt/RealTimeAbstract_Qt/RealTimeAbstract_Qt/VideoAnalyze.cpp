@@ -4,6 +4,8 @@ int VideoAnalyze::SELECTEVENT = 4;
 
 void VideoAnalyze::run()
 {
+	//debug时间
+	//Globals::time_debug = 0;
 	if(flag == VideoAnalyze::SELECTEVENT)
 	{
 		videoSearch();
@@ -25,14 +27,20 @@ void VideoAnalyze::run()
 	emit sendAnalyzeButtonState(0);
 	emit sendEndTimeCount();
 	emit sendEventCount(eventList.size());
+	//输出时间
+	//FILE*fs = fopen("output.txt", "w+");
+	//fprintf(fs, "%f\n", Globals::time_debug/cvGetTickFrequency()/1000000);
+	//fclose(fs);
 }
 
 //视频内容检索
 void VideoAnalyze::videoSearch()
 {
+	/*
 	FILE*fs = fopen("output.txt", "w+");
 	fprintf(fs, "13456%s\n", data.toLocal8Bit().data());
 	fclose(fs);
+	*/
 	//第一步：删除原界面中的摘要事件
 	emit sendRemoveAllAbstracts();
 	emit sendAnalyzeButtonState(1);
@@ -455,9 +463,12 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
  
     cvConvert( mhi, dst );//将mhi转化为dst,dst=mhi   
     
+	//int64 start_time = cvGetTickCount();
     // 中值滤波，消除小的噪声
     cvSmooth( dst, dst, CV_MEDIAN, 3, 0, 0, 0 );
-    
+	//my_median(dst, dst, 3);
+    //int64 end_time = cvGetTickCount();
+	//Globals::time_debug+=end_time-start_time;
     
     cvPyrDown( dst, pyr, CV_GAUSSIAN_5x5 );// 向下采样，去掉噪声，图像是原图像的四分之一
     cvDilate( pyr, pyr, 0, 1 );  // 做膨胀操作，消除目标的不连续空洞
@@ -938,6 +949,48 @@ void VideoAnalyze::drawAbstracts()
 	}
 	//发送信号画摘要事件缩略图
 		//emit sendDrawAbstracts();
+}
+
+//自己实现的中值滤波
+void VideoAnalyze::my_median(IplImage* src, IplImage* dst, int n)
+{
+	IplImage* temp = cvCreateImage(cvGetSize(src), 8, 1);
+	cvCopy(src, temp);
+	//cvZero(dst);
+	int src_step       = temp->widthStep/sizeof(uchar);
+	int src_channels   = temp->nChannels;
+	uchar* src_data    = (uchar *)temp->imageData;
+	int dst_step       = dst->widthStep/sizeof(uchar);
+	int dst_channels   = dst->nChannels;
+	uchar* dst_data    = (uchar *)dst->imageData;
+	int a = n/2;
+	int n2 = n*n/2;
+	for(int y = a; y < temp->height-a; y++)
+	{
+		for(int x = a; x < temp->width-a; x++)
+		{
+			int count0 = 0;
+			int count1 = 0;
+			bool mark = true;
+			for(int y_ = y-a; y_ <= y+a && mark; y_++)
+			{
+				for(int x_ = x-a; x_ <= x+a && mark; x_++)
+				{
+					if(src_data[y_*src_step+x_] == 255)
+						count1++;
+					else
+						count0++;
+					if(count0 > n2 ||count1 > n2)
+						mark = false;
+				}
+			}
+			if(count0 > n2)
+				dst_data[y*dst_step+x] = 0;
+			else
+				dst_data[y*dst_step+x] = 255;
+		}
+	}
+	cvReleaseImage(&temp);
 }
 
 void VideoAnalyze::getBaseFrame()

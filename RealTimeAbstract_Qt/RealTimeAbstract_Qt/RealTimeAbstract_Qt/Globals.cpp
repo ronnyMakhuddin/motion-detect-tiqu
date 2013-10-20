@@ -1,6 +1,7 @@
 #include "Globals.h"
 
 QStringList Globals::files;
+int64 Globals::time_debug = 0;
 
 int Globals::getFileNameFromQString(QString filePath, QString&fileName)
 {

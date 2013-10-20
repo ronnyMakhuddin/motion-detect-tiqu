@@ -5,6 +5,7 @@ class Globals
 {
 public:
 	static QStringList files;
+	static int64 time_debug;
 	//static VideoAnalyze* aa;
 public:
 	static int getFileNameFromQString(QString filePath, QString&fileName);  //获取单独文件名
