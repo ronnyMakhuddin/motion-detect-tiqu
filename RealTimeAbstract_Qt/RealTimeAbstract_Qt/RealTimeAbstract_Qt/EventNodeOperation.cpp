@@ -49,6 +49,57 @@ bool EventNodeOperation::isTheSame(Rect r1, Rect r2)
 	return false;
 }
 
+//判断两个矩形框之间的关系：
+/*
+return 0:两个矩形互不相关
+return 1:两个矩形是同一个矩形
+return 2:r1包含r2，分裂情况
+return 3:r2包含r1，合并情况
+*/
+int EventNodeOperation::rectRelationship(Rect r1, Rect r2)
+{
+	if((r1.x+r1.width)<r2.x || r1.x>(r2.x+r2.width) || (r1.y+r1.height)<r2.y || r1.y>(r2.y+r2.height))
+	{
+		return 0;
+	}else
+	{
+		int xLength[] = {r1.x, r1.x+r1.width, r2.x, r2.x+r2.width};
+		int yHeight[] = {r1.y, r1.y+r1.height, r2.y, r2.y+r2.height};
+		double mianji = findLength(xLength) * findLength(yHeight);
+		double mianji1 = r1.width*r1.height;
+		double mianji2 = r2.width*r2.height;
+		if(mianji/mianji1 > 0.65 && mianji/mianji2 > 0.65)
+			return 1;
+		if(mianji/mianji1 <= 0.65 && mianji/mianji2 > 0.65)
+			return 2;
+		if(mianji/mianji1 > 0.65 && mianji/mianji2 <= 0.65)
+			return 3;
+	}
+	return 0;
+}
+
+//复制一个EventNode
+EventNode EventNodeOperation::copyEventNode(EventNode node)
+{
+	EventNode newNode;
+	newNode.mark = node.mark;
+	newNode.startFrame = node.startFrame;
+	newNode.endFrame = node.endFrame;
+	/*
+	newNode.rect.x = node.rect.x;
+	newNode.rect.y = node.rect.y;
+	newNode.rect.width = node.rect.width;
+	newNode.rect.height = node.rect.height;
+	*/
+	newNode.rect = node.rect;
+	for(int i = 0; i < node.trackList.size(); i++)
+	{
+		Rect r = node.trackList[i];
+		newNode.trackList.push_back(r);
+	}
+	return newNode;
+}
+
 bool EventNodeOperation::isTheSameDirect(Point lineP1, Point lineP2, Point eventP1, Point eventP2)  //判断是否按方向运动
 {
 	Point a(lineP2.x-lineP1.x, lineP2.y-lineP1.y);
@@ -206,6 +257,7 @@ void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point 
 
 bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, EventNode&node)
 {
+	/*
 	for (int i = 0; i < eventList.size(); i++)
 	{
 		if (eventList[i].endFrame != -1)
@@ -215,15 +267,50 @@ bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, 
 		{
 			eventList[i].mark = true;
 			eventList[i].rect = r2;
-
 			//在跟踪列表插入最后一帧
 			eventList[i].trackList.push_back(r2);
 			node = eventList[i];
-
 			return true;
 		}
 	}
 	return false;
+	*/
+	int size = eventList.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (eventList[i].endFrame != -1)
+			continue;
+		Rect r1 = eventList[i].rect;
+		int relationship = rectRelationship(r1, r2);
+		//return 0:两个矩形互不相关
+		//return 1:两个矩形是同一个矩形
+		//return 2:r1包含r2，分裂情况
+		//return 3:r2包含r1，合并情况
+		if (1==relationship)
+		{
+			eventList[i].mark = true;
+			eventList[i].rect = r2;
+
+			//在跟踪列表插入最后一帧
+			eventList[i].trackList.push_back(r2);
+			node = eventList[i];
+			return true;
+		}else if(2==relationship)
+		{
+			//新建一个节点，跟之前的完全一样
+			EventNode cloneNode = copyEventNode(eventList[i]);
+			eventList.push_back(cloneNode);
+
+			eventList[i].mark = true;
+			eventList[i].rect = r2;
+			//在跟踪列表插入最后一帧
+			eventList[i].trackList.push_back(r2);
+			node = eventList[i];
+			return true;
+		}
+	}
+	return false;
+	
 }
 
 EventNodeOperation::EventNodeOperation(void)
