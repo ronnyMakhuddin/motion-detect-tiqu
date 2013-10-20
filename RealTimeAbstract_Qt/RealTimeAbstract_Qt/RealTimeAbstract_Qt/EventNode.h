@@ -15,6 +15,6 @@ public:
 	int endFrame;
 	Rect rect;
 	vector<Rect> trackList;
-	VideoCapture capture;
+	VideoCapture capture; 
 };
 
