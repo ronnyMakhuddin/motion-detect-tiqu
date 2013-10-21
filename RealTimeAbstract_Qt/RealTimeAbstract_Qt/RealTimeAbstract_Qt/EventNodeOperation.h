@@ -12,6 +12,7 @@ public:
 	static int rectRelationship(Rect r1, Rect r2);  //判断2个矩形之间的关系
 	static EventNode copyEventNode(EventNode node); //复制一个EventNode
 	static bool isTheSameDirect(Point lineP1, Point lineP2, Point eventP1, Point eventP2);  //判断两条线的方向是否一致
+	static Point getCenterPoint(Rect r); //判断分裂后是否属于该事件
 	static bool isEnterRect(Rect r1, Rect r2);          //判断是否入侵
 	static EventNode insertEventNode(vector<EventNode> &eventList, Rect r, int frameNum); //插入一个新事件
 	static void deleteEventList(vector<EventNode> &eventList);  //删除整个事件链表

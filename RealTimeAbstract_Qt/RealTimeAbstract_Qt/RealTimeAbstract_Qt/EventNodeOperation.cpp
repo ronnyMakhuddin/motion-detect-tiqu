@@ -143,7 +143,7 @@ EventNode EventNodeOperation::insertEventNode(vector<EventNode> &eventList, Rect
 	insert.rect = r;
 	insert.endFrame = -1;
 	insert.mark = true;
-	insert.type = 0;
+	insert.type = 1;
 	//insert.capture = 0;
 
 	//事件跟踪的表头
@@ -258,6 +258,14 @@ void EventNodeOperation::selectAbstractEvent(vector<EventNode>&eventList, Point 
 	}
 }
 
+Point EventNodeOperation::getCenterPoint(Rect r)
+{
+	Point p;
+	p.x = r.x+r.width/2;
+	p.y = r.y+r.height/2;
+	return p;
+}
+
 bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, EventNode&node)
 {
 	/*
@@ -278,6 +286,7 @@ bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, 
 	}
 	return false;
 	*/
+	bool returnValue = false;
 	int size = eventList.size();
 	for (int i = 0; i < size; i++)
 	{
@@ -296,18 +305,39 @@ bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, 
 			//在跟踪列表插入最后一帧
 			eventList[i].trackList.push_back(r2);
 			node = eventList[i];
-			return true;
+			if(3==eventList[i].type)
+			{
+				returnValue = true;
+				continue;
+			}
+			else
+			    return true;
 		}else if(2==relationship)
 		{
 			//新建一个节点，跟之前的完全一样
-			if(0==eventList[i].type)
+			if(1==eventList[i].type)
 			{
 				EventNode cloneNode = copyEventNode(eventList[i]);
-				cloneNode.type = 1;
+				cloneNode.type = 2;
 				eventList.push_back(cloneNode);
-			}else if(1==eventList[i].type)
+			}else if(2==eventList[i].type)
 			{
-				eventList[i].type = 0;
+				eventList[i].type = 1;
+			}else if(3==eventList[i].type)
+			{
+				Point p1 = getCenterPoint(eventList[i].trackList[0]);
+				Point p2 = getCenterPoint(r1);
+				Point p3 = getCenterPoint(r2);
+				if(isTheSameDirect(p1, p2, p2, p3))
+				{
+					eventList[i].type = 1;
+					eventList[i].mark = true;
+					eventList[i].rect = r2;
+					//在跟踪列表插入最后一帧
+					eventList[i].trackList.push_back(r2);
+					node = eventList[i];
+					return true;
+				}
 			}
 
 			eventList[i].mark = true;
@@ -316,9 +346,19 @@ bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, 
 			eventList[i].trackList.push_back(r2);
 			node = eventList[i];
 			return true;
+		}else if(3==relationship)
+		{
+			eventList[i].mark = true;
+			eventList[i].type = 3;
+			eventList[i].rect = r2;
+			//在跟踪列表插入最后一帧
+			eventList[i].trackList.push_back(r2);
+			node = eventList[i];
+			returnValue = true;
+			continue;
 		}
 	}
-	return false;
+	return returnValue;
 	
 }
 
