@@ -58,6 +58,7 @@ return 3:r2包含r1，合并情况
 */
 int EventNodeOperation::rectRelationship(Rect r1, Rect r2)
 {
+	float threshold = 0.5;
 	if((r1.x+r1.width)<r2.x || r1.x>(r2.x+r2.width) || (r1.y+r1.height)<r2.y || r1.y>(r2.y+r2.height))
 	{
 		return 0;
@@ -68,11 +69,11 @@ int EventNodeOperation::rectRelationship(Rect r1, Rect r2)
 		double mianji = findLength(xLength) * findLength(yHeight);
 		double mianji1 = r1.width*r1.height;
 		double mianji2 = r2.width*r2.height;
-		if(mianji/mianji1 > 0.65 && mianji/mianji2 > 0.65)
+		if(mianji/mianji1 > threshold && mianji/mianji2 > threshold)
 			return 1;
-		if(mianji/mianji1 <= 0.65 && mianji/mianji2 > 0.65)
+		if(mianji/mianji1 <= threshold && mianji/mianji2 > threshold)
 			return 2;
-		if(mianji/mianji1 > 0.65 && mianji/mianji2 <= 0.65)
+		if(mianji/mianji1 > threshold && mianji/mianji2 <= threshold)
 			return 3;
 	}
 	return 0;
@@ -85,6 +86,7 @@ EventNode EventNodeOperation::copyEventNode(EventNode node)
 	newNode.mark = node.mark;
 	newNode.startFrame = node.startFrame;
 	newNode.endFrame = node.endFrame;
+	newNode.type = node.type;
 	/*
 	newNode.rect.x = node.rect.x;
 	newNode.rect.y = node.rect.y;
@@ -141,6 +143,7 @@ EventNode EventNodeOperation::insertEventNode(vector<EventNode> &eventList, Rect
 	insert.rect = r;
 	insert.endFrame = -1;
 	insert.mark = true;
+	insert.type = 0;
 	//insert.capture = 0;
 
 	//事件跟踪的表头
@@ -290,7 +293,6 @@ bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, 
 		{
 			eventList[i].mark = true;
 			eventList[i].rect = r2;
-
 			//在跟踪列表插入最后一帧
 			eventList[i].trackList.push_back(r2);
 			node = eventList[i];
@@ -298,8 +300,15 @@ bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, 
 		}else if(2==relationship)
 		{
 			//新建一个节点，跟之前的完全一样
-			EventNode cloneNode = copyEventNode(eventList[i]);
-			eventList.push_back(cloneNode);
+			if(0==eventList[i].type)
+			{
+				EventNode cloneNode = copyEventNode(eventList[i]);
+				cloneNode.type = 1;
+				eventList.push_back(cloneNode);
+			}else if(1==eventList[i].type)
+			{
+				eventList[i].type = 0;
+			}
 
 			eventList[i].mark = true;
 			eventList[i].rect = r2;
