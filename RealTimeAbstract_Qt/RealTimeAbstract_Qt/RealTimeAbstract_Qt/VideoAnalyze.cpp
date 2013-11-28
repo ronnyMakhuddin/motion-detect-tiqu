@@ -352,6 +352,50 @@ bool VideoAnalyze::isTheSameHSVColor(int h, int s, int v, int H, int S, int V)
 	return false;
 }
 
+//判断是不是同一个rgb颜色
+bool VideoAnalyze::isTheSameRGBColor(int r1, int g1, int b1, int r2, int g2, int b2) 
+{
+	int w_r = 1, w_g = 2, w_b = 1;
+	int r1addr2 = r1 + r2;
+	int g1addg2 = g1 + g2;
+	int b1addb2 = b1 + b2;
+	int r1subr2 = abs(r1 - r2);
+	int g1subg2 = abs(g1 - g2);
+	int b1subb2 = abs(b1 - b2);
+	float sum_rgb = (r1addr2 + g1addg2 + b1addb2)/3.0;
+	float s_r = r1addr2/sum_rgb;
+	s_r = s_r < 1 ? s_r : 1;
+	float s_r_2 = s_r*s_r;
+	float s_g = g1addg2/sum_rgb;
+	s_g = s_g < 1 ? s_g : 1;
+	float s_g_2 = s_g*s_g;
+	float s_b = b1addb2/sum_rgb;
+	s_b = s_b < 1 ? s_b : 1;
+	float s_b_2 = s_b*s_b;
+	float theta = 2*acos((r1*r2 + g1*g2 + b1*b2)/(sqrt(1.0*(r1*r1+g1*g1+b1*b1)*(r2*r2+g2*g2+b2*b2))))/3.14159;
+	float tempadd = r1subr2/r1addr2 + g1subg2/g1addg2 + b1subb2/b1addb2;
+	float s_theta_r = r1subr2/r1addr2/tempadd*s_r*s_r;
+	float s_theta_g = g1subg2/g1addg2/tempadd*s_g*s_g;
+	float s_theta_b = b1subb2/b1addb2/tempadd*s_b*s_b;
+	float s_theta = s_theta_r + s_theta_g + s_theta_b;
+	//选出最大值
+	int max = r1;
+	max = max > r2 ? max : r2;
+	max = max > g1 ? max : g1;
+	max = max > g2 ? max : g2;
+	max = max > b1 ? max : b1;
+	max = max > b2 ? max : b2;
+
+	float s_max_theta = max*1.0/255;
+
+	float dist = sqrt((s_r_2*w_r*r1subr2*r1subr2 + s_g_2*w_g*g1subg2*g1subg2 + s_b_2*w_b*b1subb2*b1subb2)/((w_r+w_g+w_b)*255*255)+s_theta*s_max_theta*theta*theta);
+
+	if(dist <= 0.2)
+		return true;
+	else
+		return false;
+}
+
 //判断事件是不是人物事件
 bool VideoAnalyze::isHumanEvent(EventNode node, CascadeClassifier human_detector)
 {
