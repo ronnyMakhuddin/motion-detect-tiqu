@@ -5,6 +5,7 @@
 #include <qdir.h>
 #include <qtime>
 #include <QTimer>
+#include <math.h>
 #include "EventNode.h"
 #include "EventNodeOperation.h"
 #include "Globals.h"
@@ -64,6 +65,7 @@ public:
 	void typeFilter(int type); //类别过滤器
 	void colorFilter(int r, int g, int b); //颜色过滤器
 	bool isTheSameHSVColor(int h, int s, int v, int H, int S, int V); //判断是不是同一个hsv颜色
+	bool isTheSameRGBColor(int r1, int g1, int b1, int r2, int g2, int b2); //判断是不是同一个rgb颜色
 	bool isHumanEvent(EventNode node, CascadeClassifier detector);       //判断该事件是不是人物事件
 	bool isCarEvent(EventNode node, CascadeClassifier detector);    //判断该事件是不是车辆事件
 	void my_median(IplImage* src, IplImage* dst, int n);  //自己实现的中值滤波
