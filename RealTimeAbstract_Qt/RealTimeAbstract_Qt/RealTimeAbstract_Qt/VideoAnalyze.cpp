@@ -4,8 +4,6 @@ int VideoAnalyze::SELECTEVENT = 4;
 
 void VideoAnalyze::run()
 {
-	//debug时间
-	//Globals::time_debug = 0;
 	if(flag == VideoAnalyze::SELECTEVENT)
 	{
 		videoSearch();
@@ -27,20 +25,11 @@ void VideoAnalyze::run()
 	emit sendAnalyzeButtonState(0);
 	emit sendEndTimeCount();
 	emit sendEventCount(eventList.size());
-	//输出时间
-	//FILE*fs = fopen("output.txt", "w+");
-	//fprintf(fs, "%f\n", Globals::time_debug/cvGetTickFrequency()/1000000);
-	//fclose(fs);
 }
 
 //视频内容检索
 void VideoAnalyze::videoSearch()
 {
-	/*
-	FILE*fs = fopen("output.txt", "w+");
-	fprintf(fs, "13456%s\n", data.toLocal8Bit().data());
-	fclose(fs);
-	*/
 	//第一步：删除原界面中的摘要事件
 	emit sendRemoveAllAbstracts();
 	emit sendAnalyzeButtonState(1);
@@ -686,7 +675,6 @@ void VideoAnalyze::analyzeVideo()
 		int totalFrames = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_COUNT);
 		isSaveToFile = true;
 		int frameNum = 0;
-		//int64 start_time = cv::getTickCount();
 		while (true)
 		{
 			frame = cvQueryFrame(capture);
@@ -753,6 +741,11 @@ void VideoAnalyze::createAllEventVideo()
 	QByteArray ba = videoPath.toLocal8Bit();
 	char* path = ba.data();
 	videoWriter = cvCreateVideoWriter(path, CV_FOURCC('X', 'V', 'I', 'D'), fps, captureSize, 1);
+	if(!videoWriter)
+	{
+		emit sendProcessInfo(tr("无法创建视频摘要，可能没有编码器支持!"));
+		return;
+	}
 	int part = eventList.size() / LIMIT;
 	if(eventList.size()%LIMIT!=0)
 		part++;
@@ -778,11 +771,6 @@ void VideoAnalyze::createAllEventVideo()
 			r_index = eventList.size();
 		}
 		//对每一段视频进行合成保存    记得要处理帧间隔
-		/*
-		bool* mark = new bool[r_index-l_index];
-		for(int j = l_index; j < r_index; j++)
-			mark[j] = true;
-		*/
 		int frameCount = 0;   //记录帧偏移量
 		int endCount = 0;     //记录有几个节点已经完成
 
@@ -792,7 +780,6 @@ void VideoAnalyze::createAllEventVideo()
 
 			for(int j = l_index; j < r_index; j++)
 			{
-				//emit sendProcessInfo(tr("调试")+QString::number(2, 10));
 				int frameNum = eventList[j].startFrame+frameCount*jiange;
 				if(frameCount == eventList[j].trackList.size())  //注意这里一定是“==”，如果是“>=”的话会使endCount重复多加几次，损失很多帧
 				{
@@ -804,12 +791,8 @@ void VideoAnalyze::createAllEventVideo()
 					continue;
 				}
 				CvRect rect = eventList[j].trackList[frameCount];
-				//emit sendProcessInfo(tr("调试")+QString::number(frameNum, 200));
-				//msleep(200);
 				cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
 				frame = cvQueryFrame(capture);
-				//emit sendProcessInfo(tr("调试")+QString::number(frame->height, 10));
-				//msleep(200);
 				//截取矩形图像合成
 				cvSetImageROI(frame, rect);
 				sprintf(eventNumber, "%d", j+1);
@@ -823,18 +806,13 @@ void VideoAnalyze::createAllEventVideo()
 			{
 				cvWriteFrame(videoWriter, allEventImage);
 			}
-			
 			frameCount++;
 		}
-		//int time_diff = time.elapsed();
-		//QString tr_time_diff = QString::number(int(time_diff/1000), 10);
-		//tr_time_diff = tr("100个事件合成时间为:") + tr_time_diff;
-		//emit sendProcessInfo(tr_time_diff);
 	}
 	//记得释放空间
 	cvReleaseVideoWriter(&videoWriter);
 	cvReleaseImage(&allEventImage);
-	//cvReleaseFont
+	emit sendProcessInfo(tr("分析结束！"));
 }
 
 void VideoAnalyze::saveEventToFile()
