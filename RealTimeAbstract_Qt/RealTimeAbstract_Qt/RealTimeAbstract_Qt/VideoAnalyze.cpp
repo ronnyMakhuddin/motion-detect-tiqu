@@ -162,194 +162,136 @@ void VideoAnalyze::typeFilter(int type)
 			iter++ ;
 	}
 }
-/*
+
 //颜色过滤器
 void VideoAnalyze::colorFilter(int r, int g, int b)
 {
+    IplImage* pFrImg1 = NULL;
+    IplImage* pFrImg2 = NULL;
+    IplImage* pFrImg3 = NULL;
+    IplImage* result1 = NULL;
+    IplImage* result2 = NULL;
+    IplImage* result = NULL;
+	IplImage* pre_frame = NULL;
+	CvMat* pFrMat1 = NULL;
+    CvMat* pFrMat2 = NULL;
+    CvMat* pFrMat3 = NULL;
+    CvMat* reMat1 = NULL;
+    CvMat* reMat2 = NULL;
+    CvMat* reMat = NULL;
+
+	pFrImg1 = cvCreateImage(captureSize, IPL_DEPTH_8U, 1);
+    pFrImg2 = cvCreateImage(captureSize, IPL_DEPTH_8U, 1);
+    pFrImg3 = cvCreateImage(captureSize, IPL_DEPTH_8U, 1);
+    result1 = cvCreateImage(captureSize, IPL_DEPTH_8U, 1);
+    result2 = cvCreateImage(captureSize, IPL_DEPTH_8U, 1);
+    result = cvCreateImage(captureSize, IPL_DEPTH_8U, 1);
+	pre_frame = cvCreateImage(captureSize, IPL_DEPTH_8U, 3);
+
+	pFrMat1 = cvCreateMat(captureSize.height, captureSize.width, CV_8UC1);
+    pFrMat2 = cvCreateMat(captureSize.height, captureSize.width, CV_8UC1);
+    pFrMat3 = cvCreateMat(captureSize.height, captureSize.width, CV_8UC1);
+    reMat1 = cvCreateMat(captureSize.height, captureSize.width, CV_8UC1);
+    reMat2 = cvCreateMat(captureSize.height, captureSize.width, CV_8UC1);
+    reMat = cvCreateMat(captureSize.height, captureSize.width, CV_8UC1);
+
 	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
 	{
 		EventNode node = *iter;
-		int frameNum = node.startFrame+node.trackList.size()/3*jiange;//从运动事件的三分之一开始
-		//int frameNum = (*iter).startFrame;
+		int frameNum = node.startFrame+node.trackList.size()/3*jiange-2;//从运动事件的三分之一开始
 		cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
-		int count = 0;
-		for(int i = frameNum; i < node.endFrame; i++)//检查帧
+		//先读取两帧
+		frame = cvQueryFrame( capture );
+		frameNum++;
+		cvCvtColor(frame, pFrImg1, CV_BGR2GRAY);
+		cvConvert(pFrImg1, pFrMat1);
+		for(int i = jiange; i > 1; i--)
 		{
-			frame = cvQueryFrame(capture);
-			if(i%jiange==0)
-			{
-				//求直方图代码
-				cvSetImageROI(frame, node.trackList[frameNum-node.startFrame]);
-				IplImage* hsv = cvCreateImage(cvGetSize(frame), 8, 3);
-				cvCvtColor(frame, hsv, CV_BGR2HSV);
-				cvResetImageROI(frame);
-				IplImage* h_plane = cvCreateImage(cvGetSize(frame), 8, 1);
-				IplImage* s_plane = cvCreateImage(cvGetSize(frame), 8, 1);
-				IplImage* v_plane = cvCreateImage(cvGetSize(frame), 8, 1);
-				IplImage* planes[] = {h_plane, s_plane};
-				cvCvtPixToPlane(hsv, h_plane, s_plane, v_plane, 0);
-
-				int h_bins = 30, s_bins = 32;
-				CvHistogram* hist;
-				{
-					int hist_size[] = {h_bins, s_bins};
-					float h_ranges[] = {0, 180};
-					float s_ranges[] = {0, 255};
-					float* ranges[] = {h_ranges, s_ranges};
-					hist = cvCreateHist(2, hist_size, CV_HIST_ARRAY, ranges, 1);
-				}
-				cvCalcHist(planes, hist, 0, 0);//计算直方图
-				cvNormalizeHist(hist, 1.0); //归一化
-
-				//创建图像显示直方图
-				int scale = 10;
-				IplImage* hist_img = cvCreateImage(cvSize(h_bins*scale, s_bins*scale), 8, 3);
-				cvZero(hist_img);
-				float max_value = 0;
-				cvGetMinMaxHistValue(hist, 0, &max_value, 0, 0);
-				for(int h = 0; h < h_bins; h++)
-				{
-					for(int s = 0; s < s_bins; s++)
-					{
-						float bin_val = cvQueryHistValue_2D(hist, h, s);
-						int intensity = cvRound(bin_val*255 / max_value);
-						cvRectangle(hist_img, cvPoint(h*scale, s*scale), cvPoint((h+1)*scale-1, (s+1)*scale-1),
-							CV_RGB(intensity, intensity, intensity), CV_FILLED);
-					}
-				}
-			}
+			frame=cvQueryFrame( capture );
 			frameNum++;
 		}
+		frame = cvQueryFrame( capture );
+		frameNum++;
+		cvCvtColor(frame, pFrImg2, CV_BGR2GRAY);
+		cvConvert(pFrImg2, pFrMat2);
 
-		if(count < 16)  //删除不是检索的对象
-			iter = eventList.erase(iter);
-		else
-			iter++;
-	}
-}
-*/
+		cvCopy(frame, pre_frame);
 
-//颜色过滤器
-void VideoAnalyze::colorFilter(int r, int g, int b)
-{
-	//rgb转化为hsv
-	IplImage * hsv_color = cvCreateImage(cvSize(1,1),8,3);
-	IplImage * rgb_color = cvCreateImage(cvSize(1,1),8,3);
-	cvSet2D(rgb_color, 0, 0, CV_RGB(r,g,b));
-	cvCvtColor(rgb_color, hsv_color, CV_BGR2HSV);
-	int step       = hsv_color->widthStep/sizeof(uchar);
-	int channels   = hsv_color->nChannels;
-	uchar* data    = (uchar *)hsv_color->imageData;
-	int h = data[0*step+0*channels+0];
-	int s = data[0*step+0*channels+1];
-	int v = data[0*step+0*channels+2];
-	CvScalar ss = cvGet2D(hsv_color,0,0);
-	
-	FILE*fs = fopen("output.txt", "w+");
-	fprintf(fs, "%d %d %d\n", r, g, b);
-	fprintf(fs, "%d %d %d\n", h, s, v);
-	fprintf(fs, "%d %d %d\n", ss.val[0],ss.val[1],ss.val[2]);
-	fclose(fs);
-
-	cvReleaseImage(&hsv_color);
-	cvReleaseImage(&rgb_color);
-	for(vector<EventNode>::iterator iter=eventList.begin(); iter!=eventList.end(); )
-	{
-		EventNode node = *iter;
-		int frameNum = node.startFrame+node.trackList.size()/3*jiange;//从运动事件的三分之一开始
-		//int frameNum = (*iter).startFrame;
-		cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, frameNum);
 		int count = 0;
 		for(int i = frameNum; i < node.endFrame; i++)//检查帧
 		{
 			frame = cvQueryFrame(capture);
 			if(i%jiange==0)
 			{
-				cvSetImageROI(frame, node.trackList[frameNum-node.startFrame]);
-				IplImage* tempImage = cvCreateImage(cvGetSize(frame), 8, 3);
-				cvCvtColor(frame, tempImage, CV_BGR2HSV);
-				//char fileName[256];
-				//sprintf(fileName, "saveImage\\%d.jpg", i);
-				//cvSaveImage(fileName, frame);
-				int sx_point = node.trackList[frameNum-node.startFrame].x;
-				int sy_point = node.trackList[frameNum-node.startFrame].y;
-				int ex_point = node.trackList[frameNum-node.startFrame].width;
-				int ey_point = node.trackList[frameNum-node.startFrame].height;
+				cvCvtColor(frame, pFrImg3, CV_BGR2GRAY);
+				cvConvert(pFrImg3, pFrMat3);
+				//当前帧跟前一帧相减
+				cvAbsDiff(pFrMat2, pFrMat1, reMat1);
+				cvAbsDiff(pFrMat3, pFrMat2, reMat2);
+				//二值化前景图
+			    cvThreshold(reMat1, result1, 10.0, 255.0, CV_THRESH_BINARY);
+				cvThreshold(reMat2, result2, 10.0, 255.0, CV_THRESH_BINARY);
+				//两个帧差值相与
+				cvAnd(result1,result2,result,0);
+
+				int temp_index = (frameNum-node.startFrame)/jiange;
+				int sx_point = node.trackList[temp_index].x;
+				int sy_point = node.trackList[temp_index].y;
+				int ex_point = node.trackList[temp_index].width;
+				int ey_point = node.trackList[temp_index].height;
+				int same_color_count = 0;
 				int color_count = 0;
-				for(int y = 0; y < node.trackList[frameNum-node.startFrame].height; y++)
+				for(int y = sy_point; y < sy_point+ey_point; y++)
 				{
-					for(int x = 0; x < node.trackList[frameNum-node.startFrame].width; x++)
+					for(int x = sx_point; x < sx_point+ex_point; x++)
 					{
-						int step       = frame->widthStep/sizeof(uchar);
-						int channels   = frame->nChannels;
-						uchar* data    = (uchar *)frame->imageData;
-						int H = data[y*step+x*channels+0];
-						int S = data[y*step+x*channels+1];
-						int V = data[y*step+x*channels+2];
-						//int distance = (int)sqrt(float(3*(r-R)*(r-R)+4*(g-G)*(g-G)+2*(b-B)*(b-B)));
-						if(isTheSameHSVColor(h,s,v,H,S,V))
+						int step    = result->widthStep/sizeof(uchar);
+						uchar* data = (uchar *)result->imageData;
+						if(data[y*step+x] >= 200)
+						{
 							color_count++;
-					}
-					if(color_count>0.1*node.trackList[frameNum-node.startFrame].width*node.trackList[frameNum-node.startFrame].height)
-					{
-						count++;
-						break;
+							int step       = pre_frame->widthStep/sizeof(uchar);
+							int channels   = pre_frame->nChannels;
+							uchar* data    = (uchar *)pre_frame->imageData;
+							int G = data[y*step+x*channels+0];
+							int B = data[y*step+x*channels+1];
+							int R = data[y*step+x*channels+2];
+							if(isTheSameRGBColor(r,g,b,R,G,B))
+								same_color_count++;
+						}
 					}
 				}
-				if(count >= 10)
-				{
-					break;
-				}
-				cvResetImageROI(frame);
-				cvReleaseImage(&tempImage);
+				float temp_result = 1.0*same_color_count / color_count;
+				if(temp_result >= 0.2)
+					count++;
 			}
 			frameNum++;
+			cvCopy(frame, pre_frame);
+			cvCopy(pFrMat2, pFrMat1, NULL);
+			cvCopy(pFrMat3, pFrMat2, NULL);
+			cvWaitKey(1);
 		}
 
-		if(count < 10)  //删除不是检索的对象
+		if(count < 5)  //删除不是检索的对象
 			iter = eventList.erase(iter);
 		else
 			iter++;
 	}
-}
+	//释放图像和矩阵
+    cvReleaseImage(&pFrImg1);
+    cvReleaseImage(&pFrImg2);
+	cvReleaseImage(&pFrImg3);
+    cvReleaseImage(&result1);
+    cvReleaseImage(&result2);
+    cvReleaseImage(&result);
+    cvReleaseImage(&pre_frame);
 
-//判断是不是同一个hsv颜色
-bool VideoAnalyze::isTheSameHSVColor(int h, int s, int v, int H, int S, int V)
-{
-	
-	if(v < 40 && V <40)  //同为黑色
-	{
-		return true;
-	}
-	if(s < 15 && S < 15 && abs(v-V) <= 40) //接近灰色
-	{
-		return true;
-	}
-	if(v >= 40 && V >= 40 && s >= 15 && S >= 15
-		&& abs(h-H)<35 && abs(s-S) < 70 && abs(v-V) < 85)
-	{
-		return true;
-	}
-	/*
-	if(v > 220 && V > 220)  //同为白色
-	{
-		return true;
-	}
-	if(s < 80 && S < 80)  //同为灰色
-	{
-		return true;
-	}
-	if(s >= 80 && S >= 80 
-		&& v >= 50 && v <= 220 && V >= 50 && V <=220
-		&& abs(h-H)<20)
-	{
-		return true;
-	}
-	*/
-	/*
-	降低S值增加白色，降低V值增加黑色
-	*/
-	return false;
+    cvReleaseMat(&pFrMat1);
+    cvReleaseMat(&pFrMat2);
+	cvReleaseMat(&pFrMat3);
+    cvReleaseMat(&reMat1);
+    cvReleaseMat(&reMat2);
+    cvReleaseMat(&reMat);
 }
 
 //判断是不是同一个rgb颜色
@@ -373,7 +315,7 @@ bool VideoAnalyze::isTheSameRGBColor(int r1, int g1, int b1, int r2, int g2, int
 	s_b = s_b < 1 ? s_b : 1;
 	float s_b_2 = s_b*s_b;
 	float theta = 2*acos((r1*r2 + g1*g2 + b1*b2)/(sqrt(1.0*(r1*r1+g1*g1+b1*b1)*(r2*r2+g2*g2+b2*b2))))/3.14159;
-	float tempadd = r1subr2/r1addr2 + g1subg2/g1addg2 + b1subb2/b1addb2;
+	float tempadd = 1.0*r1subr2/r1addr2 + 1.0*g1subg2/g1addg2 + 1.0*b1subb2/b1addb2;
 	float s_theta_r = r1subr2/r1addr2/tempadd*s_r*s_r;
 	float s_theta_g = g1subg2/g1addg2/tempadd*s_g*s_g;
 	float s_theta_b = b1subb2/b1addb2/tempadd*s_b*s_b;
@@ -390,7 +332,7 @@ bool VideoAnalyze::isTheSameRGBColor(int r1, int g1, int b1, int r2, int g2, int
 
 	float dist = sqrt((s_r_2*w_r*r1subr2*r1subr2 + s_g_2*w_g*g1subg2*g1subg2 + s_b_2*w_b*b1subb2*b1subb2)/((w_r+w_g+w_b)*255*255)+s_theta*s_max_theta*theta*theta);
 
-	if(dist <= 0.2)
+	if(dist <= 0.25)
 		return true;
 	else
 		return false;
@@ -411,7 +353,7 @@ bool VideoAnalyze::isHumanEvent(EventNode node, CascadeClassifier human_detector
 			std::vector<Rect> detectRects;
 			Mat fImage(frame,0);
 			//car_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100), Size(1000,1000) );
-			human_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(10, 10), Size(100,100) );
+			human_detector.detectMultiScale(fImage, detectRects, 1.1, 1, 0|CV_HAAR_SCALE_IMAGE, Size(9, 30), Size(45,150) );
 			for(int j = 0; j < detectRects.size(); j++)
 			{
 				if(EventNodeOperation::isTheSame(detectRects[j], node.trackList[frameNum-node.startFrame]))
@@ -506,13 +448,8 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
     cvUpdateMotionHistory( silh, mhi, timestamp, MHI_DURATION ); // update MHI
  
     cvConvert( mhi, dst );//将mhi转化为dst,dst=mhi   
-    
-	//int64 start_time = cvGetTickCount();
-    // 中值滤波，消除小的噪声
+
     cvSmooth( dst, dst, CV_MEDIAN, 3, 0, 0, 0 );
-	//my_median(dst, dst, 3);
-    //int64 end_time = cvGetTickCount();
-	//Globals::time_debug+=end_time-start_time;
     
     cvPyrDown( dst, pyr, CV_GAUSSIAN_5x5 );// 向下采样，去掉噪声，图像是原图像的四分之一
     cvDilate( pyr, pyr, 0, 1 );  // 做膨胀操作，消除目标的不连续空洞
@@ -551,8 +488,6 @@ void VideoAnalyze::update_mhi(IplImage*&img, IplImage*&dst, int frameNum, IplIma
 			cvRectangle(img, cvPoint(r.x, r.y), cvPoint(r.x + r.width, r.y + r.height), s, 1, CV_AA, 0);
 		}
 	}
-
-	//EventNodeOperation::bianliEventList(eventList, frameNum);
 	int count = EventNodeOperation::bianliEventList(eventList, frameNum, fps);
 	emit sendEventCount(count);
 
@@ -802,16 +737,6 @@ void VideoAnalyze::analyzeVideo()
 			}
 			frameNum++;
 		}
-		//int64 end_time = cv::getTickCount();
-		/*
-		FILE*fs = fopen("output.txt", "w+");
-		fprintf(fs, "%d %d %d %d\n", captureSize.width, captureSize.height, fps, jiange);
-		fprintf(fs, "frameCount=%d\n", frameNum);
-		fprintf(fs, "time=%f\n", (end_time-start_time)/cv::getTickFrequency());
-		fclose(fs);
-		*/
-		//printf("frameCount=%d\n", frameNum);
-		//printf("time=%f\n", (end_time-start_time)/cv::getTickFrequency()/1000);
 	}
 	else
 	{
@@ -841,9 +766,6 @@ void VideoAnalyze::createAllEventVideo()
 	//将视频分成part端，分别对没段进行合成保存
 	for(int i = 0; i < part; i++)
 	{
-		//QTime time;
-		//time.start();
-
 		//计算每一段的下标
 		int l_index, r_index;
 		if(i != part-1)
@@ -956,21 +878,15 @@ void VideoAnalyze::getKeyFrameJiange()
 }
 
 void VideoAnalyze::drawAbstracts()
-{/*
-	for(int i = 0; i < 19; i++)
-	{
-		frame = cvQueryFrame(capture);
-	}*/
+{
 	int framePosition;
 	if(isSaveToFile)
 	{
 		for(int i = 0; i < eventList.size(); i++)
-			//for(int i = 0; i < 30; i++)
 		{
 			EventNode node = eventList[i];
 			Rect rect = node.trackList[node.trackList.size()/2];
 			cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, node.startFrame+node.trackList.size()/2*jiange);
-			//framePosition = (int)cvGetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES);
 			frame = cvQueryFrame(capture);
 			cvRectangle(frame, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y+rect.height), cvScalar(255, 0, 0));
 			if(frame)  
@@ -991,50 +907,6 @@ void VideoAnalyze::drawAbstracts()
 			msleep(100);
 		}
 	}
-	//发送信号画摘要事件缩略图
-		//emit sendDrawAbstracts();
-}
-
-//自己实现的中值滤波
-void VideoAnalyze::my_median(IplImage* src, IplImage* dst, int n)
-{
-	IplImage* temp = cvCreateImage(cvGetSize(src), 8, 1);
-	cvCopy(src, temp);
-	//cvZero(dst);
-	int src_step       = temp->widthStep/sizeof(uchar);
-	int src_channels   = temp->nChannels;
-	uchar* src_data    = (uchar *)temp->imageData;
-	int dst_step       = dst->widthStep/sizeof(uchar);
-	int dst_channels   = dst->nChannels;
-	uchar* dst_data    = (uchar *)dst->imageData;
-	int a = n/2;
-	int n2 = n*n/2;
-	for(int y = a; y < temp->height-a; y++)
-	{
-		for(int x = a; x < temp->width-a; x++)
-		{
-			int count0 = 0;
-			int count1 = 0;
-			bool mark = true;
-			for(int y_ = y-a; y_ <= y+a && mark; y_++)
-			{
-				for(int x_ = x-a; x_ <= x+a && mark; x_++)
-				{
-					if(src_data[y_*src_step+x_] == 255)
-						count1++;
-					else
-						count0++;
-					if(count0 > n2 ||count1 > n2)
-						mark = false;
-				}
-			}
-			if(count0 > n2)
-				dst_data[y*dst_step+x] = 0;
-			else
-				dst_data[y*dst_step+x] = 255;
-		}
-	}
-	cvReleaseImage(&temp);
 }
 
 void VideoAnalyze::getBaseFrame()
@@ -1170,9 +1042,6 @@ void VideoAnalyze::getSettingData(int zoom,int width,int height,int min_area,int
 	this->maxArea = max_area;
 	this->jiange = jiange;
 	this->LIMIT = max_event_num;
-
-	//fps = data.fps;
-	//int zoom = data.zoom;
 }
 
 void VideoAnalyze::getShuaixuanData(Point currentLineP1,Point currentLineP2,Point currentRectP1,Point currentRectP2,QString data)

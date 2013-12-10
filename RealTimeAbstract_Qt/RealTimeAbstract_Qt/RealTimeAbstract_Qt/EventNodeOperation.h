@@ -10,7 +10,6 @@ public:
 	static int findLength(int a[]);       //判断是否同一个对象的辅助函数
 	static bool isTheSame(Rect r1, Rect r2);  //判断2个矩形是否为同一对象
 	static int rectRelationship(Rect r1, Rect r2);  //判断2个矩形之间的关系
-	static EventNode copyEventNode(EventNode node); //复制一个EventNode
 	static bool isTheSameDirect(Point lineP1, Point lineP2, Point eventP1, Point eventP2);  //判断两条线的方向是否一致
 	static Point getCenterPoint(Rect r); //判断分裂后是否属于该事件
 	static bool isEnterRect(Rect r1, Rect r2);          //判断是否入侵

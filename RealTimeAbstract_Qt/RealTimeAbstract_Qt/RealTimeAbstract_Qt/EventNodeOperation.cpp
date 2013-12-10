@@ -79,29 +79,6 @@ int EventNodeOperation::rectRelationship(Rect r1, Rect r2)
 	return 0;
 }
 
-//复制一个EventNode
-EventNode EventNodeOperation::copyEventNode(EventNode node)
-{
-	EventNode newNode;
-	newNode.mark = node.mark;
-	newNode.startFrame = node.startFrame;
-	newNode.endFrame = node.endFrame;
-	newNode.type = node.type;
-	/*
-	newNode.rect.x = node.rect.x;
-	newNode.rect.y = node.rect.y;
-	newNode.rect.width = node.rect.width;
-	newNode.rect.height = node.rect.height;
-	*/
-	newNode.rect = node.rect;
-	for(int i = 0; i < node.trackList.size(); i++)
-	{
-		Rect r = node.trackList[i];
-		newNode.trackList.push_back(r);
-	}
-	return newNode;
-}
-
 bool EventNodeOperation::isTheSameDirect(Point lineP1, Point lineP2, Point eventP1, Point eventP2)  //判断是否按方向运动
 {
 	Point a(lineP2.x-lineP1.x, lineP2.y-lineP1.y);
@@ -143,8 +120,6 @@ EventNode EventNodeOperation::insertEventNode(vector<EventNode> &eventList, Rect
 	insert.rect = r;
 	insert.endFrame = -1;
 	insert.mark = true;
-	insert.type = 1;
-	//insert.capture = 0;
 
 	//事件跟踪的表头
 	insert.trackList.push_back(r);
@@ -268,7 +243,7 @@ Point EventNodeOperation::getCenterPoint(Rect r)
 
 bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, EventNode&node)
 {
-	/*
+	//最原始的跟踪版本
 	for (int i = 0; i < eventList.size(); i++)
 	{
 		if (eventList[i].endFrame != -1)
@@ -285,7 +260,9 @@ bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, 
 		}
 	}
 	return false;
-	*/
+	
+	/***
+	****分情况讨论的版本
 	bool returnValue = false;
 	int size = eventList.size();
 	for (int i = 0; i < size; i++)
@@ -359,7 +336,7 @@ bool EventNodeOperation::searchEventList(vector<EventNode> &eventList, Rect r2, 
 		}
 	}
 	return returnValue;
-	
+	*/
 }
 
 EventNodeOperation::EventNodeOperation(void)
