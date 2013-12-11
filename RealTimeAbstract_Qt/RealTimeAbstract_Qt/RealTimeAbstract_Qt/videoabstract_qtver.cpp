@@ -10,7 +10,7 @@ void VideoAbstract_QTver::on_open_file_button_clicked()
     Globals::files = QFileDialog::getOpenFileNames(
 		this, tr("请选择一个或者多个视频文件"),
 		QDir::rootPath(),
-        tr("视频文件 (*.avi)"),
+        tr("视频文件 (*.avi *.flv)"),
         &selectedFilter,
         options);
 	
